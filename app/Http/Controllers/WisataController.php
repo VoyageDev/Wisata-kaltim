@@ -1,0 +1,105 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Models\Kota;
+use App\Models\Wisata;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+class WisataController extends Controller
+{
+    public function index()
+    {
+        $wisatas = Wisata::with('kota')->latest()->paginate(10);
+
+        return view('admin.wisata.index', compact('wisatas'));
+    }
+
+    public function create()
+    {
+        $kotas = Kota::all();
+
+        return view('admin.wisata.create', compact('kotas'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'alamat' => 'required|string',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'jam_buka' => 'required|string',
+            'jam_tutup' => 'required|string',
+            'harga_tiket' => 'required|numeric|min:0',
+            'status' => 'required|in:Open,Close',
+            'kota_id' => 'required|exists:kotas,id',
+            'links_maps' => 'nullable|url',
+            'links_bookings' => 'nullable|url',
+        ]);
+
+        $gambar = $request->file('gambar')->store('wisata', 'public');
+
+        Wisata::create([
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
+            'deskripsi' => $validated['deskripsi'],
+            'alamat' => $validated['alamat'],
+            'gambar' => $gambar,
+            'jam_buka' => $validated['jam_buka'],
+            'jam_tutup' => $validated['jam_tutup'],
+            'harga_tiket' => $validated['harga_tiket'],
+            'status' => $validated['status'],
+            'kota_id' => $validated['kota_id'],
+            'links_maps' => $validated['links_maps'] ?? null,
+            'links_bookings' => $validated['links_bookings'] ?? null,
+        ]);
+
+        return redirect()->route('admin.wisata.index')->with('success', 'Wisata berhasil dibuat');
+    }
+
+    public function edit(Wisata $wisata)
+    {
+        $kotas = Kota::all();
+
+        return view('admin.wisata.edit', compact('wisata', 'kotas'));
+    }
+
+    public function update(Request $request, Wisata $wisata)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'alamat' => 'required|string',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'jam_buka' => 'required|string',
+            'jam_tutup' => 'required|string',
+            'harga_tiket' => 'required|numeric|min:0',
+            'status' => 'required|in:Open,Close',
+            'kota_id' => 'required|exists:kotas,id',
+            'links_maps' => 'nullable|url',
+            'links_bookings' => 'nullable|url',
+        ]);
+
+        $data = $validated;
+        $data['slug'] = Str::slug($validated['name']);
+
+        if ($request->hasFile('gambar')) {
+            $gambar = $request->file('gambar')->store('wisata', 'public');
+            $data['gambar'] = $gambar;
+        }
+
+        $wisata->update($data);
+
+        return redirect()->route('admin.wisata.index')->with('success', 'Wisata berhasil diperbarui');
+    }
+
+    public function destroy(Wisata $wisata)
+    {
+        $wisata->delete();
+
+        return redirect()->route('admin.wisata.index')->with('success', 'Wisata berhasil dihapus');
+    }
+}

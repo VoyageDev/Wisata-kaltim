@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200" fill="none">
+  <rect width="320" height="200" fill="#14B8A6"/>
+  <rect x="16" y="16" width="288" height="168" rx="12" fill="#ECFEFF"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#0F766E" font-family="'Segoe UI', Arial, sans-serif" font-size="20" font-weight="700">Artikel 2</text>
+</svg>
