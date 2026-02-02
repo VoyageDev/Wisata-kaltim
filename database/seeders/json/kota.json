@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Balikpapan",
+        "slug": "balikpapan",
+        "image": "balikpapan.jpg"
+    },
+    {
+        "name": "Samarinda",
+        "slug": "samarinda",
+        "image": "samarinda.jpg"
+    },
+    {
+        "name": "Banjarmasin",
+        "slug": "banjarmasin",
+        "image": "banjarmasin.jpg"
+    },
+    {
+        "name": "Pontianak",
+        "slug": "pontianak",
+        "image": "pontianak.jpg"
+    },
+    {
+        "name": "Palangkaraya",
+        "slug": "palangkaraya",
+        "image": "palangkaraya.jpg"
+    }
+]

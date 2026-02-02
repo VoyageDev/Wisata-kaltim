@@ -30,7 +30,7 @@ class Wisata extends Model
     protected $casts = [
         'jam_buka' => 'datetime:H:i',
         'jam_tutup' => 'datetime:H:i',
-        'harga_tiket' => 'integer',
+        'links_bookings' => 'array',
     ];
 
     public function kota(): BelongsTo

@@ -12,9 +12,11 @@
                             <i class="fas fa-chevron-right mx-2"></i>
                         </li>
                         <li class="flex items-center">
-                            <a href="{{ route('kota.detail', $wisata->kota->slug) }}" class="hover:text-gray-200">
-                                {{ $wisata->kota->name }}
-                            </a>
+                            @if ($wisata->kota)
+                                <a href="{{ route('kota.detail', $wisata->kota->slug) }}" class="hover:text-gray-200">
+                                    {{ $wisata->kota->name }}
+                                </a>
+                            @endif
                             <i class="fas fa-chevron-right mx-2"></i>
                         </li>
                         <li class="text-gray-200">{{ $wisata->name }}</li>
@@ -44,10 +46,12 @@
                                 class="px-4 py-2 rounded-full text-sm font-semibold {{ $wisata->status === 'Open' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                 <i class="fas fa-circle text-xs mr-1"></i>{{ $wisata->status }}
                             </span>
-                            <span class="text-gray-500 text-sm">
-                                <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
-                                {{ $wisata->kota->name }}
-                            </span>
+                            @if ($wisata->kota)
+                                <span class="text-gray-500 text-sm">
+                                    <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
+                                    {{ $wisata->kota->name }}
+                                </span>
+                            @endif
                         </div>
 
                         {{-- Deskripsi --}}
@@ -89,7 +93,8 @@
                         <div>
                             <h3 class="text-sm font-semibold text-gray-500 mb-1">Harga Tiket</h3>
                             <p class="text-2xl font-bold text-green-600">
-                                Rp {{ number_format($wisata->harga_tiket, 0, ',', '.') }}
+                                {{ $wisata->harga_tiket }}
+                                <span class="text-sm font-normal text-gray-600">/ orang</span>
                             </p>
                         </div>
 
@@ -103,12 +108,19 @@
                                 </a>
                             @endif
 
-                            @if ($wisata->links_bookings)
-                                <a href="{{ $wisata->links_bookings }}" target="_blank"
-                                    class="flex items-center justify-center space-x-2 bg-gradient-to-r from-[#8B6F47] to-[#D4AF37] hover:shadow-xl text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 shadow-md">
-                                    <i class="fas fa-ticket text-xl"></i>
-                                    <span>Booking Tiket Sekarang</span>
-                                </a>
+                            @if ($wisata->links_bookings && is_array($wisata->links_bookings) && count($wisata->links_bookings) > 0)
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-semibold text-gray-700">Link Booking:</span>
+                                    <div class="flex items-center gap-2">
+                                        @foreach ($wisata->links_bookings as $index => $link)
+                                            <a href="{{ $link }}" target="_blank"
+                                                title="Booking #{{ $index + 1 }}"
+                                                class="w-14 h-11 flex items-center justify-center bg-gradient-to-r from-[#737272] to-[#3b3b3b] hover:shadow-lg text-white rounded-lg transition-all duration-200">
+                                                <i class="fas fa-ticket"> {{ $index + 1 }}</i>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
                             @endif
                         </div>
                     </div>

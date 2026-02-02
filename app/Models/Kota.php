@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Kota extends Model
 {
@@ -22,8 +23,9 @@ class Kota extends Model
         return $this->hasMany(Wisata::class);
     }
 
-    public function artikels(): HasMany
+    public function artikels(): HasManyThrough
     {
-        return $this->hasMany(Artikel::class);
+        // Get artikels through wisata relationship
+        return $this->hasManyThrough(Artikel::class, Wisata::class);
     }
 }

@@ -14,8 +14,7 @@ class Artikel extends Model
 
     protected $fillable = [
         'user_id',
-        // 'wisata_id',
-        'kota_id',
+        'wisata_id',
         'judul',
         'slug',
         'views',
@@ -36,15 +35,10 @@ class Artikel extends Model
         return $this->belongsTo(User::class);
     }
 
-    // public function wisata(): BelongsTo
-    // {
-    //     return $this->belongsTo(Wisata::class);
-    // }
-    public function kota(): BelongsTo
+    public function wisata(): BelongsTo
     {
-        return $this->belongsTo(Kota::class);
+        return $this->belongsTo(Wisata::class);
     }
-
 
     public function ulasans(): MorphMany
     {

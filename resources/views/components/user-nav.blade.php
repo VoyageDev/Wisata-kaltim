@@ -44,7 +44,7 @@
                                 class="text-white font-medium hover:scale-110 transition-transform block">History</a>
                         </li>
                     @else
-                        <div class="flex flex-1 gap-8 items-center justify-center ml-28">
+                        <div class="flex gap-8 items-center justify-center">
                             <li><a href="#" @click.prevent="showLoginModal = true"
                                     class="text-white font-medium hover:scale-110 transition-transform block">Berita</a>
                             </li>

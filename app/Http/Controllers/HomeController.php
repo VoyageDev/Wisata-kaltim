@@ -18,7 +18,7 @@ class HomeController extends Controller
     public function index()
     {
         // Ambil artikel unggulan
-        $artikels = Artikel::with(['kota', 'user'])
+        $artikels = Artikel::with(['wisata.kota', 'user'])
             ->latest()
             ->take(6)
             ->get();
@@ -36,7 +36,7 @@ class HomeController extends Controller
             ->get();
 
         // format jam buka dna tutup
-        $kotaWithWisata->each(function($kota) {
+        $kotaWithWisata->each(function ($kota) {
             $kota->wisatas->each(function ($wisata) {
                 $wisata->jam_buka_format = Carbon::parse($wisata->jam_buka)->format('H:i');
                 $wisata->jam_tutup_format = Carbon::parse($wisata->jam_tutup)->format('H:i');
@@ -50,9 +50,11 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
-        // ambil ulasan user dengan relationship reviewable
+        // ambil ulasan user dengan relationship reviewable and nested kota
         $ulasans = Ulasan::where('user_id', $user->id)
-            ->with('reviewable')
+            ->with(['reviewable' => function ($query) {
+                $query->with('kota');
+            }])
             ->latest()
             ->paginate(12);
 

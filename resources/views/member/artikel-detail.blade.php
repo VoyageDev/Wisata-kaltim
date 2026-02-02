@@ -24,10 +24,12 @@
                     {{-- Metadata --}}
                     <div
                         class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6 pb-6 border-b border-gray-200">
-                        <span class="flex items-center">
-                            <i class="fas fa-map-marker-alt text-[#8B6F47] mr-2"></i>
-                            {{ $artikel->kota->name }}
-                        </span>
+                        @if ($artikel->wisata && $artikel->wisata->kota)
+                            <span class="flex items-center">
+                                <i class="fas fa-map-marker-alt text-[#8B6F47] mr-2"></i>
+                                {{ $artikel->wisata->kota->name }}
+                            </span>
+                        @endif
                         <span class="flex items-center">
                             <i class="fas fa-calendar text-[#8B6F47] mr-2"></i>
                             {{ $artikel->created_at->format('d F Y') }}
@@ -267,10 +269,12 @@
                                 </div>
                                 <div class="p-5">
                                     <div class="flex items-center gap-3 text-xs text-gray-600 mb-3">
-                                        <span class="flex items-center">
-                                            <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
-                                            {{ $terkait->kota->name }}
-                                        </span>
+                                        @if ($terkait->wisata && $terkait->wisata->kota)
+                                            <span class="flex items-center">
+                                                <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
+                                                {{ $terkait->wisata->kota->name }}
+                                            </span>
+                                        @endif
                                         <span class="flex items-center">
                                             <i class="fas fa-eye text-[#8B6F47] mr-1"></i>
                                             {{ number_format($terkait->views) }}
@@ -399,9 +403,10 @@
                     span class = "flex items-center" >
                     <
                     i class = "fas fa-map-marker-alt text-[#8B6F47] mr-1" > < /i>
-                    {{ $terkait->kota->name }}
-                        <
-                        /span> <
+                    @if ($terkait->wisata && $terkait->wisata->kota)
+                        {{ $terkait->wisata->kota->name }}
+                    @endif <
+                    /span> <
                     span class = "flex items-center" >
                     <
                     i class = "fas fa-eye text-[#8B6F47] mr-1" > < /i>

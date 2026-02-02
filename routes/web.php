@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\ArtikelController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KotaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UlasanController;
 use App\Http\Controllers\WisataController;
-use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Landing page
@@ -15,8 +15,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // Member route
 Route::middleware('auth')->group(function () {
     // artikel route
-    Route::get('/artikel', [ArtikelController::class, 'index'])->name('artikel.index');
-    Route::get('/artikel/{slug}', [ArtikelController::class, 'show'])->name('artikel.detail');
+    Route::get('/artikel', [ArtikelController::class, 'memberIndex'])->name('artikel.index');
+    Route::get('/artikel/{slug}', [ArtikelController::class, 'detail'])->name('artikel.detail');
 
     // Load more artikel route
     Route::get('/artikel-load-more/terbaru/{offset}', [ArtikelController::class, 'loadMoreTerbaru'])->name('artikel.loadMoreTerbaru');
@@ -24,11 +24,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/artikel-load-more/top-wisata/{offset}', [ArtikelController::class, 'loadMoreTopWisata'])->name('artikel.loadMoreTopWisata');
 
     // kota route
-    Route::get('/kota', [KotaController::class, 'index'])->name('kota.index');
-    Route::get('/kota/{slug}', [KotaController::class, 'show'])->name('kota.detail');
+    Route::get('/kota', [KotaController::class, 'memberIndex'])->name('kota.index');
+    Route::get('/kota/{slug}', [KotaController::class, 'detail'])->name('kota.detail');
 
     // wisata route
-    Route::get('/wisata/{slug}', [WisataController::class, 'show'])->name('wisata.detail');
+    Route::get('/wisata', [WisataController::class, 'memberIndex'])->name('wisata.index');
+    Route::get('/wisata/{slug}', [WisataController::class, 'detail'])->name('wisata.detail');
 
     // history route
     Route::get('/history', [HomeController::class, 'showHistory'])->name('history.index');
@@ -46,13 +47,13 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 // Admin CRUD Routes
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Artikel Management
+    // Artikel Management - resource route with model binding (ID-based)
     Route::resource('artikel', ArtikelController::class);
 
-    // Wisata Management
+    // Wisata Management - resource route with model binding (ID-based)
     Route::resource('wisata', WisataController::class);
 
-    // Kota Management
+    // Kota Management - resource route with model binding (ID-based)
     Route::resource('kota', KotaController::class);
 
     // Ulasan Management

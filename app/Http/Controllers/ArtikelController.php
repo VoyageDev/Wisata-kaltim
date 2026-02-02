@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Artikel;
 use App\Models\Kota;
+use App\Models\Ulasan;
+use App\Models\Wisata;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -13,9 +14,80 @@ class ArtikelController extends Controller
 {
     public function index()
     {
-        $artikels = Artikel::with(['kota', 'user'])->latest()->paginate(10);
+        $artikels = Artikel::with(['wisata.kota', 'user'])->latest()->paginate(10);
 
         return view('admin.artikel.index', compact('artikels'));
+    }
+
+    public function memberIndex()
+    {
+        // Berita Terbaru - latest articles
+        $beritaTerbaru = Artikel::with(['wisata.kota', 'user'])
+            ->latest()
+            ->take(6)
+            ->get();
+        $totalBeritaTerbaru = Artikel::count();
+
+        // Populer Bulan Ini - most viewed this month
+        $populerBulanIni = Artikel::with(['wisata.kota', 'user'])
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->orderBy('views', 'desc')
+            ->take(5)
+            ->get();
+        $totalPopulerBulanIni = Artikel::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+
+        // Top Wisata - highest viewed articles about wisata
+        $topWisata = Artikel::with(['wisata.kota', 'user'])
+            ->orderBy('views', 'desc')
+            ->take(6)
+            ->get();
+        $totalTopWisata = Artikel::count();
+
+        return view('member.artikel', compact(
+            'beritaTerbaru',
+            'totalBeritaTerbaru',
+            'populerBulanIni',
+            'totalPopulerBulanIni',
+            'topWisata',
+            'totalTopWisata'
+        ));
+    }
+
+    public function show(Artikel $artikel)
+    {
+        return view('admin.artikel.show', compact('artikel'));
+    }
+
+    public function detail($slug)
+    {
+        $artikel = Artikel::with([
+            'wisata.kota',
+            'user',
+            'ulasans' => function ($query) {
+                $query->whereNull('parent_id')->with('user');
+            },
+        ])->where('slug', $slug)->firstOrFail();
+
+        // Get all replies for nested comments
+        $allReplies = Ulasan::where('reviewable_id', $artikel->id)
+            ->where('reviewable_type', 'App\Models\Artikel')
+            ->whereNotNull('parent_id')
+            ->with('user')
+            ->get();
+
+        // Get related articles from same wisata
+        $artikelTerkait = Artikel::with(['wisata.kota', 'user'])
+            ->where('wisata_id', $artikel->wisata_id)
+            ->where('id', '!=', $artikel->id)
+            ->withCount('ulasans')
+            ->latest()
+            ->take(6)
+            ->get();
+
+        return view('member.artikel-detail', compact('artikel', 'artikelTerkait', 'allReplies'));
     }
 
     public function create()

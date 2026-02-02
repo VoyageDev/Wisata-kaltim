@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Kota;
+use App\Models\Ulasan;
 use App\Models\Wisata;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -17,11 +17,41 @@ class WisataController extends Controller
         return view('admin.wisata.index', compact('wisatas'));
     }
 
+    public function memberIndex()
+    {
+        $wisatas = Wisata::with('kota')->latest()->paginate(12);
+
+        return view('member.wisata', compact('wisatas'));
+    }
+
     public function create()
     {
         $kotas = Kota::all();
 
         return view('admin.wisata.create', compact('kotas'));
+    }
+
+    public function show(Wisata $wisata)
+    {
+        $kotas = Kota::all();
+
+        return view('admin.wisata.show', compact('wisata', 'kotas'));
+    }
+
+    public function detail($slug)
+    {
+        $wisata = Wisata::with(['kota', 'ulasans' => function ($query) {
+            $query->whereNull('parent_id')->with('user');
+        }])->where('slug', $slug)->firstOrFail();
+
+        // Get all replies for nested comments
+        $allReplies = Ulasan::where('reviewable_id', $wisata->id)
+            ->where('reviewable_type', 'App\Models\Wisata')
+            ->whereNotNull('parent_id')
+            ->with('user')
+            ->get();
+
+        return view('member.wisata-detail', compact('wisata', 'allReplies'));
     }
 
     public function store(Request $request)

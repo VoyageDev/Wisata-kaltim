@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Kota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,6 +13,37 @@ class KotaController extends Controller
         $kotas = Kota::withCount(['wisatas', 'artikels'])->latest()->paginate(10);
 
         return view('admin.kota.index', compact('kotas'));
+    }
+
+    public function memberIndex()
+    {
+        $kotas = Kota::withCount(['wisatas', 'artikels'])->latest()->paginate(12);
+
+        return view('member.kota', compact('kotas'));
+    }
+
+    public function show(Kota $kota)
+    {
+        return view('admin.kota.show', compact('kota'));
+    }
+
+    public function detail($slug)
+    {
+        $kota = Kota::with([
+            'wisatas' => function ($query) {
+                $query->with(['ulasans' => function ($q) {
+                    $q->with('user')->latest()->take(10);
+                }]);
+            },
+            'artikels' => function ($query) {
+                $query->with('user')->withCount('ulasans');
+            },
+        ])->where('slug', $slug)->firstOrFail();
+
+        // Get related articles for this kota
+        $artikelTerkait = $kota->artikels()->with('user')->latest()->take(6)->get();
+
+        return view('member.kota-detail', compact('kota', 'artikelTerkait'));
     }
 
     public function create()

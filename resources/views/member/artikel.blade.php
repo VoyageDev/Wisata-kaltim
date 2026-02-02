@@ -17,15 +17,17 @@
                             class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200">
                             <div class="flex flex-col md:flex-row">
                                 <div class="md:w-72 h-48 overflow-hidden">
-                                    <img src="/{{ $artikel->thumbnail }}" alt="{{ $artikel->judul }}"
+                                    <img src="{{ asset($artikel->thumbnail) }}" alt="{{ $artikel->judul }}"
                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
                                 </div>
                                 <div class="flex-1 p-6">
                                     <div class="flex items-center gap-3 text-sm text-gray-600 mb-3">
-                                        <span class="flex items-center">
-                                            <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
-                                            {{ $artikel->kota->name }}
-                                        </span>
+                                        @if ($artikel->wisata && $artikel->wisata->kota)
+                                            <span class="flex items-center">
+                                                <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
+                                                {{ $artikel->wisata->kota->name }}
+                                            </span>
+                                        @endif
                                         <span class="flex items-center">
                                             <i class="fas fa-calendar text-[#8B6F47] mr-1"></i>
                                             {{ $artikel->created_at->format('d M Y') }}
@@ -77,15 +79,17 @@
                             class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200">
                             <div class="flex flex-col md:flex-row">
                                 <div class="md:w-72 h-48 overflow-hidden">
-                                    <img src="/{{ $artikel->thumbnail }}" alt="{{ $artikel->judul }}"
+                                    <img src="{{ asset($artikel->thumbnail) }}" alt="{{ $artikel->judul }}"
                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
                                 </div>
                                 <div class="flex-1 p-6">
                                     <div class="flex items-center gap-3 text-sm text-gray-600 mb-3">
-                                        <span class="flex items-center">
-                                            <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
-                                            {{ $artikel->kota->name }}
-                                        </span>
+                                        @if ($artikel->wisata && $artikel->wisata->kota)
+                                            <span class="flex items-center">
+                                                <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
+                                                {{ $artikel->wisata->kota->name }}
+                                            </span>
+                                        @endif
                                         <span class="flex items-center">
                                             <i class="fas fa-calendar text-[#8B6F47] mr-1"></i>
                                             {{ $artikel->created_at->format('d M Y') }}
@@ -136,15 +140,17 @@
                         <div
                             class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200">
                             <div class="h-48 overflow-hidden">
-                                <img src="/{{ $artikel->thumbnail }}" alt="{{ $artikel->judul }}"
+                                <img src="{{ asset($artikel->thumbnail) }}" alt="{{ $artikel->judul }}"
                                     class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
                             </div>
                             <div class="p-5">
                                 <div class="flex items-center gap-3 text-xs text-gray-600 mb-3">
-                                    <span class="flex items-center">
-                                        <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
-                                        {{ $artikel->kota->name }}
-                                    </span>
+                                    @if ($artikel->wisata && $artikel->wisata->kota)
+                                        <span class="flex items-center">
+                                            <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
+                                            {{ $artikel->wisata->kota->name }}
+                                        </span>
+                                    @endif
                                     <span class="flex items-center">
                                         <i class="fas fa-eye text-[#8B6F47] mr-1"></i>
                                         {{ number_format($artikel->views, 0, ',', '.') }}
