@@ -9,7 +9,7 @@
             </div>
 
             {{-- nav links dekstop --}}
-            <div class="hidden md:flex flex-1 justify-center">
+            <div class="hidden md:flex flex-1 justify-center items-center">
                 <ul class="flex space-x-8">
                     @auth
                         <li><a href="{{ url('/artikel') }}"
@@ -40,12 +40,12 @@
                             </div>
                         </li>
 
-                        <li><a href="{{ url('/history') }}"
+                        <li><a href="{{ route('history.index') }}"
                                 class="text-white font-medium hover:scale-110 transition-transform block">History</a>
                         </li>
                     @else
-                        <div class="flex gap-8 items-center justify-center">
-                            <li><a href="#" @click.prevent="showLoginModal = true"
+                        <div class="flex gap-8 items-center justify-center ">
+                            <li><a href="{{ route('artikel.index') }}"
                                     class="text-white font-medium hover:scale-110 transition-transform block">Berita</a>
                             </li>
                             <li class="relative group">
@@ -56,13 +56,13 @@
                                     class="absolute left-0 mt-0 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                     <div class="py-2 max-h-96 overflow-y-auto">
                                         @foreach ($kotas as $kota)
-                                            <a href="#" @click.prevent="showLoginModal = true"
+                                            <a href="{{ route('kota.detail', $kota->slug) }}"
                                                 class="block px-4 py-2 text-gray-700 hover:bg-[#D4AF37] hover:text-white transition-colors">
                                                 {{ $kota->name }}
                                             </a>
                                         @endforeach
                                         <div class="border-t border-gray-200">
-                                            <a href="#" @click.prevent="showLoginModal = true"
+                                            <a href="{{ route('kota.index') }}"
                                                 class="block px-4 py-2 text-gray-700 hover:bg-[#D4AF37] hover:text-white transition-colors font-semibold">
                                                 <i class="fas fa-arrow-right mr-2"></i>Show More
                                             </a>
@@ -152,7 +152,7 @@
                     </div>
                 </div>
 
-                <a href="{{ url('/history') }}"
+                <a href="{{ route('history.index') }}"
                     class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">History</a>
             @else
                 <a href="#" @click.prevent="showLoginModal = true; mobileMenuOpen = false"
@@ -274,8 +274,7 @@
         </button>
 
         <div class="text-center mb-6">
-            <div
-                class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
                 <i class="fas fa-sign-out-alt text-red-600 text-2xl"></i>
             </div>
             <h3 class="text-2xl font-bold text-gray-800 mb-2">Logout</h3>

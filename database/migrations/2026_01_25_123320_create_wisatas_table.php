@@ -19,8 +19,7 @@ return new class extends Migration
             $table->string('gambar')->nullable();
             $table->text('description');
             $table->string('links_maps')->nullable();
-            $table->string('harga_tiket');
-            $table->string('links_bookings');
+            $table->decimal('harga_tiket', 12, 2);
             $table->time('jam_buka');
             $table->time('jam_tutup');
             $table->enum('status', ['Open', 'Closed'])->default('Open');

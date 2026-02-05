@@ -37,8 +37,8 @@
                         class="w-full h-[500px] object-cover">
                 </div>
 
-                {{-- Kanan - Detail Info --}}
-                <div class="bg-white rounded-xl shadow-lg p-8">
+                {{-- Kanan - Detail Info WIsata --}}
+                <div class="bg-white rounded-xl shadow-lg p-8 relative">
                     <div class="space-y-6">
                         {{-- Status --}}
                         <div class="flex items-center space-x-3">
@@ -48,16 +48,30 @@
                             </span>
                             @if ($wisata->kota)
                                 <span class="text-gray-500 text-sm">
-                                    <i class="fas fa-map-marker-alt text-[#8B6F47] mr-1"></i>
+                                    <i class="fas fa-map-marker-alt text-[#2150ea] mr-1"></i>
                                     {{ $wisata->kota->name }}
                                 </span>
                             @endif
                         </div>
 
+                        {{-- Google Maps Icon (pojok kanan atas) --}}
+                        <a href="{{ $wisata->links_maps }}" target="_blank" title="Lihat di Google Maps"
+                            class="absolute top-0 right-8 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                                <path
+                                    d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0" />
+                            </svg>
+                        </a>
+
                         {{-- Deskripsi --}}
                         <div>
                             <h3 class="text-lg font-bold text-gray-800 mb-2 flex items-center">
-                                <i class="fas fa-info-circle text-[#8B6F47] mr-2"></i>Deskripsi
+                                <i class="fas fa-info-circle text-[#acaaaa] mr-2"></i>Deskripsi
                             </h3>
                             <p class="text-gray-600 leading-relaxed">{{ $wisata->description }}</p>
                         </div>
@@ -65,7 +79,7 @@
                         {{-- Alamat --}}
                         <div>
                             <h3 class="text-lg font-bold text-gray-800 mb-2 flex items-center">
-                                <i class="fas fa-location-dot text-[#8B6F47] mr-2"></i>Alamat
+                                <i class="fas fa-location-dot text-[#2150ea] mr-2"></i>Alamat
                             </h3>
                             <p class="text-gray-600">{{ $wisata->alamat }}</p>
                         </div>
@@ -74,7 +88,7 @@
                         <div class="flex items-center space-x-8">
                             <div>
                                 <h3 class="text-sm font-semibold text-gray-500 mb-1">Jam Buka</h3>
-                                <p class="text-lg font-bold text-[#8B6F47]">
+                                <p class="text-lg font-bold text-[#252525]">
                                     <i
                                         class="fas fa-clock mr-1"></i>{{ \Carbon\Carbon::parse($wisata->jam_buka)->format('H:i') }}
                                 </p>
@@ -93,35 +107,23 @@
                         <div>
                             <h3 class="text-sm font-semibold text-gray-500 mb-1">Harga Tiket</h3>
                             <p class="text-2xl font-bold text-green-600">
-                                {{ $wisata->harga_tiket }}
+                                Rp {{ number_format($wisata->harga_tiket, 0, ',', '.') }}
                                 <span class="text-sm font-normal text-gray-600">/ orang</span>
                             </p>
                         </div>
 
                         {{-- Links Maps & Booking --}}
                         <div class="pt-4 border-t border-gray-200 space-y-3">
-                            @if ($wisata->links_maps)
-                                <a href="{{ $wisata->links_maps }}" target="_blank"
-                                    class="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
-                                    <i class="fas fa-map-location-dot text-xl"></i>
-                                    <span>Lihat di Google Maps</span>
-                                </a>
-                            @endif
-
-                            @if ($wisata->links_bookings && is_array($wisata->links_bookings) && count($wisata->links_bookings) > 0)
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm font-semibold text-gray-700">Link Booking:</span>
-                                    <div class="flex items-center gap-2">
-                                        @foreach ($wisata->links_bookings as $index => $link)
-                                            <a href="{{ $link }}" target="_blank"
-                                                title="Booking #{{ $index + 1 }}"
-                                                class="w-14 h-11 flex items-center justify-center bg-gradient-to-r from-[#737272] to-[#3b3b3b] hover:shadow-lg text-white rounded-lg transition-all duration-200">
-                                                <i class="fas fa-ticket"> {{ $index + 1 }}</i>
-                                            </a>
-                                        @endforeach
-                                    </div>
+                            {{-- Booking Button (di ATAS) --}}
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2 w-full">
+                                    <a href="" target="_blank" title="Pesan Tiket"
+                                        class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:shadow-lg text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200">
+                                        <i class="fas fa-ticket"></i>
+                                        <span>Booking Sekarang</span>
+                                    </a>
                                 </div>
-                            @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -130,7 +132,7 @@
             {{-- Section Komentar --}}
             <div class="bg-white rounded-xl shadow-lg p-8">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                    <i class="fas fa-comments text-[#8B6F47] mr-3"></i>
+                    <i class="fas fa-comments text-[#c4c0ba] mr-3"></i>
                     Ulasan & Komentar ({{ $wisata->ulasans->count() }})
                 </h2>
 

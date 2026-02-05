@@ -1,0 +1,128 @@
+[
+    {
+        "user_id": 2,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 1,
+        "komentar": "Pulau Derawan benar-benar surga dunia! Airnya jernih banget dan bisa liat penyu dari dekat. Pengalaman yang nggak terlupakan. Recommended banget buat yang suka snorkeling!",
+        "rating": 5
+    },
+    {
+        "user_id": 3,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 1,
+        "komentar": "Tempatnya indah tapi akses ke sana agak susah dan mahal. Tapi worth it sih kalau udah sampai sana. Homestay dan makanannya juga oke.",
+        "rating": 4
+    },
+    {
+        "user_id": 2,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 2,
+        "komentar": "Danau Labuan Cermin unik banget! Bisa ngerasain dua jenis air dalam satu danau. Pemandangannya juga bagus buat foto-foto. Tiketnya murah tapi perjalanannya lumayan jauh.",
+        "rating": 5
+    },
+    {
+        "user_id": 4,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 2,
+        "komentar": "Danaunya cantik dan airnya bening banget. Sayang pas rame agak ramai jadi kurang bisa menikmati ketenangan. Mending datang pagi atau weekday.",
+        "rating": 4
+    },
+    {
+        "user_id": 3,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 3,
+        "komentar": "Pengalaman jungle trekking yang seru! Guide lokalnya informatif dan ramah. Sempat liat bekantan dan orangutan dari jauh. Bawa bekal yang cukup ya karena trekkingnya lumayan menguras tenaga.",
+        "rating": 5
+    },
+    {
+        "user_id": 5,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 3,
+        "komentar": "Taman nasionalnya luas dan alami. Trekkingnya cukup menantang tapi pemandangannya sepadan. Cuma sayangnya satwa liarnya susah ditemuin, butuh keberuntungan.",
+        "rating": 4
+    },
+    {
+        "user_id": 4,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 4,
+        "komentar": "Canopy bridge-nya seru dan menantang! View dari atas pohon keren banget. Naik towernya bikin jantung deg-degan tapi worth it banget. Must try kalau ke Balikpapan!",
+        "rating": 5
+    },
+    {
+        "user_id": 2,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 4,
+        "komentar": "Seru banget jalan di atas kanopi pohon! Agak takut di awal tapi lama-lama santai. Pemandangan dari tower luar biasa. Cocok buat yang suka adventure.",
+        "rating": 5
+    },
+    {
+        "user_id": 5,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 5,
+        "komentar": "Danau ubur-ubur yang unik! Nggak nyangka bisa berenang bareng ubur-ubur tanpa disengat. Pengalaman yang jarang ada. Snorkelingnya juga asyik.",
+        "rating": 5
+    },
+    {
+        "user_id": 3,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 6,
+        "komentar": "Pasar terapung yang masih otentik. Naik kelotok susuri sungai sambil belanja sayur dan makanan tradisional. Pengalaman budaya yang menarik!",
+        "rating": 4
+    },
+    {
+        "user_id": 4,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 6,
+        "komentar": "Suasananya unik dan tradisional. Bisa liat kehidupan lokal yang asli. Cuma harus pagi banget datangnya, sekitar jam 5-6 pagi baru rame.",
+        "rating": 4
+    },
+    {
+        "user_id": 2,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 7,
+        "komentar": "Pulau bekantannya lucu banget! Bisa liat bekantan dari dekat dan juga burung-burung lain. Tour dengan boat juga nyaman. Guide-nya juga asik ngejelasinnya.",
+        "rating": 5
+    },
+    {
+        "user_id": 5,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 8,
+        "komentar": "Danau Sentarum indah dan masih alami. Air hitamnya unik dan ekosistemnya menarik. Perjalanannya agak jauh tapi sepadan dengan pengalaman yang didapat.",
+        "rating": 4
+    },
+    {
+        "user_id": 4,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 9,
+        "komentar": "Keraton Kadriah keren dengan arsitektur tradisional Melayu. Banyak benda bersejarah yang dipajang. Cocok buat yang suka wisata sejarah dan budaya.",
+        "rating": 4
+    },
+    {
+        "user_id": 3,
+        "reviewable_type": "App\\Models\\Wisata",
+        "reviewable_id": 10,
+        "komentar": "Taman Nasional Sebangau bagus buat liat orangutan di habitat aslinya. Susur sungai dengan kelotok juga menarik. Guide lokalnya knowledgeable banget.",
+        "rating": 5
+    },
+    {
+        "user_id": 2,
+        "reviewable_type": "App\\Models\\Artikel",
+        "reviewable_id": 1,
+        "komentar": "Artikel yang informatif! Jadi tambah pengen ke Pulau Derawan setelah baca ini. Tipsnya juga berguna buat persiapan.",
+        "rating": 5
+    },
+    {
+        "user_id": 3,
+        "reviewable_type": "App\\Models\\Artikel",
+        "reviewable_id": 2,
+        "komentar": "Penjelasan tentang Danau Labuan Cermin sangat detail. Foto-fotonya juga bagus. Jadi makin excited mau kesana!",
+        "rating": 5
+    },
+    {
+        "user_id": 4,
+        "reviewable_type": "App\\Models\\Artikel",
+        "reviewable_id": 5,
+        "komentar": "Artikel yang menarik! Nggak tau kalau di Kakaban ada danau ubur-ubur yang unik gitu. Next trip destination nih!",
+        "rating": 4
+    }
+]

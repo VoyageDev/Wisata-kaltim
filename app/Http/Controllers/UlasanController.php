@@ -75,6 +75,58 @@ class UlasanController extends Controller
     }
 
     /**
+     * Load more ulasan for infinite scroll / load more buttons.
+     */
+    public function loadMore(Request $request)
+    {
+        $validated = $request->validate([
+            'reviewable_type' => 'required|in:App\\Models\\Artikel,App\\Models\\Wisata',
+            'reviewable_id' => 'required|integer',
+            'offset' => 'nullable|integer|min:0',
+        ]);
+
+        $limit = 5;
+        $offset = $validated['offset'] ?? 0;
+
+        $ulasans = Ulasan::where('reviewable_type', $validated['reviewable_type'])
+            ->where('reviewable_id', $validated['reviewable_id'])
+            ->whereNull('parent_id')
+            ->with('user')
+            ->latest()
+            ->skip($offset)
+            ->take($limit)
+            ->get();
+
+        $allReplies = Ulasan::where('reviewable_type', $validated['reviewable_type'])
+            ->where('reviewable_id', $validated['reviewable_id'])
+            ->whereNotNull('parent_id')
+            ->with('user')
+            ->get();
+
+        $html = '';
+        foreach ($ulasans as $ulasan) {
+            $html .= view('member.partials.ulasan-item', [
+                'ulasan' => $ulasan,
+                'allReplies' => $allReplies,
+                'reviewableType' => $validated['reviewable_type'],
+                'reviewableId' => $validated['reviewable_id'],
+            ])->render();
+        }
+
+        $totalParent = Ulasan::where('reviewable_type', $validated['reviewable_type'])
+            ->where('reviewable_id', $validated['reviewable_id'])
+            ->whereNull('parent_id')
+            ->count();
+
+        $hasMore = ($offset + $limit) < $totalParent;
+
+        return response()->json([
+            'html' => $html,
+            'hasMore' => $hasMore,
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Ulasan $ulasan)

@@ -1,0 +1,302 @@
+[
+    {
+        "wisata_id": 1,
+        "tanggal": "2026-02-10",
+        "kuota_total": 50,
+        "kuota_terpakai": 25
+    },
+    {
+        "wisata_id": 1,
+        "tanggal": "2026-02-11",
+        "kuota_total": 50,
+        "kuota_terpakai": 30
+    },
+    {
+        "wisata_id": 1,
+        "tanggal": "2026-02-12",
+        "kuota_total": 50,
+        "kuota_terpakai": 15
+    },
+    {
+        "wisata_id": 1,
+        "tanggal": "2026-02-13",
+        "kuota_total": 50,
+        "kuota_terpakai": 0
+    },
+    {
+        "wisata_id": 1,
+        "tanggal": "2026-02-14",
+        "kuota_total": 60,
+        "kuota_terpakai": 45
+    },
+    {
+        "wisata_id": 1,
+        "tanggal": "2026-02-15",
+        "kuota_total": 60,
+        "kuota_terpakai": 50
+    },
+    {
+        "wisata_id": 2,
+        "tanggal": "2026-02-10",
+        "kuota_total": 30,
+        "kuota_terpakai": 12
+    },
+    {
+        "wisata_id": 2,
+        "tanggal": "2026-02-11",
+        "kuota_total": 30,
+        "kuota_terpakai": 18
+    },
+    {
+        "wisata_id": 2,
+        "tanggal": "2026-02-12",
+        "kuota_total": 30,
+        "kuota_terpakai": 8
+    },
+    {
+        "wisata_id": 2,
+        "tanggal": "2026-02-13",
+        "kuota_total": 30,
+        "kuota_terpakai": 0
+    },
+    {
+        "wisata_id": 2,
+        "tanggal": "2026-02-14",
+        "kuota_total": 40,
+        "kuota_terpakai": 35
+    },
+    {
+        "wisata_id": 2,
+        "tanggal": "2026-02-15",
+        "kuota_total": 40,
+        "kuota_terpakai": 28
+    },
+    {
+        "wisata_id": 3,
+        "tanggal": "2026-02-10",
+        "kuota_total": 40,
+        "kuota_terpakai": 20
+    },
+    {
+        "wisata_id": 3,
+        "tanggal": "2026-02-11",
+        "kuota_total": 40,
+        "kuota_terpakai": 22
+    },
+    {
+        "wisata_id": 3,
+        "tanggal": "2026-02-12",
+        "kuota_total": 40,
+        "kuota_terpakai": 15
+    },
+    {
+        "wisata_id": 3,
+        "tanggal": "2026-02-13",
+        "kuota_total": 40,
+        "kuota_terpakai": 10
+    },
+    {
+        "wisata_id": 3,
+        "tanggal": "2026-02-14",
+        "kuota_total": 50,
+        "kuota_terpakai": 40
+    },
+    {
+        "wisata_id": 3,
+        "tanggal": "2026-02-15",
+        "kuota_total": 50,
+        "kuota_terpakai": 38
+    },
+    {
+        "wisata_id": 4,
+        "tanggal": "2026-02-10",
+        "kuota_total": 35,
+        "kuota_terpakai": 18
+    },
+    {
+        "wisata_id": 4,
+        "tanggal": "2026-02-11",
+        "kuota_total": 35,
+        "kuota_terpakai": 20
+    },
+    {
+        "wisata_id": 4,
+        "tanggal": "2026-02-12",
+        "kuota_total": 35,
+        "kuota_terpakai": 12
+    },
+    {
+        "wisata_id": 4,
+        "tanggal": "2026-02-13",
+        "kuota_total": 35,
+        "kuota_terpakai": 8
+    },
+    {
+        "wisata_id": 4,
+        "tanggal": "2026-02-14",
+        "kuota_total": 45,
+        "kuota_terpakai": 35
+    },
+    {
+        "wisata_id": 4,
+        "tanggal": "2026-02-15",
+        "kuota_total": 45,
+        "kuota_terpakai": 40
+    },
+    {
+        "wisata_id": 5,
+        "tanggal": "2026-02-10",
+        "kuota_total": 45,
+        "kuota_terpakai": 22
+    },
+    {
+        "wisata_id": 5,
+        "tanggal": "2026-02-11",
+        "kuota_total": 45,
+        "kuota_terpakai": 28
+    },
+    {
+        "wisata_id": 5,
+        "tanggal": "2026-02-12",
+        "kuota_total": 45,
+        "kuota_terpakai": 20
+    },
+    {
+        "wisata_id": 5,
+        "tanggal": "2026-02-13",
+        "kuota_total": 45,
+        "kuota_terpakai": 5
+    },
+    {
+        "wisata_id": 5,
+        "tanggal": "2026-02-14",
+        "kuota_total": 55,
+        "kuota_terpakai": 48
+    },
+    {
+        "wisata_id": 5,
+        "tanggal": "2026-02-15",
+        "kuota_total": 55,
+        "kuota_terpakai": 52
+    },
+    {
+        "wisata_id": 6,
+        "tanggal": "2026-02-10",
+        "kuota_total": 100,
+        "kuota_terpakai": 45
+    },
+    {
+        "wisata_id": 6,
+        "tanggal": "2026-02-11",
+        "kuota_total": 100,
+        "kuota_terpakai": 50
+    },
+    {
+        "wisata_id": 6,
+        "tanggal": "2026-02-14",
+        "kuota_total": 120,
+        "kuota_terpakai": 95
+    },
+    {
+        "wisata_id": 6,
+        "tanggal": "2026-02-15",
+        "kuota_total": 120,
+        "kuota_terpakai": 100
+    },
+    {
+        "wisata_id": 7,
+        "tanggal": "2026-02-10",
+        "kuota_total": 25,
+        "kuota_terpakai": 15
+    },
+    {
+        "wisata_id": 7,
+        "tanggal": "2026-02-11",
+        "kuota_total": 25,
+        "kuota_terpakai": 18
+    },
+    {
+        "wisata_id": 7,
+        "tanggal": "2026-02-14",
+        "kuota_total": 30,
+        "kuota_terpakai": 25
+    },
+    {
+        "wisata_id": 7,
+        "tanggal": "2026-02-15",
+        "kuota_total": 30,
+        "kuota_terpakai": 28
+    },
+    {
+        "wisata_id": 8,
+        "tanggal": "2026-02-10",
+        "kuota_total": 20,
+        "kuota_terpakai": 8
+    },
+    {
+        "wisata_id": 8,
+        "tanggal": "2026-02-11",
+        "kuota_total": 20,
+        "kuota_terpakai": 10
+    },
+    {
+        "wisata_id": 8,
+        "tanggal": "2026-02-14",
+        "kuota_total": 25,
+        "kuota_terpakai": 18
+    },
+    {
+        "wisata_id": 8,
+        "tanggal": "2026-02-15",
+        "kuota_total": 25,
+        "kuota_terpakai": 20
+    },
+    {
+        "wisata_id": 9,
+        "tanggal": "2026-02-10",
+        "kuota_total": 80,
+        "kuota_terpakai": 35
+    },
+    {
+        "wisata_id": 9,
+        "tanggal": "2026-02-11",
+        "kuota_total": 80,
+        "kuota_terpakai": 40
+    },
+    {
+        "wisata_id": 9,
+        "tanggal": "2026-02-14",
+        "kuota_total": 100,
+        "kuota_terpakai": 75
+    },
+    {
+        "wisata_id": 9,
+        "tanggal": "2026-02-15",
+        "kuota_total": 100,
+        "kuota_terpakai": 80
+    },
+    {
+        "wisata_id": 10,
+        "tanggal": "2026-02-10",
+        "kuota_total": 30,
+        "kuota_terpakai": 15
+    },
+    {
+        "wisata_id": 10,
+        "tanggal": "2026-02-11",
+        "kuota_total": 30,
+        "kuota_terpakai": 20
+    },
+    {
+        "wisata_id": 10,
+        "tanggal": "2026-02-14",
+        "kuota_total": 35,
+        "kuota_terpakai": 28
+    },
+    {
+        "wisata_id": 10,
+        "tanggal": "2026-02-15",
+        "kuota_total": 35,
+        "kuota_terpakai": 30
+    }
+]

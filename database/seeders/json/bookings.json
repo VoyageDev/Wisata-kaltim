@@ -1,0 +1,134 @@
+[
+    {
+        "user_id": 2,
+        "wisata_id": 1,
+        "paket_wisata_id": 1,
+        "tanggal_kunjungan": "2026-02-10",
+        "jumlah_orang": 2,
+        "jumlah_tiket": 2,
+        "kode_tiket": "TRV20260205001",
+        "total_harga": 850000.0,
+        "status": "paid"
+    },
+    {
+        "user_id": 3,
+        "wisata_id": 1,
+        "paket_wisata_id": 2,
+        "tanggal_kunjungan": "2026-02-10",
+        "jumlah_orang": 4,
+        "jumlah_tiket": 4,
+        "kode_tiket": "TRV20260205002",
+        "total_harga": 1500000.0,
+        "status": "paid"
+    },
+    {
+        "user_id": 4,
+        "wisata_id": 2,
+        "paket_wisata_id": 4,
+        "tanggal_kunjungan": "2026-02-11",
+        "jumlah_orang": 2,
+        "jumlah_tiket": 2,
+        "kode_tiket": "TRV20260205003",
+        "total_harga": 650000.0,
+        "status": "paid"
+    },
+    {
+        "user_id": 5,
+        "wisata_id": 3,
+        "paket_wisata_id": 6,
+        "tanggal_kunjungan": "2026-02-12",
+        "jumlah_orang": 2,
+        "jumlah_tiket": 2,
+        "kode_tiket": "TRV20260205004",
+        "total_harga": 900000.0,
+        "status": "paid"
+    },
+    {
+        "user_id": 2,
+        "wisata_id": 4,
+        "paket_wisata_id": 8,
+        "tanggal_kunjungan": "2026-02-13",
+        "jumlah_orang": 2,
+        "jumlah_tiket": 2,
+        "kode_tiket": "TRV20260205005",
+        "total_harga": 350000.0,
+        "status": "paid"
+    },
+    {
+        "user_id": 3,
+        "wisata_id": 1,
+        "paket_wisata_id": 3,
+        "tanggal_kunjungan": "2026-02-14",
+        "jumlah_orang": 10,
+        "jumlah_tiket": 10,
+        "kode_tiket": "TRV20260205006",
+        "total_harga": 3200000.0,
+        "status": "pending"
+    },
+    {
+        "user_id": 4,
+        "wisata_id": 5,
+        "paket_wisata_id": 10,
+        "tanggal_kunjungan": "2026-02-14",
+        "jumlah_orang": 2,
+        "jumlah_tiket": 2,
+        "kode_tiket": "TRV20260205007",
+        "total_harga": 750000.0,
+        "status": "pending"
+    },
+    {
+        "user_id": 5,
+        "wisata_id": 2,
+        "paket_wisata_id": 5,
+        "tanggal_kunjungan": "2026-02-15",
+        "jumlah_orang": 4,
+        "jumlah_tiket": 4,
+        "kode_tiket": "TRV20260205008",
+        "total_harga": 1100000.0,
+        "status": "pending"
+    },
+    {
+        "user_id": 2,
+        "wisata_id": 6,
+        "paket_wisata_id": 12,
+        "tanggal_kunjungan": "2026-02-15",
+        "jumlah_orang": 3,
+        "jumlah_tiket": 3,
+        "kode_tiket": "TRV20260205009",
+        "total_harga": 450000.0,
+        "status": "paid"
+    },
+    {
+        "user_id": 3,
+        "wisata_id": 7,
+        "paket_wisata_id": 13,
+        "tanggal_kunjungan": "2026-02-16",
+        "jumlah_orang": 4,
+        "jumlah_tiket": 4,
+        "kode_tiket": "TRV20260205010",
+        "total_harga": 600000.0,
+        "status": "pending"
+    },
+    {
+        "user_id": 4,
+        "wisata_id": 4,
+        "paket_wisata_id": 9,
+        "tanggal_kunjungan": "2026-02-17",
+        "jumlah_orang": 4,
+        "jumlah_tiket": 4,
+        "kode_tiket": "TRV20260205011",
+        "total_harga": 800000.0,
+        "status": "cancelled"
+    },
+    {
+        "user_id": 5,
+        "wisata_id": 10,
+        "paket_wisata_id": 16,
+        "tanggal_kunjungan": "2026-02-18",
+        "jumlah_orang": 4,
+        "jumlah_tiket": 4,
+        "kode_tiket": "TRV20260205012",
+        "total_harga": 950000.0,
+        "status": "done"
+    }
+]

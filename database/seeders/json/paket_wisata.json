@@ -1,0 +1,130 @@
+[
+    {
+        "wisata_id": 1,
+        "name": "Paket Hemat Pulau Derawan",
+        "slug": "paket-hemat-pulau-derawan",
+        "gambar": "paket-derawan-hemat.jpg",
+        "jumlah_orang": 2,
+        "harga_paket": 850000.0
+    },
+    {
+        "wisata_id": 1,
+        "name": "Paket Family Pulau Derawan",
+        "slug": "paket-family-pulau-derawan",
+        "gambar": "paket-derawan-family.jpg",
+        "jumlah_orang": 4,
+        "harga_paket": 1500000.0
+    },
+    {
+        "wisata_id": 1,
+        "name": "Paket Group Pulau Derawan",
+        "slug": "paket-group-pulau-derawan",
+        "gambar": "paket-derawan-group.jpg",
+        "jumlah_orang": 10,
+        "harga_paket": 3200000.0
+    },
+    {
+        "wisata_id": 2,
+        "name": "Paket Couple Labuan Cermin",
+        "slug": "paket-couple-labuan-cermin",
+        "gambar": "paket-labuan-couple.jpg",
+        "jumlah_orang": 2,
+        "harga_paket": 650000.0
+    },
+    {
+        "wisata_id": 2,
+        "name": "Paket Family Labuan Cermin",
+        "slug": "paket-family-labuan-cermin",
+        "gambar": "paket-labuan-family.jpg",
+        "jumlah_orang": 4,
+        "harga_paket": 1100000.0
+    },
+    {
+        "wisata_id": 3,
+        "name": "Paket Trekking Kutai Basic",
+        "slug": "paket-trekking-kutai-basic",
+        "gambar": "paket-kutai-basic.jpg",
+        "jumlah_orang": 2,
+        "harga_paket": 450000.0
+    },
+    {
+        "wisata_id": 3,
+        "name": "Paket Adventure Kutai",
+        "slug": "paket-adventure-kutai",
+        "gambar": "paket-kutai-adventure.jpg",
+        "jumlah_orang": 5,
+        "harga_paket": 950000.0
+    },
+    {
+        "wisata_id": 4,
+        "name": "Paket Day Trip Bangkirai",
+        "slug": "paket-day-trip-bangkirai",
+        "gambar": "paket-bangkirai-day.jpg",
+        "jumlah_orang": 2,
+        "harga_paket": 350000.0
+    },
+    {
+        "wisata_id": 4,
+        "name": "Paket Camping Bangkirai",
+        "slug": "paket-camping-bangkirai",
+        "gambar": "paket-bangkirai-camping.jpg",
+        "jumlah_orang": 4,
+        "harga_paket": 800000.0
+    },
+    {
+        "wisata_id": 5,
+        "name": "Paket Snorkeling Kakaban",
+        "slug": "paket-snorkeling-kakaban",
+        "gambar": "paket-kakaban-snorkel.jpg",
+        "jumlah_orang": 2,
+        "harga_paket": 750000.0
+    },
+    {
+        "wisata_id": 5,
+        "name": "Paket Group Kakaban",
+        "slug": "paket-group-kakaban",
+        "gambar": "paket-kakaban-group.jpg",
+        "jumlah_orang": 8,
+        "harga_paket": 2500000.0
+    },
+    {
+        "wisata_id": 6,
+        "name": "Paket Floating Market Tour",
+        "slug": "paket-floating-market-tour",
+        "gambar": "paket-floating-market.jpg",
+        "jumlah_orang": 3,
+        "harga_paket": 450000.0
+    },
+    {
+        "wisata_id": 7,
+        "name": "Paket Bekantan Tour",
+        "slug": "paket-bekantan-tour",
+        "gambar": "paket-bekantan.jpg",
+        "jumlah_orang": 4,
+        "harga_paket": 600000.0
+    },
+    {
+        "wisata_id": 8,
+        "name": "Paket Danau Sentarum Explore",
+        "slug": "paket-danau-sentarum-explore",
+        "gambar": "paket-sentarum.jpg",
+        "jumlah_orang": 3,
+        "harga_paket": 850000.0
+    },
+    {
+        "wisata_id": 9,
+        "name": "Paket Keraton Pontianak Tour",
+        "slug": "paket-keraton-pontianak-tour",
+        "gambar": "paket-keraton.jpg",
+        "jumlah_orang": 2,
+        "harga_paket": 250000.0
+    },
+    {
+        "wisata_id": 10,
+        "name": "Paket Sebangau Adventure",
+        "slug": "paket-sebangau-adventure",
+        "gambar": "paket-sebangau.jpg",
+        "jumlah_orang": 4,
+        "harga_paket": 950000.0
+    }
+]

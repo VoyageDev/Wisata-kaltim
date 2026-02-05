@@ -127,7 +127,7 @@
                 </div>
 
                 {{-- Reviews List --}}
-                <div class="space-y-6">
+                <div id="ulasan-container" class="space-y-6">
                     @forelse($artikel->ulasans as $ulasan)
                         {{-- Parent Comment --}}
                         <div class="border-b border-gray-200 pb-6 last:border-0">

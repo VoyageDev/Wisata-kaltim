@@ -93,21 +93,31 @@ class WisataFactory extends Factory
             $kota_id = $item['kota_id'] ?? ($kotas->isNotEmpty() ? $kotas->first()->id : null);
 
             if ($kota_id) {
-                // Convert links_bookings array to JSON string jika ada
-                $linksBookings = '';
-                if (isset($item['links_bookings']) && is_array($item['links_bookings'])) {
-                    $linksBookings = json_encode($item['links_bookings']);
+                // Parse harga_tiket - hapus "Rp" dan titik pemisah ribuan, lalu convert ke angka
+                $hargaTiket = 0;
+                if (isset($item['harga_tiket'])) {
+                    // Hapus "Rp", spasi, dan titik, lalu convert ke angka
+                    $hargaTiket = preg_replace('/[^0-9]/', '', $item['harga_tiket']);
+                    $hargaTiket = (float) $hargaTiket;
                 }
 
                 // Parse jam_buka dan jam_tutup - jika bukan format HH:MM:SS, set default
-                $jamBuka = '08:00:00';
-                if (isset($item['jam_buka']) && preg_match('/^(\d{1,2}):(\d{2}):(\d{2})$/', $item['jam_buka'])) {
-                    $jamBuka = $item['jam_buka'];
+                $jamBuka = '00:00:00'; // Default untuk "24 Jam"
+                if (isset($item['jam_buka'])) {
+                    if (preg_match('/^(\d{1,2}):(\d{2}):(\d{2})$/', $item['jam_buka'])) {
+                        $jamBuka = $item['jam_buka'];
+                    } elseif (stripos($item['jam_buka'], '24') !== false) {
+                        $jamBuka = '00:00:00'; // 24 jam berarti selalu buka
+                    }
                 }
 
-                $jamTutup = '17:00:00';
-                if (isset($item['jam_tutup']) && preg_match('/^(\d{1,2}):(\d{2}):(\d{2})$/', $item['jam_tutup'])) {
-                    $jamTutup = $item['jam_tutup'];
+                $jamTutup = '23:59:59'; // Default untuk "24 Jam"
+                if (isset($item['jam_tutup'])) {
+                    if (preg_match('/^(\d{1,2}):(\d{2}):(\d{2})$/', $item['jam_tutup'])) {
+                        $jamTutup = $item['jam_tutup'];
+                    } elseif (stripos($item['jam_tutup'], '24') !== false) {
+                        $jamTutup = '23:59:59'; // 24 jam berarti selalu buka
+                    }
                 }
 
                 Wisata::create([
@@ -117,8 +127,7 @@ class WisataFactory extends Factory
                     'gambar' => $item['gambar'] ?? null,
                     'description' => $item['description'] ?? '',
                     'links_maps' => $item['links_maps'] ?? null,
-                    'harga_tiket' => $item['harga_tiket'] ?? '',
-                    'links_bookings' => $linksBookings,
+                    'harga_tiket' => $hargaTiket,
                     'jam_buka' => $jamBuka,
                     'jam_tutup' => $jamTutup,
                     'status' => $item['status'] ?? 'Open',

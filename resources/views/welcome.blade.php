@@ -44,7 +44,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-                    <i class="fas fa-star text-[#D4AF37] mr-2"></i>
+                    <i class="fas fa-star text-[#f8f008] mr-2"></i>
                     Berita Wisata Terbaru
                 </h2>
                 <p class="text-gray-600 text-lg">Temukan informasi detail wisata dan berita terbaru seputar destinasi wisata Indonesia</p>
@@ -58,14 +58,14 @@
                             style="background-image: url('{{ $artikel->thumbnail ? asset($artikel->thumbnail) : asset('images/seed/artikels/artikel-1.svg') }}');">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                             <div class="absolute top-4 left-4">
-                                <span class="bg-[#D4AF37] text-gray-900 text-xs font-bold px-3 py-1 rounded-full">
+                                <span class="bg-[#e0b939] text-gray-900 text-xs font-bold px-3 py-1 rounded-full">
                                     <i class="fas fa-newspaper mr-1"></i> Berita
                                 </span>
                             </div>
                             <div class="absolute bottom-4 left-4 right-4">
                                 <div class="text-white text-xs font-semibold mb-2 flex items-center">
                                     <i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{ $artikel->kota->name ?? 'Indonesia' }}
+                                    {{ $artikel->wisata->kota->name ?? 'Indonesia' }}
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@
                                                 {{ $wisata->jam_tutup_format }}</span>
                                         </div>
                                         <div class="text-sm font-bold text-[#8B6F47]">
-                                            Rp {{ number_format($wisata->harga, 0, ',', '.') }}
+                                            {{ $wisata->harga_tiket }}
                                         </div>
                                     </div>
                                 </div>
@@ -181,7 +181,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
                 <div>
-                    <h4 class="text-lg font-bold mb-4 border-b border-gray-600 pb-2 inline-block">
+                    <h4 class="text-lg font-bold mb-4 border-b border-gray-600   pb-2 inline-block">
                         <i class="fas fa-info-circle mr-2"></i>Tentang Portal
                     </h4>
                     <p class="text-gray-300 text-sm leading-relaxed">

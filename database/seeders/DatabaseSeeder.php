@@ -2,14 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\Artikel;
 use App\Models\Kota;
-use App\Models\Ulasan;
 use App\Models\User;
 use App\Models\Wisata;
 use Database\Factories\ArtikelFactory;
+use Database\Factories\BookingsFactory;
 use Database\Factories\KotaFactory;
+use Database\Factories\PaketWisataFactory;
+use Database\Factories\PaymentsChannelsFactory;
+use Database\Factories\PaymentsFactory;
+use Database\Factories\UlasanFactory;
 use Database\Factories\WisataFactory;
+use Database\Factories\WisataKuotaFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -24,7 +28,7 @@ class DatabaseSeeder extends Seeder
     {
         // Create regular users
         User::factory()->admin()->create();
-        $users = User::factory(10)->create();
+        $users = User::factory(4)->create(); // Reduced to 4 users since we have specific user_ids in JSON
 
         // Create kotas from JSON
         KotaFactory::createFromJson();
@@ -37,26 +41,22 @@ class DatabaseSeeder extends Seeder
         // Create artikels from JSON
         ArtikelFactory::createFromJson(user: $users->random());
 
-        // buat komentar user untuk wisata dan artikel
-        foreach ($users as $user) {
-            // wisata
-            if ($wisatas->isNotEmpty()) {
-                Ulasan::factory(rand(1, 3))->create([
-                    'user_id' => $user->id,
-                    'reviewable_type' => Wisata::class,
-                    'reviewable_id' => $wisatas->random()->id,
-                ]);
-            }
+        // Create payment channels from JSON
+        PaymentsChannelsFactory::createFromJson();
 
-            // artikel
-            $artikel = Artikel::inRandomOrder()->first();
-            if ($artikel) {
-                Ulasan::factory(rand(0, 2))->create([
-                    'user_id' => $user->id,
-                    'reviewable_type' => Artikel::class,
-                    'reviewable_id' => $artikel->id,
-                ]);
-            }
-        }
+        // Create paket wisatas from JSON
+        PaketWisataFactory::createFromJson();
+
+        // Create wisata kuotas from JSON
+        WisataKuotaFactory::createFromJson();
+
+        // Create ulasans from JSON
+        UlasanFactory::createFromJson();
+
+        // Create bookings from JSON
+        BookingsFactory::createFromJson();
+
+        // Create payments from JSON
+        PaymentsFactory::createFromJson();
     }
 }

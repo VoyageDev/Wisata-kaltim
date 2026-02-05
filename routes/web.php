@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KotaController;
 use App\Http\Controllers\ProfileController;
@@ -12,32 +13,41 @@ use Illuminate\Support\Facades\Route;
 // Landing page
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Member route
+// artikel route
+Route::get('/artikel', [ArtikelController::class, 'memberIndex'])->name('artikel.index');
+Route::get('/artikel/{slug}', [ArtikelController::class, 'detail'])->name('artikel.detail');
+Route::get('/ulasan/load-more', [UlasanController::class, 'loadMore'])->name('ulasan.loadMore');
+
+// Load more artikel route
+Route::get('/artikel-load-more/terbaru/{offset}', [ArtikelController::class, 'loadMoreTerbaru'])->name('artikel.loadMoreTerbaru');
+Route::get('/artikel-load-more/populer/{offset}', [ArtikelController::class, 'loadMorePopuler'])->name('artikel.loadMorePopuler');
+Route::get('/artikel-load-more/top-wisata/{offset}', [ArtikelController::class, 'loadMoreTopWisata'])->name('artikel.loadMoreTopWisata');
+
+// kota route
+Route::get('/kota', [KotaController::class, 'memberIndex'])->name('kota.index');
+Route::get('/kota/{slug}', [KotaController::class, 'detail'])->name('kota.detail');
+
+// wisata route
+Route::get('/wisata', [WisataController::class, 'memberIndex'])->name('wisata.index');
+Route::get('/wisata/{slug}', [WisataController::class, 'detail'])->name('wisata.detail');
+
+// ** Member route ** //
 Route::middleware('auth')->group(function () {
-    // artikel route
-    Route::get('/artikel', [ArtikelController::class, 'memberIndex'])->name('artikel.index');
-    Route::get('/artikel/{slug}', [ArtikelController::class, 'detail'])->name('artikel.detail');
 
-    // Load more artikel route
-    Route::get('/artikel-load-more/terbaru/{offset}', [ArtikelController::class, 'loadMoreTerbaru'])->name('artikel.loadMoreTerbaru');
-    Route::get('/artikel-load-more/populer/{offset}', [ArtikelController::class, 'loadMorePopuler'])->name('artikel.loadMorePopuler');
-    Route::get('/artikel-load-more/top-wisata/{offset}', [ArtikelController::class, 'loadMoreTopWisata'])->name('artikel.loadMoreTopWisata');
+    // History routes (member)
+    Route::prefix('history')->name('history.')->group(function () {
+        Route::get('/', [HistoryController::class, 'index'])->name('index');
+        Route::get('/bookings', [HistoryController::class, 'bookings'])->name('bookings');
+        Route::get('/ulasans', [HistoryController::class, 'ulasans'])->name('ulasans');
+        Route::get('/booking/{booking}', [HistoryController::class, 'showBooking'])->name('booking.show');
+        Route::post('/booking/{booking}/cancel', [HistoryController::class, 'cancelBooking'])->name('booking.cancel');
+        Route::put('/ulasan/{ulasan}', [HistoryController::class, 'updateUlasan'])->name('ulasan.update');
+        Route::delete('/ulasan/{ulasan}', [HistoryController::class, 'deleteUlasan'])->name('ulasan.delete');
+    });
 
-    // kota route
-    Route::get('/kota', [KotaController::class, 'memberIndex'])->name('kota.index');
-    Route::get('/kota/{slug}', [KotaController::class, 'detail'])->name('kota.detail');
-
-    // wisata route
-    Route::get('/wisata', [WisataController::class, 'memberIndex'])->name('wisata.index');
-    Route::get('/wisata/{slug}', [WisataController::class, 'detail'])->name('wisata.detail');
-
-    // history route
-    Route::get('/history', [HomeController::class, 'showHistory'])->name('history.index');
-
-    // Ulasan route
+    // Ulasan routes (for creating and deleting reviews from wisata/artikel pages)
     Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
-    Route::delete('/ulasan/{ulasan}', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
-    Route::get('/ulasan/load-more', [UlasanController::class, 'loadMore'])->name('ulasan.loadMore');
+    Route::delete('/ulasan/{ulasan}', [HistoryController::class, 'deleteUlasan'])->name('ulasan.destroy');
 });
 
 // Dashboard (admin only)
