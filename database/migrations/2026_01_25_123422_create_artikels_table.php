@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('judul');
             $table->string('slug')->unique();
             $table->bigInteger('views')->default(0);
-            $table->text('isi');
+            $table->json('isi');
 
             // kalau mau API
             $table->string('api_source')->nullable(); // Nama sumber API (misal: 'BMKG' atau 'NewsAPI')

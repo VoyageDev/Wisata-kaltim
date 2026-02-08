@@ -28,8 +28,6 @@
                                     Wisata</option>
                                 <option value="App\Models\Artikel" @if (request('type') === 'App\Models\Artikel') selected @endif>
                                     Artikel</option>
-                                <option value="App\Models\Kota" @if (request('type') === 'App\Models\Kota') selected @endif>Kota
-                                </option>
                             </select>
                         </div>
                         <div>
@@ -126,11 +124,13 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center">
-                                            @for ($i = 0; $i < $ulasan->rating; $i++)
-                                                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= $ulasan->rating)
+                                                    <i class="fas fa-star text-yellow-400 text-sm"></i>
+                                                @else
+                                                    <i class="fas fa-star text-gray-500 text-sm"></i>
+                                                @endif
                                             @endfor
-                                            <span
-                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">{{ $ulasan->rating }}/5</span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">

@@ -61,6 +61,7 @@ class ArtikelController extends Controller
         return view('admin.artikel.show', compact('artikel'));
     }
 
+    // memuat detail artikel beserta ulasan berdasarkan slug
     public function detail($slug)
     {
         $artikel = Artikel::with([

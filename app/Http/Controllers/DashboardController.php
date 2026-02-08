@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Artikel;
+use App\Models\Bookings;
 use App\Models\Kota;
 use App\Models\Ulasan;
 use App\Models\Wisata;
@@ -19,7 +19,8 @@ class DashboardController extends Controller
         $wisataCount = Wisata::count();
         $kotaCount = Kota::count();
         $ulasanCount = Ulasan::count();
+        $bookingsCount = Bookings::count();
 
-        return view('dashboard', compact('artikelCount', 'wisataCount', 'kotaCount', 'ulasanCount'));
+        return view('dashboard', compact('artikelCount', 'wisataCount', 'kotaCount', 'ulasanCount', 'bookingsCount'));
     }
 }

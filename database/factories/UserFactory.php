@@ -54,4 +54,13 @@ class UserFactory extends Factory
             'role' => 'admin',
         ]);
     }
+    public function member(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'Member',
+            'email' => 'member@travel.com',
+            'password' => Hash::make('member123'),
+            'role' => 'member',
+        ]);
+    }
 }

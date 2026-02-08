@@ -2,14 +2,14 @@
     {
         "booking_id": 1,
         "payment_channel_id": 1,
-        "metode": "BCA Virtual Account",
+        "metode": "Transfer BCA",
         "jumlah": 850000.0,
         "status": "paid",
         "paid_at": "2026-02-05 10:30:00"
     },
     {
         "booking_id": 2,
-        "payment_channel_id": 4,
+        "payment_channel_id": 1,
         "metode": "Transfer BCA",
         "jumlah": 1500000.0,
         "status": "paid",
@@ -17,7 +17,7 @@
     },
     {
         "booking_id": 3,
-        "payment_channel_id": 7,
+        "payment_channel_id": 2,
         "metode": "GoPay",
         "jumlah": 650000.0,
         "status": "paid",
@@ -26,63 +26,63 @@
     {
         "booking_id": 4,
         "payment_channel_id": 2,
-        "metode": "BNI Virtual Account",
+        "metode": "GoPay",
         "jumlah": 900000.0,
         "status": "paid",
         "paid_at": "2026-02-05 13:20:00"
     },
     {
         "booking_id": 5,
-        "payment_channel_id": 10,
-        "metode": "QRIS (All E-Wallet)",
+        "payment_channel_id": 3,
+        "metode": "OVO",
         "jumlah": 350000.0,
         "status": "paid",
         "paid_at": "2026-02-05 14:10:00"
     },
     {
         "booking_id": 6,
-        "payment_channel_id": 1,
-        "metode": "BCA Virtual Account",
+        "payment_channel_id": 3,
+        "metode": "OVO",
         "jumlah": 3200000.0,
         "status": "pending",
         "paid_at": null
     },
     {
         "booking_id": 7,
-        "payment_channel_id": 8,
-        "metode": "OVO",
+        "payment_channel_id": 4,
+        "metode": "DANA",
         "jumlah": 750000.0,
         "status": "pending",
         "paid_at": null
     },
     {
         "booking_id": 8,
-        "payment_channel_id": 5,
-        "metode": "Transfer BNI",
+        "payment_channel_id": 4,
+        "metode": "DANA",
         "jumlah": 1100000.0,
         "status": "pending",
         "paid_at": null
     },
     {
         "booking_id": 9,
-        "payment_channel_id": 9,
-        "metode": "DANA",
+        "payment_channel_id": 5,
+        "metode": "QRIS (All E-Wallet)",
         "jumlah": 450000.0,
         "status": "paid",
         "paid_at": "2026-02-05 15:30:00"
     },
     {
         "booking_id": 10,
-        "payment_channel_id": 3,
-        "metode": "Mandiri Virtual Account",
+        "payment_channel_id": 5,
+        "metode": "QRIS (All E-Wallet)",
         "jumlah": 600000.0,
         "status": "pending",
         "paid_at": null
     },
     {
         "booking_id": 11,
-        "payment_channel_id": 6,
-        "metode": "Transfer Mandiri",
+        "payment_channel_id": 4,
+        "metode": "DANA",
         "jumlah": 800000.0,
         "status": "failed",
         "paid_at": null
@@ -90,7 +90,7 @@
     {
         "booking_id": 12,
         "payment_channel_id": 1,
-        "metode": "BCA Virtual Account",
+        "metode": "Transfer BCA",
         "jumlah": 950000.0,
         "status": "paid",
         "paid_at": "2026-01-25 09:00:00"

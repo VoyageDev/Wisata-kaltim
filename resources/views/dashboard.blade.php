@@ -7,31 +7,9 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            {{-- Navigation Links --}}
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Navigasi Cepat</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <a href="{{ route('admin.artikel.index') }}"
-                        class="flex items-center p-4 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition text-blue-700 dark:text-blue-400 font-medium">
-                        <i class="fas fa-newspaper mr-2"></i> Berita
-                    </a>
-                    <a href="{{ route('admin.wisata.index') }}"
-                        class="flex items-center p-4 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-lg transition text-green-700 dark:text-green-400 font-medium">
-                        <i class="fas fa-map-marked-alt mr-2"></i> Wisata
-                    </a>
-                    <a href="{{ route('admin.kota.index') }}"
-                        class="flex items-center p-4 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-lg transition text-purple-700 dark:text-purple-400 font-medium">
-                        <i class="fas fa-city mr-2"></i> Kota
-                    </a>
-                    <a href="{{ route('admin.ulasan.index') }}"
-                        class="flex items-center p-4 bg-orange-50 dark:bg-orange-900/30 hover:bg-orange-100 dark:hover:bg-orange-900/50 rounded-lg transition text-orange-700 dark:text-orange-400 font-medium">
-                        <i class="fas fa-comments mr-2"></i> Ulasan
-                    </a>
-                </div>
-            </div>
 
             {{-- Stats Grid --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                 {{-- Berita Card --}}
                 <div
                     class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition-shadow">
@@ -112,6 +90,27 @@
                         <a href="{{ route('admin.ulasan.index') }}"
                             class="block mt-4 text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">
                             Kelola Ulasan <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                {{-- booking Card --}}
+                <div
+                    class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Booking</p>
+                                <p class="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">{{ $bookingsCount }}
+                                </p>
+                            </div>
+                            <div class="bg-red-100 dark:bg-red-900 p-4 rounded-lg">
+                                <i class="fas fa-ticket-alt text-red-600 dark:text-red-400 text-2xl"></i>
+                            </div>
+                        </div>
+                        <a href="{{ route('admin.booking.index') }}"
+                            class="block mt-4 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">
+                            Kelola Booking <i class="fas fa-arrow-right ml-2"></i>
                         </a>
                     </div>
                 </div>

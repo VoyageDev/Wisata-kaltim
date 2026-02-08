@@ -41,7 +41,7 @@
                     </div>
 
                     {{-- Title --}}
-                    <h1 class="text-4xl font-bold text-gray-800 mb-6">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
                         {{ $artikel->judul }}
                     </h1>
 
@@ -55,7 +55,9 @@
 
                     {{-- Article Body --}}
                     <div class="prose prose-lg max-w-none mb-8 text-gray-700 leading-relaxed">
-                        {!! $artikel->isi !!}
+                        @foreach ($artikel->isi as $paragraph)
+                            <p>{{ $paragraph }}</p> <br>
+                        @endforeach
                     </div>
 
                     {{-- API Source Info (if exists) --}}
@@ -89,41 +91,51 @@
 
                 {{-- Review Form --}}
                 <div x-show="showReviewForm" x-transition class="bg-white rounded-xl shadow-lg p-6 mb-8">
-                    <form action="{{ route('ulasan.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="reviewable_type" value="App\Models\Artikel">
-                        <input type="hidden" name="reviewable_id" value="{{ $artikel->id }}">
+                    @auth
+                        <form action="{{ route('ulasan.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="reviewable_type" value="App\Models\Artikel">
+                            <input type="hidden" name="reviewable_id" value="{{ $artikel->id }}">
 
-                        {{-- Rating --}}
-                        <div class="mb-4">
-                            <label class="block text-gray-700 font-semibold mb-2">Rating</label>
-                            <div class="flex gap-2" x-data="{ rating: 0 }">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <button type="button" @click="rating = {{ $i }}"
-                                        class="text-3xl transition-colors">
-                                        <i class="fas fa-star"
-                                            :class="rating >= {{ $i }} ? 'text-yellow-400' : 'text-gray-300'"></i>
-                                    </button>
-                                @endfor
-                                <input type="hidden" name="rating" :value="rating" required>
+                            {{-- Rating --}}
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-semibold mb-2">Rating</label>
+                                <div class="flex gap-2" x-data="{ rating: 0 }">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <button type="button" @click="rating = {{ $i }}"
+                                            class="text-3xl transition-colors">
+                                            <i class="fas fa-star"
+                                                :class="rating >= {{ $i }} ? 'text-yellow-400' : 'text-gray-300'"></i>
+                                        </button>
+                                    @endfor
+                                    <input type="hidden" name="rating" :value="rating" required>
+                                </div>
                             </div>
+
+                            {{-- Komentar --}}
+                            <div class="mb-4">
+                                <label for="komentar" class="block text-gray-700 font-semibold mb-2">Komentar</label>
+                                <textarea name="komentar" id="komentar" rows="4"
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
+                                    placeholder="Tulis komentar Anda..." required></textarea>
+                            </div>
+
+                            <button type="submit"
+                                class="bg-gradient-to-r from-[#16A34A] to-[#15803D] text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                Kirim Ulasan
+                            </button>
+                        </form>
+                    @else
+                        <div class="text-center py-4">
+                            <p class="text-gray-600 mb-4">Anda harus login untuk membuat ulasan</p>
+                            <button @click="showLoginModal = true; showReviewForm = false"
+                                class="bg-gradient-to-r from-[#16A34A] to-[#15803D] text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
+                                <i class="fas fa-sign-in-alt mr-2"></i>
+                                Login untuk Membuat Ulasan
+                            </button>
                         </div>
-
-
-                        {{-- Komentar --}}
-                        <div class="mb-4">
-                            <label for="komentar" class="block text-gray-700 font-semibold mb-2">Komentar</label>
-                            <textarea name="komentar" id="komentar" rows="4"
-                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
-                                placeholder="Tulis komentar Anda..." required></textarea>
-                        </div>
-
-                        <button type="submit"
-                            class="bg-gradient-to-r from-[#16A34A] to-[#15803D] text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300">
-                            <i class="fas fa-paper-plane mr-2"></i>
-                            Kirim Ulasan
-                        </button>
-                    </form>
+                    @endauth
                 </div>
 
                 {{-- Reviews List --}}
@@ -141,7 +153,17 @@
                                 <div class="flex-1">
                                     <div class="flex items-center justify-between mb-2">
                                         <div>
-                                            <h4 class="font-semibold text-gray-800">{{ $ulasan->user->name }}</h4>
+                                            <h4 class="font-semibold text-gray-800 flex items-center gap-1">{{ $ulasan->user->name }}
+                                                @if ($ulasan->user->role === 'admin')
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        fill="currentColor" class="w-4 h-4 text-blue-500"
+                                                        title="Administrator">
+                                                        <path fill-rule="evenodd"
+                                                            d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.491 4.491 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                @endif
+                                            </h4>
                                             <div class="flex items-center space-x-2">
                                                 <p class="text-xs text-gray-500">
                                                     {{ $ulasan->created_at->diffForHumans() }}
@@ -200,7 +222,7 @@
                                         </form>
                                     </div>
 
-                                    {{-- Replies (Collapsible) - Show all replies that directly or indirectly reply to this comment --}}
+                                    {{-- Replies (Collapsible) - Menunjukan semua reply yang bersangkutan dengan username di samping nama balasan --}}
                                     @php
                                         // Get all reply IDs of this comment
                                         $directReplies = $allReplies
@@ -291,7 +313,7 @@
                                         </a>
                                     </h3>
                                     <p class="text-gray-600 text-sm line-clamp-3 mb-3">
-                                        {{ Str::limit(strip_tags($terkait->isi), 100) }}
+                                        {{ Str::limit(strip_tags(is_array($terkait->isi) ? implode(' ', $terkait->isi) : $terkait->isi), 100) }}
                                     </p>
                                     <div class="flex items-center justify-between text-xs text-gray-500">
                                         <span class="flex items-center">
@@ -306,7 +328,6 @@
                     </div>
                 </div>
             @endif
-
         </div>
     </div>
 
@@ -429,7 +450,7 @@
                         /a> < /
                     h3 > <
                         p class = "text-gray-600 text-sm line-clamp-3 mb-3" >
-                        {{ Str::limit(strip_tags($terkait->isi), 100) }} <
+                        {{ Str::limit(strip_tags(is_array($terkait->isi) ? implode(' ', $terkait->isi) : $terkait->isi), 100) }} <
                         /p> <
                     div class = "flex items-center justify-between text-xs text-gray-500" >
                     <

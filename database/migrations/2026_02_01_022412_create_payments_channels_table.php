@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments_channels', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['virtual_account', 'bank_transfer', 'e_wallet']);
+            $table->enum('type', ['virtual_account', 'bank_transfer', 'e_wallet', 'qris']);
             $table->string('code')->unique()->comment('bca_va, qris, bni_manual');
             $table->string('name'); // contoh bank Bca, gopay
             $table->string('account_number')->nullable()->comment('No Rekening Admin / Tujuan Transfer');

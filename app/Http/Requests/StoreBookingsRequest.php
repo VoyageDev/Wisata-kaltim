@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreBookingsRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreBookingsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check();
     }
 
     /**
@@ -22,7 +23,10 @@ class StoreBookingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'wisata_id' => 'required|exists:wisatas,id',
+            'paket_wisata_id' => 'nullable|exists:paket_wisatas,id',
+            'jumlah_orang' => 'nullable|numeric|min:1',
+            'tanggal_kunjungan' => 'required|date|after:today',
         ];
     }
 }

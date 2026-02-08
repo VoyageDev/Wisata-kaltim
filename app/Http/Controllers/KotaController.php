@@ -55,13 +55,11 @@ class KotaController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:kotas,name',
-            'deskripsi' => 'required|string',
         ]);
 
         Kota::create([
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
-            'deskripsi' => $validated['deskripsi'],
         ]);
 
         return redirect()->route('admin.kota.index')->with('success', 'Kota berhasil dibuat');

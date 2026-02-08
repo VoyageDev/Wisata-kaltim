@@ -38,6 +38,7 @@
                         <thead class="bg-gradient-to-r from-[#0f0c29] via-[#302b63] to-[#24243e] text-white">
                             <tr>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Judul</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Wisata</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Kota</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Penulis</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Views</th>
@@ -53,9 +54,13 @@
                                             {{ $artikel->judul }}</div>
                                     </td>
                                     <td class="px-6 py-4">
+                                        <div class="text-gray-600 dark:text-gray-400 text-sm line-clamp-1">
+                                            {{ $artikel->wisata->name ?? 'Wisata Tidak Tersedia' }}</div>
+                                    </td>
+                                    <td class="px-6 py-4">
                                         <span
                                             class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-3 py-1 rounded-full font-medium">
-                                            {{ $artikel->kota->name }}
+                                            {{ $artikel->wisata->kota->name }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
@@ -73,8 +78,8 @@
                                                 class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 font-medium text-sm">
                                                 <i class="fas fa-edit"></i>Edit
                                             </a>
-                                            <form action="{{ route('admin.artikel.destroy', $artikel) }}" method="POST"
-                                                onsubmit="return confirm('Yakin ingin menghapus?')">
+                                            <form action="{{ route('admin.artikel.destroy', $artikel) }}"
+                                                method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"

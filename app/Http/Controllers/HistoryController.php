@@ -17,6 +17,9 @@ class HistoryController extends Controller
         $user = Auth::user();
         $tab = $request->get('tab', 'bookings');
 
+        // 1. AMBIL STATUS DARI URL (Link Stats Card mengirim ?status=...)
+        $status = $request->get('status');
+
         // Get bookings statistics
         $bookingsStats = [
             'all' => Bookings::where('user_id', $user->id)->count(),
@@ -29,11 +32,23 @@ class HistoryController extends Controller
         // Get ulasan count
         $ulasanCount = Ulasan::where('user_id', $user->id)->count();
 
-        // Get bookings data with pagination
-        $bookings = Bookings::where('user_id', $user->id)
+        // --- MULAI PERBAIKAN QUERY DISINI ---
+
+        // 2. Siapkan Query Dasar
+        $bookingsQuery = Bookings::where('user_id', $user->id)
             ->with(['wisata', 'paketWisata', 'payments'])
-            ->latest()
-            ->paginate(10);
+            ->latest(); // Sudah otomatis "Paling Baru"
+
+        // 3. Terapkan Filter Status (Jika diklik dari Stats Card)
+        if ($status && in_array($status, ['pending', 'paid', 'done', 'cancelled'])) {
+            $bookingsQuery->where('status', $status);
+        }
+
+        // 4. Eksekusi Pagination
+        // ->appends() penting agar saat pindah ke halaman 2, filternya tidak hilang
+        $bookings = $bookingsQuery->paginate(10)->appends($request->query());
+
+        // --- SELESAI PERBAIKAN ---
 
         // Get ulasans data with pagination
         $ulasans = Ulasan::where('user_id', $user->id)
@@ -137,9 +152,32 @@ class HistoryController extends Controller
             return back()->with('error', 'Hanya pemesanan dengan status pending yang dapat dibatalkan');
         }
 
+        // Update booking status to cancelled
         $booking->update(['status' => 'cancelled']);
 
+        // Update all related payments to cancelled status
+        $booking->payments()->update(['status' => 'failed']);
+
         return back()->with('success', 'Pemesanan berhasil dibatalkan');
+    }
+
+    public function completeBooking(Bookings $booking)
+    {
+        // 1. Cek apakah booking ini milik user yang sedang login
+        if ($booking->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access');
+        }
+
+        // 2. Validasi: Hanya status 'paid' yang bisa diubah jadi 'done'
+        if ($booking->status !== 'paid') {
+            return back()->with('error', 'Hanya pesanan yang sudah dibayar yang dapat diselesaikan.');
+        }
+
+        // 3. Update status
+        $booking->update(['status' => 'done']);
+
+        // 4. Redirect kembali dengan pesan sukses
+        return back()->with('success', 'Terima kasih! Pesanan telah diselesaikan.');
     }
 
     /**

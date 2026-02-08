@@ -1,82 +1,42 @@
 [
     {
-        "type": "virtual_account",
-        "code": "bca_va",
-        "name": "BCA Virtual Account",
-        "account_number": null,
-        "account_name": null,
-        "is_active": true
-    },
-    {
-        "type": "virtual_account",
-        "code": "bni_va",
-        "name": "BNI Virtual Account",
-        "account_number": null,
-        "account_name": null,
-        "is_active": true
-    },
-    {
-        "type": "virtual_account",
-        "code": "mandiri_va",
-        "name": "Mandiri Virtual Account",
-        "account_number": null,
-        "account_name": null,
-        "is_active": true
-    },
-    {
         "type": "bank_transfer",
         "code": "bca_manual",
         "name": "Transfer BCA",
-        "account_number": "8765432109",
-        "account_name": "PT Travel Kalimantan",
-        "is_active": true
-    },
-    {
-        "type": "bank_transfer",
-        "code": "bni_manual",
-        "name": "Transfer BNI",
-        "account_number": "1234567890",
-        "account_name": "PT Travel Kalimantan",
-        "is_active": true
-    },
-    {
-        "type": "bank_transfer",
-        "code": "mandiri_manual",
-        "name": "Transfer Mandiri",
-        "account_number": "1472583690",
-        "account_name": "PT Travel Kalimantan",
+        "account_number": "6585299468",
+        "account_name": "Louiz Vigo",
         "is_active": true
     },
     {
         "type": "e_wallet",
         "code": "gopay",
         "name": "GoPay",
-        "account_number": "081234567890",
-        "account_name": "Travel Kalimantan",
+        "account_number": "085386125690",
+        "account_name": "Louiz Vigo",
         "is_active": true
     },
     {
         "type": "e_wallet",
         "code": "ovo",
         "name": "OVO",
-        "account_number": "081234567890",
-        "account_name": "Travel Kalimantan",
+        "account_number": "085386125690",
+        "account_name": "Louiz Vigo",
         "is_active": true
     },
     {
         "type": "e_wallet",
         "code": "dana",
         "name": "DANA",
-        "account_number": "081234567890",
-        "account_name": "Travel Kalimantan",
+        "account_number": "085386125690",
+        "account_name": "Louiz Vigo",
         "is_active": true
     },
     {
-        "type": "e_wallet",
+        "type": "qris",
         "code": "qris",
         "name": "QRIS (All E-Wallet)",
         "account_number": null,
-        "account_name": null,
+        "account_name": "Louiz Vigo",
         "is_active": true
     }
 ]

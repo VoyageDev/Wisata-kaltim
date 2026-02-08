@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Bookings;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class BookingsPolicy
 {
@@ -21,7 +20,7 @@ class BookingsPolicy
      */
     public function view(User $user, Bookings $bookings): bool
     {
-        return false;
+        return $user->id === $bookings->user_id;
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Wisata extends Model
@@ -41,5 +42,10 @@ class Wisata extends Model
     public function ulasans(): MorphMany
     {
         return $this->morphMany(Ulasan::class, 'reviewable');
+    }
+
+    public function paketWisatas(): HasMany
+    {
+        return $this->hasMany(PaketWisata::class);
     }
 }

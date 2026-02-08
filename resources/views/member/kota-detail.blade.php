@@ -14,7 +14,7 @@
             {{-- City Header --}}
             <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-12">
                 <div class="h-96 overflow-hidden relative">
-                    <img src="{{ asset($kota->image) }}" alt="{{ $kota->name }}" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/seed/kota/' . $kota->image) }}" alt="{{ $kota->name }}" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                         <div class="p-8 w-full">
                             <h1 class="text-5xl font-bold text-white mb-2">{{ $kota->name }}</h1>
@@ -40,7 +40,7 @@
                             <div
                                 class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 group">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="{{ asset($wisata->image ?? 'images/placeholder.jpg') }}"
+                                    <img src="{{ asset('images/seed/wisata/' . ($wisata->gambar ?? 'placeholder.jpg')) }}"
                                         alt="{{ $wisata->name }}"
                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                 </div>
@@ -64,7 +64,7 @@
                                     @if ($wisata->address)
                                         <div class="text-xs text-gray-500 mb-4 flex items-start">
                                             <i class="fas fa-map-pin text-[#8B6F47] mr-2 mt-0.5 flex-shrink-0"></i>
-                                            <span class="line-clamp-2">{{ $wisata->address }}</span>
+                                            <span class="line-clamp-2">{{ $wisata->alamat }}</span>
                                         </div>
                                     @endif
                                     <a href="{{ route('wisata.detail', $wisata->slug) }}"
@@ -96,7 +96,7 @@
                                     {{-- Modal Content --}}
                                     <div class="p-6">
                                         {{-- Wisata Image --}}
-                                        <img src="{{ asset($wisata->image ?? 'images/placeholder.jpg') }}"
+                                        <img src="{{ asset('images/seed/wisata/' . $wisata->image ?? 'images/placeholder.jpg') }}"
                                             alt="{{ $wisata->name }}" class="w-full h-64 object-cover rounded-xl mb-6">
 
                                         {{-- Wisata Info --}}
@@ -242,7 +242,7 @@
                                 <div
                                     class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 h-full flex flex-col">
                                     <div class="h-48 overflow-hidden">
-                                        <img src="{{ asset($artikel->thumbnail) }}" alt="{{ $artikel->judul }}"
+                                        <img src="{{ asset('images/seed/artikel/' . $artikel->thumbnail) }}" alt="{{ $artikel->judul }}"
                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                     </div>
                                     <div class="p-5 flex flex-col flex-grow">
@@ -251,7 +251,7 @@
                                             {{ $artikel->judul }}
                                         </h3>
                                         <p class="text-gray-600 text-sm line-clamp-3 mb-4 flex-grow">
-                                            {{ Str::limit(strip_tags($artikel->isi), 100) }}
+                                            {{ Str::limit(strip_tags(is_array($artikel->isi) ? implode(' ', $artikel->isi) : $artikel->isi), 100) }}
                                         </p>
                                         <div class="flex items-center justify-between text-xs text-gray-500">
                                             <span class="flex items-center">

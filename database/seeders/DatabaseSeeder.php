@@ -27,8 +27,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create regular users
+        User::factory()->member()->create();
         User::factory()->admin()->create();
-        $users = User::factory(4)->create(); // Reduced to 4 users since we have specific user_ids in JSON
+        $users = User::factory(4)->create();
 
         // Create kotas from JSON
         KotaFactory::createFromJson();

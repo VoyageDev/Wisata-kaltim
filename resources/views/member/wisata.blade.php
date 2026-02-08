@@ -8,7 +8,7 @@
                     <i class="fas fa-map-marked-alt text-[#8B6F47] mr-3"></i>
                     Daftar Wisata
                 </h1>
-                <p class="text-gray-600 text-lg">Temukan destinasi wisata terbaik di seluruh Indonesia</p>
+                <p class="text-gray-600 text-lg">Temukan destinasi wisata terbaik yang ada di kalimantan timur</p>
             </div>
 
             {{-- Wisata Grid (4 Columns) --}}
@@ -19,7 +19,7 @@
                             class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 h-full flex flex-col">
                             {{-- Wisata Image --}}
                             <div class="relative h-48 overflow-hidden bg-gray-300">
-                                <img src="{{ asset($wisata->gambar) }}" alt="{{ $wisata->name }}"
+                                <img src="{{ asset('images/seed/wisata/' . $wisata->gambar) }}" alt="{{ $wisata->name }}"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                 {{-- Status Badge --}}
                                 <div class="absolute top-4 right-4">
@@ -32,7 +32,7 @@
                                 @if ($wisata->kota)
                                     <div class="absolute top-4 left-4">
                                         <span
-                                            class="px-3 py-1 bg-[#8B6F47] text-white rounded-full text-xs font-semibold shadow-lg">
+                                            class="px-3 py-1 bg-[#535353] text-white rounded-full text-xs font-semibold shadow-lg">
                                             <i class="fas fa-map-marker-alt mr-1"></i>{{ $wisata->kota->name }}
                                         </span>
                                     </div>
@@ -50,7 +50,7 @@
                                 </p>
                                 <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
                                     <span class="flex items-center">
-                                        <i class="fas fa-ticket-alt text-[#8B6F47] mr-1"></i>
+                                        <i class="fas fa-ticket text-[#000000] mr-1"></i>
                                         @if ($wisata->harga_tiket > 0)
                                             Rp {{ number_format($wisata->harga_tiket, 0, ',', '.') }}
                                         @else
@@ -58,12 +58,13 @@
                                         @endif
                                     </span>
                                     <span class="flex items-center">
-                                        <i class="fas fa-clock text-[#8B6F47] mr-1"></i>
-                                        {{ $wisata->jam_buka }} - {{ $wisata->jam_tutup }}
+                                        <i class="fas fa-clock text-[#aaaaaa] mr-1"></i>
+                                        {{ $wisata->jam_buka->format('H:i') }} -
+                                        {{ $wisata->jam_tutup->format('H:i') }}
                                     </span>
                                 </div>
                                 <button
-                                    class="w-full bg-gradient-to-r from-[#8B6F47] to-[#D4AF37] text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 text-sm">
+                                    class="w-full bg-gradient-to-r from-[#098207] to-[#23e111] text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 text-sm">
                                     <i class="fas fa-info-circle mr-2"></i>Detail
                                 </button>
                             </div>

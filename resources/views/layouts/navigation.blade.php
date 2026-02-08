@@ -17,6 +17,9 @@
                     </x-nav-link>
 
                     @if (Auth::check() && Auth::user()->role === 'admin')
+                        <x-nav-link :href="route('admin.booking.index')" :active="request()->routeIs('admin.booking.*')">
+                            {{ __('Booking') }}
+                        </x-nav-link>
                         <x-nav-link :href="route('admin.artikel.index')" :active="request()->routeIs('admin.artikel.*')">
                             {{ __('Berita') }}
                         </x-nav-link>
@@ -97,6 +100,10 @@
             </x-responsive-nav-link>
 
             @if (Auth::check() && Auth::user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.booking.index')" :active="request()->routeIs('admin.booking.*')" class="rounded-lg">
+                    <i class="fas fa-newspaper mr-2 text-blue-600 dark:text-blue-400"></i>
+                    {{ __('Booking') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.artikel.index')" :active="request()->routeIs('admin.artikel.*')" class="rounded-lg">
                     <i class="fas fa-newspaper mr-2 text-blue-600 dark:text-blue-400"></i>
                     {{ __('Berita') }}

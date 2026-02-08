@@ -1,4 +1,4 @@
-<nav class="bg-gradient-to-r from-[#8B6F47] to-[#D4AF37] shadow-lg">
+<nav class="bg-gradient-to-r from-[#9e7944] to-[#D4AF37] shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
 
@@ -15,7 +15,6 @@
                         <li><a href="{{ url('/artikel') }}"
                                 class="text-white font-medium hover:scale-110 transition-transform block">Berita</a>
                         </li>
-
                         {{-- Kota Dropdown --}}
                         <li class="relative group">
                             <button class="text-white font-medium hover:scale-110 transition-transform">
@@ -40,8 +39,15 @@
                             </div>
                         </li>
 
+                        <li><a href="{{ route('wisata.index') }}"
+                                class="text-white font-medium hover:scale-110 transition-transform block">Wisata</a>
+                        </li>
+
                         <li><a href="{{ route('history.index') }}"
                                 class="text-white font-medium hover:scale-110 transition-transform block">History</a>
+                        </li>
+                        <li><a href="{{ route('booking.index') }}"
+                                class="text-white font-medium hover:scale-110 transition-transform block">Booking</a>
                         </li>
                     @else
                         <div class="flex gap-8 items-center justify-center ">
@@ -70,8 +76,13 @@
                                     </div>
                                 </div>
                             </li>
+                            <li><a href="{{ route('wisata.index') }}"
+                                    class="text-white font-medium hover:scale-110 transition-transform block">Wisata</a>
+                            </li>
+                            <li><a href="{{ route('booking.index') }}"
+                                    class="text-white font-medium hover:scale-110 transition-transform block">Booking</a>
+                            </li>
                         </div>
-
                     @endauth
                 </ul>
             </div>
@@ -126,7 +137,7 @@
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             @auth
                 <a href="{{ url('/artikel') }}"
-                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Artikel</a>
+                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Berita</a>
 
                 {{-- Mobile Kota Dropdown --}}
                 <div x-data="{ kotaOpen: false }" class="relative">
@@ -152,11 +163,17 @@
                     </div>
                 </div>
 
+                <a href="{{ route('wisata.index') }}"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Wisata</a>
+
                 <a href="{{ route('history.index') }}"
                     class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">History</a>
+
+                <a href="{{ route('booking.index') }}"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Booking</a>
             @else
-                <a href="#" @click.prevent="showLoginModal = true; mobileMenuOpen = false"
-                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Artikel</a>
+                <a href="{{route('artikel.index')}}"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Berita</a>
 
                 {{-- Mobile Kota Dropdown (Unauthenticated) --}}
                 <div x-data="{ kotaOpen: false }" class="relative">
@@ -168,17 +185,23 @@
                     </button>
                     <div x-show="kotaOpen" class="ml-4 space-y-1 mt-1">
                         @foreach ($kotas as $kota)
-                            <a href="#" @click.prevent="showLoginModal = true; mobileMenuOpen = false"
+                            <a href="{{route('kota.detail', $kota->slug)}}"
                                 class="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-[#6B5436] transition">
                                 {{ $kota->name }}
                             </a>
                         @endforeach
-                        <a href="#" @click.prevent="showLoginModal = true; mobileMenuOpen = false"
+                        <a href="{{route('kota.index')}}"
                             class="block px-3 py-2 rounded-md text-sm font-semibold text-[#D4AF37] hover:bg-[#6B5436] transition">
                             <i class="fas fa-arrow-right mr-2"></i>Show More
                         </a>
                     </div>
                 </div>
+
+                <a href="{{route('wisata.index')}}"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Wisata</a>
+
+                <a href="{{route('booking.index')}}"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Booking</a>
             @endauth
         </div>
 

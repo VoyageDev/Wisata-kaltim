@@ -94,7 +94,7 @@
                             Artikel</label>
                         <textarea id="isi" name="isi" rows="8" placeholder="Masukkan isi artikel"
                             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
-                            required>{{ old('isi', $artikel->isi) }}</textarea>
+                            required>{{ old('isi', is_array($artikel->isi) ? implode('\n\n', $artikel->isi) : $artikel->isi) }}</textarea>
                         @error('isi')
                             <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror

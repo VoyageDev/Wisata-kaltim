@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePaymentsRequest;
 use App\Http\Requests\UpdatePaymentsRequest;
+use App\Models\Bookings;
 use App\Models\Payments;
+use App\Models\Payments_channels;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class PaymentsController extends Controller
@@ -31,21 +34,63 @@ class PaymentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePaymentsRequest $request): RedirectResponse
+    public function store(Request $request)
     {
-        Payments::create($request->validated());
+        $request->validate([
+            'booking_id' => 'required|exists:bookings,id',
+            'payment_channel_id' => 'required|exists:payments_channels,id', // Sesuaikan nama tabel
+        ]);
 
-        return redirect()->route('payments.index')->with('success', 'Payment created successfully.');
+        $booking = Bookings::findOrFail($request->booking_id);
+        $channel = Payments_channels::findOrFail($request->payment_channel_id);
+
+        // jika sudah ada payment pending, redirect ke halaman payment tersebut
+        if ($booking->payments()->where('status', 'pending')->exists()) {
+            $payment = $booking->payments()->where('status', 'pending')->first();
+
+            return redirect()->route('payment.show', $payment->id);
+        }
+
+        // Create Payment
+        $payment = Payments::create([
+            'booking_id' => $booking->id,
+            'payment_channel_id' => $channel->id,
+            'metode' => $channel->name,
+            'jumlah' => $booking->total_harga,
+            'status' => 'pending',
+        ]);
+
+        // Redirect ke halaman instruksi bayar
+        return redirect()->route('payment.show', $payment->id);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Payments $payment): View
+    public function show(Payments $payment)
     {
-        $payment->load('booking', 'paymentChannel');
+        // hanya user yang memiliki booking ini yang bisa mengakses
+        if ($payment->booking->user_id !== Auth::id()) {
+            abort(403);
+        }
 
-        return view('payments.show', compact('payment'));
+        // Load relasi untuk ditampilkan di view
+        $payment->load('booking.wisata', 'paymentChannel');
+
+        return view('member.payment.show', compact('payment'));
+    }
+
+    // 3. CONFIRM: Saat user klik "Saya Sudah Bayar"
+    public function confirm(Payments $payment)
+    {
+        $payment->update([
+            'status' => 'paid',
+            'paid_at' => now(),
+        ]);
+
+        // Update status Booking jadi PAID juga
+        $payment->booking->update([
+            'status' => 'paid',
+        ]);
+
+        return redirect()->route('history.index')->with('success', 'Pembayaran Berhasil! Tiket sudah terbit.');
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Models\Kota;
 use App\Models\Ulasan;
 use App\Models\Wisata;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class WisataController extends Controller
@@ -56,35 +57,40 @@ class WisataController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->has('harga_tiket')) {
+            $request->merge([
+                'harga_tiket' => str_replace('.', '', $request->harga_tiket),
+            ]);
+        }
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
+            'description' => 'required|string',
             'alamat' => 'required|string',
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'jam_buka' => 'required|string',
-            'jam_tutup' => 'required|string',
+            'jam_buka' => 'required|date_format:H:i',
+            'jam_tutup' => 'required|date_format:H:i',
             'harga_tiket' => 'required|numeric|min:0',
-            'status' => 'required|in:Open,Close',
+            'status' => 'required|in:Open,Closed',
             'kota_id' => 'required|exists:kotas,id',
             'links_maps' => 'nullable|url',
-            'links_bookings' => 'nullable|url',
         ]);
 
-        $gambar = $request->file('gambar')->store('wisata', 'public');
+        // buat nama file gambar berdasarkan slug nama wisata
+        $fileName = Str::slug($validated['name']).'.'.$request->file('gambar')->getClientOriginalExtension();
+        $request->file('gambar')->move(public_path('images/seed/wisata'), $fileName);
 
         Wisata::create([
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
-            'deskripsi' => $validated['deskripsi'],
+            'description' => $validated['description'],
             'alamat' => $validated['alamat'],
-            'gambar' => $gambar,
+            'gambar' => $fileName,
             'jam_buka' => $validated['jam_buka'],
             'jam_tutup' => $validated['jam_tutup'],
             'harga_tiket' => $validated['harga_tiket'],
             'status' => $validated['status'],
             'kota_id' => $validated['kota_id'],
             'links_maps' => $validated['links_maps'] ?? null,
-            'links_bookings' => $validated['links_bookings'] ?? null,
         ]);
 
         return redirect()->route('admin.wisata.index')->with('success', 'Wisata berhasil dibuat');
@@ -99,28 +105,37 @@ class WisataController extends Controller
 
     public function update(Request $request, Wisata $wisata)
     {
+        if ($request->has('harga_tiket')) {
+            $request->merge([
+                'harga_tiket' => str_replace('.', '', $request->harga_tiket),
+
+            ]);
+        }
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
+            'description' => 'required|string',
             'alamat' => 'required|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'jam_buka' => 'required|string',
-            'jam_tutup' => 'required|string',
+            'jam_buka' => 'required|date_format:H:i',
+            'jam_tutup' => 'required|date_format:H:i',
             'harga_tiket' => 'required|numeric|min:0',
             'status' => 'required|in:Open,Close',
             'kota_id' => 'required|exists:kotas,id',
             'links_maps' => 'nullable|url',
-            'links_bookings' => 'nullable|url',
         ]);
 
         $data = $validated;
         $data['slug'] = Str::slug($validated['name']);
 
         if ($request->hasFile('gambar')) {
-            $gambar = $request->file('gambar')->store('wisata', 'public');
-            $data['gambar'] = $gambar;
-        }
+            if ($wisata->gambar) {
+                File::delete(public_path('images/seed/wisata/'.$wisata->gambar));
+            }
 
+            $fileName = $data['slug'].'.'.$request->file('gambar')->getClientOriginalExtension();
+            $request->file('gambar')->move(public_path('images/seed/wisata'), $fileName);
+            $data['gambar'] = $fileName;
+        }
         $wisata->update($data);
 
         return redirect()->route('admin.wisata.index')->with('success', 'Wisata berhasil diperbarui');

@@ -21,7 +21,7 @@
                 {{-- Image --}}
                 @if ($wisata->gambar)
                     <div class="h-96 overflow-hidden bg-gray-200 dark:bg-gray-700">
-                        <img src="{{ asset('storage/' . $wisata->gambar) }}" alt="{{ $wisata->name }}"
+                        <img src="{{ asset('images/seed/wisata/' . $wisata->gambar) }}" alt="{{ $wisata->name }}"
                             class="w-full h-full object-cover">
                     </div>
                 @endif

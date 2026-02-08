@@ -33,18 +33,6 @@
                         @enderror
                     </div>
 
-                    {{-- Deskripsi --}}
-                    <div>
-                        <label for="deskripsi"
-                            class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Deskripsi</label>
-                        <textarea id="deskripsi" name="deskripsi" rows="6" placeholder="Masukkan deskripsi kota"
-                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
-                            required>{{ old('deskripsi') }}</textarea>
-                        @error('deskripsi')
-                            <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     {{-- Buttons --}}
                     <div class="flex gap-4 pt-6">
                         <button type="submit"

@@ -26,6 +26,7 @@ class Artikel extends Model
     ];
 
     protected $casts = [
+        'isi' => 'array',
         'api_data' => 'array',
         'views' => 'integer',
     ];

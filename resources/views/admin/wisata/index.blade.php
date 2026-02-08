@@ -15,7 +15,7 @@
                         <p class="text-gray-600 dark:text-gray-400 mt-1">Kelola destinasi wisata di platform Anda</p>
                     </div>
                     <a href="{{ route('admin.wisata.create') }}"
-                        class="bg-gradient-to-r from-[#8B6F47] to-[#D4AF37] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center">
+                        class="bg-gradient-to-r from-[#074e0e] to-[#167509] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center">
                         <i class="fas fa-plus mr-2"></i>Tambah Wisata
                     </a>
                 </div>

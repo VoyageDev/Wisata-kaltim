@@ -47,13 +47,42 @@
                         Lihat Detail →
                     </a>
                     @if ($booking->status === 'pending')
-                        <form action="{{ route('history.booking.cancel', $booking) }}" method="POST" class="inline">
+                        <a href="{{ route('booking.continue', $booking) }}"
+                            class="text-green-600 hover:text-green-800 text-sm font-medium">
+                            💳 Lanjutkan Pembayaran
+                        </a>
+                    @endif
+
+                    @if ($booking->status === 'paid')
+                        <form action="{{ route('history.booking.complete', $booking) }}" method="POST"
+                            onsubmit="return confirm('Apakah Anda yakin ingin menyelesaikan pesanan ini? Status akan berubah menjadi Selesai.')">
                             @csrf
-                            <button type="submit" onclick="return confirm('Yakin ingin membatalkan pemesanan ini?')"
-                                class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                Batalkan
+                            <button type="submit"
+                                class="text-teal-600 hover:text-teal-800 text-sm font-medium flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                Selesai
                             </button>
                         </form>
+                    @endif
+
+                    @if (($booking->status === 'done' || $booking->status === 'cancelled') && $booking->wisata)
+                        <a href="{{ route('booking.index', [
+                            'kota_id' => $booking->wisata->kota_id,
+                            'wisata_id' => $booking->wisata_id,
+                        ]) }}"
+                            class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center gap-1">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Pesan Lagi
+                        </a>
                     @endif
                 </div>
             </div>

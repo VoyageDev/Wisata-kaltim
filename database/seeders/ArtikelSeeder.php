@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\ArtikelFactory;
 use Illuminate\Database\Seeder;
 
 class ArtikelSeeder extends Seeder
@@ -12,6 +12,7 @@ class ArtikelSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        // Seed dari JSON data
+        ArtikelFactory::createFromJson();
     }
 }

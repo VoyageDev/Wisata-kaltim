@@ -64,7 +64,8 @@
                                 class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
                                 required>
                                 <option value="Open" {{ old('status') == 'Open' ? 'selected' : '' }}>Open</option>
-                                <option value="Close" {{ old('status') == 'Close' ? 'selected' : '' }}>Close</option>
+                                <option value="Closed" {{ old('status') == 'Closed' ? 'selected' : '' }}>Closed
+                                </option>
                             </select>
                             @error('status')
                                 <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
@@ -100,11 +101,22 @@
                         {{-- Harga Tiket --}}
                         <div>
                             <label for="harga_tiket"
-                                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Harga
-                                Tiket</label>
-                            <input type="number" id="harga_tiket" name="harga_tiket" placeholder="0"
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
-                                required value="{{ old('harga_tiket') }}" min="0">
+                                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                Harga Tiket
+                            </label>
+
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span class="text-gray-500 sm:text-sm">Rp</span>
+                                </div>
+
+                                <input type="text" id="harga_tiket" name="harga_tiket" placeholder="0"
+                                    class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
+                                    required
+                                    value="{{ old('harga_tiket', isset($wisata) ? number_format($wisata->harga_tiket, 0, ',', '.') : '') }}"
+                                    onkeyup="formatRupiah(this)">
+                            </div>
+
                             @error('harga_tiket')
                                 <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -115,10 +127,13 @@
                     <div>
                         <label for="gambar"
                             class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Gambar</label>
-                        <div
+
+                        <div id="drop-zone"
                             class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center cursor-pointer hover:border-[#8B6F47] dark:hover:border-[#D4AF37] transition">
+
                             <input type="file" id="gambar" name="gambar" accept="image/*" class="hidden" required
                                 onchange="previewGambar(event)">
+
                             <label for="gambar" class="cursor-pointer">
                                 <i
                                     class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500 mb-2 block"></i>
@@ -127,9 +142,11 @@
                                 <p class="text-gray-500 dark:text-gray-500 text-sm">PNG, JPG, GIF (Max 2MB)</p>
                             </label>
                         </div>
+
                         <div id="gambar-preview" class="mt-4 hidden">
                             <img id="preview-image" src="" alt="Preview" class="max-h-40 rounded-lg">
                         </div>
+
                         @error('gambar')
                             <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -149,12 +166,12 @@
 
                     {{-- Deskripsi --}}
                     <div>
-                        <label for="deskripsi"
+                        <label for="description"
                             class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Deskripsi</label>
-                        <textarea id="deskripsi" name="deskripsi" rows="6" placeholder="Masukkan deskripsi wisata"
+                        <textarea id="description" name="description" rows="6" placeholder="Masukkan deskripsi wisata"
                             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
-                            required>{{ old('deskripsi') }}</textarea>
-                        @error('deskripsi')
+                            required>{{ old('description') }}</textarea>
+                        @error('description')
                             <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -169,20 +186,6 @@
                                 class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
                                 value="{{ old('links_maps') }}">
                             @error('links_maps')
-                                <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        {{-- Booking Link --}}
-                        <div>
-                            <label for="links_bookings"
-                                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Link
-                                Booking</label>
-                            <input type="url" id="links_bookings" name="links_bookings"
-                                placeholder="https://..."
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
-                                value="{{ old('links_bookings') }}">
-                            @error('links_bookings')
                                 <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -218,6 +221,39 @@
                 };
                 reader.readAsDataURL(file);
             }
+        }
+
+        const dropZone = document.getElementById('drop-zone');
+        const inputGambar = document.getElementById('gambar');
+
+        // Mencegah browser membuka gambar saat di-drag
+        dropZone.addEventListener('dragover', (e) => e.preventDefault());
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+
+            if (e.dataTransfer.files.length) {
+                inputGambar.files = e.dataTransfer.files;
+                previewGambar({
+                    target: inputGambar
+                });
+            }
+        });
+
+        function formatRupiah(input) {
+            let angka = input.value.replace(/[^,\d]/g, '').toString();
+            let split = angka.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            input.value = rupiah;
         }
     </script>
 </x-layouts.admin>

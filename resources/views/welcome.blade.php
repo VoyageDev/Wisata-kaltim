@@ -12,18 +12,18 @@
             <div class="mb-6">
                 <i class="fas fa-book-open text-6xl text-[#ffffff] mb-4"></i>
             </div>
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-md">Portal Berita dan Informasi Wisata Indonesia
-            </h1>
-            <p class="text-xl md:text-2xl mb-4 drop-shadow-sm">Baca cerita inspiratif dan panduan lengkap destinasi
-                wisata</p>
-            <p class="text-lg md:text-xl mb-10 text-gray-200">Ayo login dan mari mulai membaca berita wisata di sini!
-            </p>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-md">Platform Booking Tiket dan Berita Wisata
+                Kalimantan</h1>
+            <p class="text-xl md:text-2xl mb-4 drop-shadow-sm">Pesan tiket wisata impianmu dan baca kisah inspiratif dari
+                destinasi favorit</p>
+            <p class="text-lg md:text-xl mb-10 text-gray-200">Login sekarang untuk mulai booking dan membaca berita
+                wisata terbaru!</p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 @auth
                     <a href="#artikel-unggulan"
                         class="bg-[#d4af37] text-gray-900 px-10 py-4 rounded-lg font-bold hover:bg-[#E8C547] hover:-translate-y-1 transition-all duration-300 shadow-lg inline-block">
-                        <i class="fas fa-book-reader mr-2"></i> Mulai Membaca
+                        <i class="fas fa-book-reader mr-2"></i> Mulai
                     </a>
                 @else
                     <a href="{{ route('login') }}"
@@ -47,7 +47,8 @@
                     <i class="fas fa-star text-[#f8f008] mr-2"></i>
                     Berita Wisata Terbaru
                 </h2>
-                <p class="text-gray-600 text-lg">Temukan informasi detail wisata dan berita terbaru seputar destinasi wisata Indonesia</p>
+                <p class="text-gray-600 text-lg">Temukan informasi detail wisata dan berita terbaru seputar destinasi
+                    wisata Indonesia</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -79,7 +80,7 @@
                                 {{ $artikel->judul }}
                             </h3>
                             <p class="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                                {{ Str::limit(strip_tags($artikel->isi), 120) }}
+                                {{ Str::limit(strip_tags(is_array($artikel->isi) ? implode(' ', $artikel->isi) : $artikel->isi), 120) }}
                             </p>
                             <div class="pt-3">
                                 <a href="{{ route('artikel.detail', $artikel->slug) }}"
@@ -101,7 +102,7 @@
 
             @if ($artikels->count() > 0)
                 <div class="text-center mt-12">
-                    <a href="#"
+                    <a href="{{ route('artikel.index') }}"
                         class="bg-[#8B6F47] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#D4AF37] hover:text-gray-900 transition-all duration-300 inline-block">
                         <i class="fas fa-th-large mr-2"></i> Lihat Semua Berita
                     </a>
@@ -121,7 +122,7 @@
                 <p class="text-gray-600 text-lg">Jelajahi destinasi wisata terbaik dari berbagai kota</p>
             </div>
 
-            @forelse ($kotaWithWisata as $kota)
+            @forelse ($kotaWithWisata->take(3) as $kota)
                 <div class="mb-16 last:mb-0">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="text-2xl font-bold text-gray-800 flex items-center">
@@ -138,7 +139,7 @@
                             <a href="{{ route('wisata.detail', $wisata->slug) }}"
                                 class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block">
                                 <div class="h-48 bg-center bg-cover relative"
-                                    style="background-image: url('{{ $wisata->gambar ? asset($wisata->gambar) : asset('images/seed/wisatas/wisata-1.svg') }}');">
+                                    style="background-image: url('{{ $wisata->gambar ? asset('images/seed/wisata/' . $wisata->gambar) : asset('images/seed/wisatas/wisata-1.svg') }}');">
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                                     <div class="absolute top-3 right-3">
                                         <span
@@ -185,8 +186,8 @@
                         <i class="fas fa-info-circle mr-2"></i>Tentang Portal
                     </h4>
                     <p class="text-gray-300 text-sm leading-relaxed">
-                        Portal Berita Wisata Indonesia - Platform terpercaya untuk membaca dan berbagi informasi seputar
-                        perjalanan wisata di seluruh kalimantan.
+                        Platform terpadu untuk booking tiket wisata dan membaca informasi destinasi wisata terbaik di
+                        seluruh Kalimantan. Temukan pengalaman wisata impianmu di sini!
                     </p>
                 </div>
                 <div>
@@ -229,7 +230,7 @@
                                     class="fab fa-facebook mr-2"></i> Facebook</a></li>
                         <li><a href="#" class="hover:text-[#D4AF37] transition"><i
                                     class="fab fa-instagram mr-2"></i> Instagram</a></li>
-                        <li><a href="https://github.com/VoyageDev" class="hover:text-[#D4AF37] transition"><i
+                        <li><a href="#" class="hover:text-[#D4AF37] transition"><i
                                     class="fab fa-github mr-2"></i> Github</a></li>
                         <li><a href="#" class="hover:text-[#D4AF37] transition"><i
                                     class="fab fa-youtube mr-2"></i> YouTube</a></li>
@@ -263,7 +264,7 @@
             </div>
 
             <div class="border-t border-gray-600 pt-8 text-center text-sm text-gray-400">
-                <p>&copy; 2026 Portal Berita Wisata Indonesia. All rights reserved.</p>
+                <p>&copy; 2026 Booking Wisata Kaltim. All rights reserved.</p>
             </div>
         </div>
     </footer>

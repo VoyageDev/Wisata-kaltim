@@ -19,7 +19,7 @@
                             class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 h-full flex flex-col">
                             {{-- City Image --}}
                             <div class="relative h-40 overflow-hidden bg-gray-300">
-                                <img src="{{ asset($kota->image) }}" alt="{{ $kota->name }}"
+                                <img src="{{ asset('images/seed/kota/' .$kota->image) }}" alt="{{ $kota->name }}"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                 {{-- Wisata Count Badge --}}
                                 <div

@@ -42,7 +42,7 @@
                                         <a href="/artikel/{{ $artikel->slug }}">{{ $artikel->judul }}</a>
                                     </h3>
                                     <p class="text-gray-600 line-clamp-2 mb-4">
-                                        {{ Str::limit(strip_tags($artikel->isi), 150) }}
+                                        {{ Str::limit(strip_tags(is_array($artikel->isi) ? implode(' ', $artikel->isi) : $artikel->isi), 150) }}
                                     </p>
                                     <div class="flex items-center text-sm text-gray-500">
                                         <i class="fas fa-user-circle mr-2"></i>
@@ -104,7 +104,7 @@
                                         <a href="/artikel/{{ $artikel->slug }}">{{ $artikel->judul }}</a>
                                     </h3>
                                     <p class="text-gray-600 line-clamp-2 mb-4">
-                                        {{ Str::limit(strip_tags($artikel->isi), 150) }}
+                                        {{ Str::limit(strip_tags(is_array($artikel->isi) ? implode(' ', $artikel->isi) : $artikel->isi), 150) }}
                                     </p>
                                     <div class="flex items-center text-sm text-gray-500">
                                         <i class="fas fa-user-circle mr-2"></i>
@@ -161,7 +161,7 @@
                                     <a href="/artikel/{{ $artikel->slug }}">{{ $artikel->judul }}</a>
                                 </h3>
                                 <p class="text-gray-600 text-sm line-clamp-3 mb-3">
-                                    {{ Str::limit(strip_tags($artikel->isi), 100) }}
+                                    {{ Str::limit(strip_tags(is_array($artikel->isi) ? implode(' ', $artikel->isi) : $artikel->isi), 100) }}
                                 </p>
                                 <div class="flex items-center justify-between text-xs text-gray-500">
                                     <span class="flex items-center">

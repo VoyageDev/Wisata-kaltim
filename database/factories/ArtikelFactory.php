@@ -45,8 +45,8 @@ class ArtikelFactory extends Factory
             $current = $data[self::$currentIndex % count($data)];
             self::$currentIndex++;
 
-            // Convert isi array to string
-            $isi = is_array($current['isi']) ? implode("\n\n", $current['isi']) : $current['isi'];
+            // Keep isi as array for JSON storage
+            $isi = is_array($current['isi']) ? $current['isi'] : [$current['isi']];
 
             return [
                 'user_id' => User::factory(),
@@ -64,7 +64,6 @@ class ArtikelFactory extends Factory
 
         // Fallback jika JSON kosong
         $judul = fake()->sentence(6);
-        $hasApiData = fake()->boolean(30);
 
         $thumbnails = [
             'images/seed/artikels/artikel-1.svg',
@@ -78,15 +77,14 @@ class ArtikelFactory extends Factory
             'judul' => rtrim($judul, '.'),
             'slug' => Str::slug($judul),
             'views' => fake()->numberBetween(0, 10000),
-            'isi' => fake()->paragraphs(5, true),
-            'api_source' => $hasApiData ? fake()->randomElement(['BMKG', 'NewsAPI', 'TravelAPI']) : null,
-            'external_id' => $hasApiData ? fake()->uuid() : null,
-            'api_data' => $hasApiData ? [
-                'source' => fake()->company(),
-                'author' => fake()->name(),
-                'published' => fake()->dateTime()->format('Y-m-d H:i:s'),
-                'category' => fake()->randomElement(['travel', 'culture', 'food', 'nature']),
-            ] : null,
+            'isi' => [
+                fake()->paragraph(),
+                fake()->paragraph(),
+                fake()->paragraph(),
+            ],
+            'api_source' => null,
+            'external_id' => null,
+            'api_data' => null,
             'thumbnail' => fake()->randomElement($thumbnails),
         ];
     }
@@ -100,12 +98,13 @@ class ArtikelFactory extends Factory
         $wisatas = Wisata::all()->keyBy('id');
 
         if ($wisatas->isEmpty()) {
-            return; // Skip if no wisatas
+            return;
         }
 
         $artikels = [];
         foreach ($data as $item) {
-            $isi = is_array($item['isi']) ? implode("\n\n", $item['isi']) : $item['isi'];
+            // Keep isi as array for JSON storage
+            $isi = is_array($item['isi']) ? $item['isi'] : [$item['isi']];
             $wisata_id = isset($item['wisata_id']) && $wisatas->has($item['wisata_id']) ? $item['wisata_id'] : $wisatas->keys()->random();
 
             $artikels[] = [
@@ -114,7 +113,7 @@ class ArtikelFactory extends Factory
                 'judul' => $item['judul'] ?? 'Artikel',
                 'slug' => $item['slug'] ?? Str::slug($item['judul'] ?? 'artikel'),
                 'views' => random_int(0, 10000),
-                'isi' => $isi ?? '',
+                'isi' => json_encode($isi),
                 'api_source' => null,
                 'external_id' => null,
                 'api_data' => null,
