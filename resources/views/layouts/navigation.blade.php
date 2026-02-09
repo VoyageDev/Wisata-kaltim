@@ -127,7 +127,7 @@
         <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
             <div class="px-4 mb-3">
                 <div class="font-semibold text-base text-gray-800 dark:text-gray-200 flex items-center">
-                    <i class="fas fa-user-circle mr-2 text-lg text-[#8B6F47]"></i>
+                    <i class="fas fa-user-circle mr-2 text-lg text-[#828282]"></i>
                     {{ Auth::user()->name }}
                 </div>
                 <div class="font-medium text-xs text-gray-500 mt-1">{{ Auth::user()->email }}</div>
