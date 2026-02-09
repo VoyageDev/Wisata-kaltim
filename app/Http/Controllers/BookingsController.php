@@ -24,7 +24,10 @@ class BookingsController extends Controller
      */
     public function index(): View
     {
-        $bookings = Bookings::with(['user', 'wisata', 'paketWisata'])->latest()->paginate(10);
+        $bookings = Bookings::with(['user', 'wisata', 'paketWisata'])
+            ->orderByRaw("FIELD(status, 'pending', 'done', 'paid', 'cancelled')")
+            ->latest()
+            ->paginate(10);
 
         return view('admin.booking.index', compact('bookings'));
     }
@@ -236,7 +239,7 @@ class BookingsController extends Controller
                 ->first();
 
             if ($kuota && $kuota->kuota_terpakai > 0) {
-                // Refund the ticket by decreasing kuota_terpakai by number of people
+                // Mengembalikan tiket berdasarkan jumlah orang pada booking
                 $jumlahOrang = $booking->jumlah_orang ?? 1;
                 $decrementQty = min($jumlahOrang, $kuota->kuota_terpakai);
                 $kuota->decrement('kuota_terpakai', $decrementQty);
@@ -259,5 +262,24 @@ class BookingsController extends Controller
         $booking->load('user', 'wisata', 'paketWisata');
 
         return view('admin.booking.print', compact('booking'));
+    }
+
+    public function markDone(Bookings $booking): RedirectResponse
+    {
+        // Authorize user
+        $this->authorize('view', $booking);
+
+        // Only allow marking done for pending bookings
+        if ($booking->status !== 'pending') {
+            return redirect()->route('admin.bookings.index')
+                ->with('error', 'Only pending bookings can be marked as done.');
+        }
+
+        // Update booking status to done
+        $booking->status = 'done';
+        $booking->save();
+
+        return redirect()->route('admin.bookings.index')
+            ->with('success', 'Booking berhasil ditandai sebagai selesai.');
     }
 }

@@ -86,11 +86,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            @if (
-                                                $booking->status == 'Paid' ||
-                                                    $booking->status == 'Done' ||
-                                                    $booking->status == 'paid' ||
-                                                    $booking->status == 'done')
+                                            @if ($booking->status == 'done')
                                                 <a href="{{ route('admin.booking.print', $booking) }}" target="_blank"
                                                     class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 font-medium text-sm flex items-center"
                                                     title="Cetak Tiket">
@@ -99,7 +95,7 @@
                                             @endif
 
                                             {{-- TOMBOL CANCEL --}}
-                                            @if ($booking->status == 'Pending' || $booking->status == 'pending')
+                                            @if ($booking->status == 'pending')
                                                 <form action="{{ route('admin.booking.cancel', $booking) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Yakin ingin membatalkan pesanan ini?')">
@@ -110,6 +106,14 @@
                                                         <i class="fas fa-ban mr-1"></i> Cancel
                                                     </button>
                                                 </form>
+                                            @endif
+                                            @if ($booking->status == 'paid')
+                                                <a href="{{ route('admin.booking.done', $booking) }}"
+                                                    class="inline-flex items-center px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded shadow-sm transition-colors duration-200 gap-2"
+                                                    title="Tandai Selesai">
+                                                    <i class="fas fa-check"></i>
+                                                    <span>Selesai</span>
+                                                </a>
                                             @endif
                                         </div>
                                     </td>

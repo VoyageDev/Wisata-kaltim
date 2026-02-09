@@ -108,6 +108,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::resource('booking', BookingsController::class);
     Route::get('/booking/{booking}/print', [BookingsController::class, 'print'])->name('booking.print');
     Route::patch('/booking/{booking}/cancel', [BookingsController::class, 'cancel'])->name('booking.cancel');
+    Route::patch('/booking/{booking}/done', [BookingsController::class, 'markDone'])->name('booking.done');
 
     // payment management
     Route::resource('payment', PaymentController::class);
