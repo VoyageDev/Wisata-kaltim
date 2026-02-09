@@ -156,4 +156,70 @@ class ArtikelController extends Controller
 
         return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil dihapus');
     }
+
+    public function loadMoreTerbaru($offset)
+    {
+        $offset = max(0, (int) $offset);
+
+        $artikels = Artikel::with(['wisata.kota', 'user'])
+            ->latest()
+            ->skip($offset)
+            ->take(6)
+            ->get();
+
+        return response()->json($this->buildArtikelPayload($artikels));
+    }
+
+    public function loadMorePopuler($offset)
+    {
+        $offset = max(0, (int) $offset);
+
+        $artikels = Artikel::with(['wisata.kota', 'user'])
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->orderBy('views', 'desc')
+            ->skip($offset)
+            ->take(5)
+            ->get();
+
+        return response()->json($this->buildArtikelPayload($artikels));
+    }
+
+    public function loadMoreTopWisata($offset)
+    {
+        $offset = max(0, (int) $offset);
+
+        $artikels = Artikel::with(['wisata.kota', 'user'])
+            ->orderBy('views', 'desc')
+            ->skip($offset)
+            ->take(6)
+            ->get();
+
+        return response()->json($this->buildArtikelPayload($artikels));
+    }
+
+    private function buildArtikelPayload($artikels)
+    {
+        return $artikels->map(function (Artikel $artikel) {
+            $isi = $artikel->isi;
+            if (is_array($isi)) {
+                $isi = implode(' ', $isi);
+            }
+
+            return [
+                'judul' => $artikel->judul,
+                'slug' => $artikel->slug,
+                'thumbnail' => $artikel->thumbnail,
+                'isi' => $isi ?? '',
+                'created_at' => $artikel->created_at,
+                'views' => $artikel->views ?? 0,
+                'user' => [
+                    'name' => optional($artikel->user)->name ?? '',
+                ],
+                'kota' => [
+                    'name' => optional(optional($artikel->wisata)->kota)->name ?? '',
+                ],
+            ];
+        });
+    }
 }

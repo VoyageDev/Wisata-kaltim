@@ -216,4 +216,33 @@ class BookingsController extends Controller
 
         return redirect()->route('bookings.index')->with('success', 'Booking deleted successfully.');
     }
+
+    public function cancel(Bookings $booking): RedirectResponse
+    {
+        // Authorize user
+        $this->authorize('cancel', $booking);
+
+        // Only allow cancellation for pending bookings
+        if ($booking->status !== 'pending') {
+            return redirect()->route('history.index')
+                ->with('error', 'Booking ini tidak dapat dibatalkan.');
+        }
+
+        // Update booking status to cancelled
+        $booking->status = 'cancelled';
+        $booking->save();
+
+        return redirect()->route('history.bookings')
+            ->with('success', 'Booking berhasil dibatalkan.');
+    }
+
+    public function print(Bookings $booking): View|RedirectResponse
+    {
+        // Authorize user
+        $this->authorize('view', $booking);
+
+        $booking->load('user', 'wisata', 'paketWisata');
+
+        return view('admin.booking.print', compact('booking'));
+    }
 }

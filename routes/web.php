@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UlasanController;
 use App\Http\Controllers\WisataController;
+use App\Http\Controllers\WisataKuotaController;
 use Illuminate\Support\Facades\Route;
 
 // Landing page
@@ -78,9 +79,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     // Artikel Management
     Route::resource('artikel', ArtikelController::class);
 
+    // Wisata Management - redirect to tiket management
+    Route::get('wisata/kelola-tiket', [WisataKuotaController::class, 'index'])
+        ->name('wisata.tiket');
+
     // Wisata Management - resource route with model binding (ID-based)
     Route::resource('wisata', WisataController::class)->parameters([
-        'wisata' => 'wisata'
+        'wisata' => 'wisata',
     ]);
 
     // Kota Management
@@ -93,6 +98,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
 
     // booking management
     Route::resource('booking', BookingsController::class);
+    Route::get('/booking/{booking}/print', [BookingsController::class, 'print'])->name('booking.print');
+    Route::patch('/booking/{booking}/cancel', [BookingsController::class, 'cancel'])->name('booking.cancel');
 
     // payment management
     Route::resource('payment', PaymentController::class);

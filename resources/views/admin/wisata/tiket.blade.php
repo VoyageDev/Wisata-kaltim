@@ -1,15 +1,15 @@
 <x-layouts.admin>
     <x-slot name="header">
-        <div class="flex items-start gap-4">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight underline">
+        <div class="flex items-center gap-4">
+            <a href="{{ route('admin.wisata.index') }}"
+                class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                 {{ __('Kelola Wisata') }}
-            </h2>
+            </a>
             <span class="text-gray-300 text-xl">|</span>
             {{-- buat kelola tiket wisata disini diarahkan ke admin.wisata.tiket --}}
-            <a href="{{ route('admin.wisata.tiket') }}"
-                class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight underline">
                 {{ __('Kelola Tiket') }}
-            </a>
+            </h2>
         </div>
     </x-slot>
 
@@ -46,9 +46,9 @@
                         <thead class="bg-gradient-to-r from-[#000428] via-[#004e92] to-[#000428] text-white">
                             <tr>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Nama Wisata</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold">Kota</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold">Harga Tiket</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold">Status</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Tanggal</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Kuota Total</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Kuota Terpakai</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Aksi</th>
                             </tr>
                         </thead>
@@ -62,7 +62,7 @@
                                     <td class="px-6 py-4">
                                         <span
                                             class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-3 py-1 rounded-full font-medium">
-                                            {{ $wisata->kota->name }}
+                                            {{ $wisata->tanggal }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">

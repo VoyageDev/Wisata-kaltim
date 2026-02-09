@@ -147,4 +147,10 @@ class WisataController extends Controller
 
         return redirect()->route('admin.wisata.index')->with('success', 'Wisata berhasil dihapus');
     }
+
+    public function redirectToTiket()
+    {
+        $wisatas = Wisata::with('kota')->latest()->paginate(10);
+        return view('admin.wisata.tiket', compact('wisatas'));
+    }
 }

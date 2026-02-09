@@ -14,6 +14,9 @@ class WisataKuotaController extends Controller
     public function index()
     {
         //
+        $wisatas = WisataKuota::with('wisata')->latest()->paginate(10);
+
+        return view('admin.wisata.tiket', compact('wisatas'));
     }
 
     /**
