@@ -135,6 +135,13 @@
                                 <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Tambah Wisata</span>
                             </div>
                         </a>
+                        <a href="{{ route('admin.tiket.create') }}"
+                            class="flex items-center justify-center p-4 bg-yellow-600 dark:bg-yellow-600/30 hover:bg-yellow-500 dark:hover:bg-yellow-900/50 rounded-lg transition">
+                            <div class="text-center">
+                                <i class="fas fa-plus text-yellow-600 dark:text-yellow-400 text-2xl mb-2 block"></i>
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Tambah Tiket</span>
+                            </div>
+                        </a>
                         <a href="{{ route('admin.kota.create') }}"
                             class="flex items-center justify-center p-4 bg-purple-50 dark:bg-purple-900/30 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-lg transition">
                             <div class="text-center">
@@ -161,7 +168,9 @@
                         <div class="flex items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                             <i class="fas fa-info-circle text-blue-600 dark:text-blue-400 text-lg mr-4"></i>
                             <p class="text-gray-700 dark:text-gray-300"><span
-                                    class="font-medium">{{ Auth::user()->name }}</span> - Terakhir login hari ini</p>
+                                    class="font-medium">{{ Auth::user()->name }}</span> - Terakhir login hari ini
+                                pada <span class="font-medium">{{ now()->format('H:i') }}</span>
+                            </p>
                         </div>
                         <div class="flex items-center p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                             <i class="fas fa-calendar-alt text-green-600 dark:text-green-400 text-lg mr-4"></i>

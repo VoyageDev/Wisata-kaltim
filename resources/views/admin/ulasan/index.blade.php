@@ -133,8 +133,8 @@
                                             @endfor
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                        {{ $ulasan->created_at->format('d M Y') }}
+                                    <td class="px-7 py-4 text-sm text-gray-600 dark:text-gray-400">
+                                        {{ $ulasan->created_at->format('d M Y H:i') }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex justify-center gap-3">

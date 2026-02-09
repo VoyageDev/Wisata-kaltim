@@ -4,7 +4,7 @@
 
             <div class="flex-shrink-0 flex items-center text-white text-2xl font-bold">
                 <a href="{{ url('/') }}" class="flex items-center">
-                    <i class="fas fa-map mr-2"></i> Wisata Kaltim
+                    <i class="fas fa-map mr-2"></i> Go Vacation
                 </a>
             </div>
 
@@ -43,11 +43,12 @@
                                 class="text-white font-medium hover:scale-110 transition-transform block">Wisata</a>
                         </li>
 
-                        <li><a href="{{ route('history.index') }}"
-                                class="text-white font-medium hover:scale-110 transition-transform block">History</a>
-                        </li>
                         <li><a href="{{ route('booking.index') }}"
                                 class="text-white font-medium hover:scale-110 transition-transform block">Booking</a>
+                        </li>
+
+                        <li><a href="{{ route('history.index') }}"
+                                class="text-white font-medium hover:scale-110 transition-transform block">History</a>
                         </li>
                     @else
                         <div class="flex gap-8 items-center justify-center ">
@@ -166,13 +167,12 @@
                 <a href="{{ route('wisata.index') }}"
                     class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Wisata</a>
 
-                <a href="{{ route('history.index') }}"
-                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">History</a>
-
                 <a href="{{ route('booking.index') }}"
                     class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Booking</a>
+                <a href="{{ route('history.index') }}"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">History</a>
             @else
-                <a href="{{route('artikel.index')}}"
+                <a href="{{ route('artikel.index') }}"
                     class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Berita</a>
 
                 {{-- Mobile Kota Dropdown (Unauthenticated) --}}
@@ -185,22 +185,22 @@
                     </button>
                     <div x-show="kotaOpen" class="ml-4 space-y-1 mt-1">
                         @foreach ($kotas as $kota)
-                            <a href="{{route('kota.detail', $kota->slug)}}"
+                            <a href="{{ route('kota.detail', $kota->slug) }}"
                                 class="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-[#6B5436] transition">
                                 {{ $kota->name }}
                             </a>
                         @endforeach
-                        <a href="{{route('kota.index')}}"
+                        <a href="{{ route('kota.index') }}"
                             class="block px-3 py-2 rounded-md text-sm font-semibold text-[#D4AF37] hover:bg-[#6B5436] transition">
                             <i class="fas fa-arrow-right mr-2"></i>Show More
                         </a>
                     </div>
                 </div>
 
-                <a href="{{route('wisata.index')}}"
+                <a href="{{ route('wisata.index') }}"
                     class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Wisata</a>
 
-                <a href="{{route('booking.index')}}"
+                <a href="{{ route('booking.index') }}"
                     class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition">Booking</a>
             @endauth
         </div>

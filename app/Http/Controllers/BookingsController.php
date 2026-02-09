@@ -9,6 +9,7 @@ use App\Models\Kota;
 use App\Models\PaketWisata;
 use App\Models\Payments_channels;
 use App\Models\Wisata;
+use App\Models\WisataKuota;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -222,10 +223,24 @@ class BookingsController extends Controller
         // Authorize user
         $this->authorize('cancel', $booking);
 
-        // Only allow cancellation for pending bookings
-        if ($booking->status !== 'pending') {
+        // Only allow cancellation for pending or paid bookings
+        if (! in_array($booking->status, ['pending', 'paid'])) {
             return redirect()->route('history.index')
-                ->with('error', 'Booking ini tidak dapat dibatalkan.');
+                ->with('error', 'Booking dengan status '.$booking->status.' tidak dapat dibatalkan.');
+        }
+
+        // If booking is already paid, refund the ticket
+        if ($booking->status === 'paid') {
+            $kuota = WisataKuota::where('wisata_id', $booking->wisata_id)
+                ->where('tanggal', $booking->tanggal_kunjungan)
+                ->first();
+
+            if ($kuota && $kuota->kuota_terpakai > 0) {
+                // Refund the ticket by decreasing kuota_terpakai by number of people
+                $jumlahOrang = $booking->jumlah_orang ?? 1;
+                $decrementQty = min($jumlahOrang, $kuota->kuota_terpakai);
+                $kuota->decrement('kuota_terpakai', $decrementQty);
+            }
         }
 
         // Update booking status to cancelled
@@ -233,7 +248,7 @@ class BookingsController extends Controller
         $booking->save();
 
         return redirect()->route('history.bookings')
-            ->with('success', 'Booking berhasil dibatalkan.');
+            ->with('success', 'Booking berhasil dibatalkan. '.($booking->status === 'paid' ? 'Tiket Anda telah di-refund.' : ''));
     }
 
     public function print(Bookings $booking): View|RedirectResponse

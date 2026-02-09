@@ -11,6 +11,19 @@ class WisataKuota extends Model
     /** @use HasFactory<\Database\Factories\WisataKuotaFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'wisata_id',
+        'tanggal',
+        'kuota_total',
+        'kuota_terpakai',
+    ];
+
+    protected $casts = [
+        'tanggal' => 'date',
+        'kuota_total' => 'integer',
+        'kuota_terpakai' => 'integer',
+    ];
+
     public function wisata(): BelongsTo
     {
         return $this->belongsTo(Wisata::class);

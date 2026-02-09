@@ -75,7 +75,37 @@
                                 tanggalKunjungan: '{{ old('tanggal_kunjungan') }}',
                                 selectedPaketId: {{ old('paket_wisata_id', 'null') }},
                                 hargaTiket: {{ $selectedWisata->harga_tiket ?? 0 }},
-                            
+                                ticketAvailable: true,
+                                ticketMessage: '',
+                                sisaTiket: 0,
+                                checkingTicket: false,
+                                wisataId: {{ $selectedWisata->id }},
+
+                                async checkTicketAvailability() {
+                                    if (!this.tanggalKunjungan) {
+                                        this.ticketAvailable = true;
+                                        this.ticketMessage = '';
+                                        this.checkingTicket = false;
+                                        return;
+                                    }
+
+                                    this.checkingTicket = true;
+                                    try {
+                                        const response = await fetch('/api/check-ticket-availability?wisata_id=' + this.wisataId + '&tanggal=' + this.tanggalKunjungan);
+                                        const data = await response.json();
+
+                                        this.ticketAvailable = data.available;
+                                        this.ticketMessage = data.message;
+                                        this.sisaTiket = data.sisaTiket;
+                                    } catch (error) {
+                                        console.error('Error checking availability:', error);
+                                        this.ticketAvailable = false;
+                                        this.ticketMessage = 'Gagal mengecek ketersediaan tiket';
+                                    } finally {
+                                        this.checkingTicket = false;
+                                    }
+                                },
+
                                 // Fungsi saat mengetik di input reguler
                                 inputRegular() {
                                     if (this.jumlahOrang > 0) {
@@ -85,7 +115,7 @@
                                         this.bookingType = ''; // Reset jika kosong
                                     }
                                 },
-                            
+
                                 // Fungsi saat memilih paket
                                 selectPaket(id) {
                                     // Jika diklik lagi paket yg sama (deselect)
@@ -98,7 +128,7 @@
                                         this.jumlahOrang = ''; // Reset input reguler
                                     }
                                 },
-                            
+
                                 // Hitung total harga reguler secara live
                                 get totalReguler() {
                                     return (this.jumlahOrang * this.hargaTiket).toLocaleString('id-ID');
@@ -127,8 +157,39 @@
                                     Pilih Tanggal Kunjungan <span class="text-red-500">*</span>
                                 </div>
                                 <input type="date" name="tanggal_kunjungan" x-model="tanggalKunjungan"
+                                    @change="checkTicketAvailability()"
                                     min="{{ now()->format('Y-m-d') }}"
                                     class="w-full p-3 rounded-full border-none focus:ring-2 focus:ring-blue-400 appearance-none bg-white">
+
+                                <!-- Ticket Availability Notification -->
+                                <div x-show="tanggalKunjungan && checkingTicket" class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-2">
+                                    <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    <span class="text-sm text-blue-700">Mengecek ketersediaan tiket...</span>
+                                </div>
+
+                                <div x-show="tanggalKunjungan && !checkingTicket && ticketMessage"
+                                    :class="ticketAvailable ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'"
+                                    class="mt-3 p-3 border rounded-lg flex items-start gap-2">
+                                    <template x-if="ticketAvailable">
+                                        <svg class="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                    </template>
+                                    <template x-if="!ticketAvailable">
+                                        <svg class="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                        </svg>
+                                    </template>
+                                    <div class="text-sm" :class="ticketAvailable ? 'text-green-700' : 'text-red-700'">
+                                        <p class="font-semibold" x-text="ticketMessage"></p>
+                                        <template x-if="ticketAvailable && sisaTiket > 0">
+                                            <p class="text-xs mt-1">Sisa kuota: <span x-text="sisaTiket"></span> tiket</p>
+                                        </template>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="bg-white rounded-2xl p-6 shadow-sm transition-all duration-300"
@@ -237,10 +298,11 @@
                             </div>
 
                             <div class="flex justify-end">
-                                <button type="submit" :disabled="!bookingType || !tanggalKunjungan"
-                                    :class="(!bookingType || !tanggalKunjungan) ? 'bg-gray-400 cursor-not-allowed' :
+                                <button type="submit" :disabled="!bookingType || !tanggalKunjungan || !ticketAvailable"
+                                    :class="(!bookingType || !tanggalKunjungan || !ticketAvailable) ? 'bg-gray-400 cursor-not-allowed' :
                                     'bg-[#10b981] hover:bg-emerald-600 shadow-lg'"
-                                    class="text-white px-8 py-2 rounded-full font-bold text-sm transition">
+                                    class="text-white px-8 py-2 rounded-full font-bold text-sm transition"
+                                    :title="!ticketAvailable && tanggalKunjungan ? 'Tiket tidak tersedia untuk tanggal ini' : ''">
                                     Booking Sekarang
                                 </button>
                             </div>

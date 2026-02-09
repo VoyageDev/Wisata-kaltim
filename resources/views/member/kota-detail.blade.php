@@ -14,7 +14,8 @@
             {{-- City Header --}}
             <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-12">
                 <div class="h-96 overflow-hidden relative">
-                    <img src="{{ asset('images/seed/kota/' . $kota->image) }}" alt="{{ $kota->name }}" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/seed/kota/' . $kota->image) }}" alt="{{ $kota->name }}"
+                        class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                         <div class="p-8 w-full">
                             <h1 class="text-5xl font-bold text-white mb-2">{{ $kota->name }}</h1>
@@ -242,7 +243,7 @@
                                 <div
                                     class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 h-full flex flex-col">
                                     <div class="h-48 overflow-hidden">
-                                        <img src="{{ asset('images/seed/artikel/' . $artikel->thumbnail) }}" alt="{{ $artikel->judul }}"
+                                        <img src="{{ asset($artikel->thumbnail) }}" alt="{{ $artikel->judul }}"
                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                     </div>
                                     <div class="p-5 flex flex-col flex-grow">

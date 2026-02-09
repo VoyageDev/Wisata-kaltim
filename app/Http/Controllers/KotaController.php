@@ -55,11 +55,17 @@ class KotaController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:kotas,name',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $file = $request->file('image');
+        $fileName = Str::slug($validated['name']).'.'.$file->getClientOriginalExtension();
+        $file->move(public_path('images/seed/kota'), $fileName);
 
         Kota::create([
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
+            'image' => $fileName,
         ]);
 
         return redirect()->route('admin.kota.index')->with('success', 'Kota berhasil dibuat');
@@ -74,11 +80,25 @@ class KotaController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:kotas,name,'.$kota->id,
-            'deskripsi' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $data = $validated;
-        $data['slug'] = Str::slug($validated['name']);
+        $data = [
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
+        ];
+
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama dari folder
+            if ($kota->image && file_exists(public_path('images/seed/kota/'.$kota->image))) {
+                unlink(public_path('images/seed/kota/'.$kota->image));
+            }
+
+            $file = $request->file('image');
+            $fileName = Str::slug($validated['name']).'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('images/seed/kota'), $fileName);
+            $data['image'] = $fileName;
+        }
 
         $kota->update($data);
 

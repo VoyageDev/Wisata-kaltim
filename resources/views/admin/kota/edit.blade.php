@@ -18,7 +18,7 @@
 
             {{-- Form --}}
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 md:p-8">
-                <form action="{{ route('admin.kota.update', $kota) }}" method="POST" class="space-y-6">
+                <form action="{{ route('admin.kota.update', $kota) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     @method('PUT')
 
@@ -34,14 +34,33 @@
                         @enderror
                     </div>
 
-                    {{-- Deskripsi --}}
+                    {{-- Image Kota --}}
                     <div>
-                        <label for="deskripsi"
-                            class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Deskripsi</label>
-                        <textarea id="deskripsi" name="deskripsi" rows="6" placeholder="Masukkan deskripsi kota"
-                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
-                            required>{{ old('deskripsi', $kota->deskripsi) }}</textarea>
-                        @error('deskripsi')
+                        <label for="gambar"
+                            class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Gambar</label>
+
+                        <div id="drop-zone"
+                            class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center cursor-pointer hover:border-[#8B6F47] dark:hover:border-[#D4AF37] transition">
+
+                            <input type="file" id="gambar" name="image" accept="image/*" class="hidden"
+                                onchange="previewGambar(event)">
+
+                            <label for="gambar" class="cursor-pointer">
+                                <i
+                                    class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500 mb-2 block"></i>
+                                <p class="text-gray-600 dark:text-gray-400 font-medium">Klik untuk upload atau drag &
+                                    drop</p>
+                                <p class="text-gray-500 dark:text-gray-500 text-sm">PNG, JPG, GIF (Max 2MB)</p>
+                            </label>
+                        </div>
+
+                        <div id="gambar-preview" class="mt-4 {{ $kota->image ? '' : 'hidden' }}">
+                            <img id="preview-image"
+                                src="{{ $kota->image ? asset('images/seed/kota/' . $kota->image) : '' }}" alt="Preview"
+                                class="max-h-40 rounded-lg">
+                        </div>
+
+                        @error('image')
                             <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -61,4 +80,39 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function previewGambar(event) {
+            const preview = document.getElementById('gambar-preview');
+            const previewImage = document.getElementById('preview-image');
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    previewImage.src = reader.result;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        const dropZone = document.getElementById('drop-zone');
+        const inputGambar = document.getElementById('gambar');
+
+        // Mencegah browser membuka gambar saat di-drag
+        dropZone.addEventListener('dragover', (e) => e.preventDefault());
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+
+            if (e.dataTransfer.files.length) {
+                inputGambar.files = e.dataTransfer.files;
+                previewGambar({
+                    target: inputGambar
+                });
+            }
+        });
+
+    </script>
 </x-layouts.admin>

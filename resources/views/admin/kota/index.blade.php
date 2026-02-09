@@ -39,7 +39,7 @@
                             <tr>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Nama Kota</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Wisata</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold">Artikel</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Berita</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Aksi</th>
                             </tr>
                         </thead>

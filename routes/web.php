@@ -35,7 +35,9 @@ Route::get('/kota/{slug}', [KotaController::class, 'detail'])->name('kota.detail
 Route::get('/wisata', [WisataController::class, 'memberIndex'])->name('wisata.index');
 Route::get('/wisata/{slug}', [WisataController::class, 'detail'])->name('wisata.detail');
 
-// booking route
+// booking routes
+// API routes for checking ticket availability (public)
+Route::get('/api/check-ticket-availability', [WisataKuotaController::class, 'checkAvailability'])->name('api.check-availability');
 Route::get('/booking', [BookingsController::class, 'memberIndex'])->name('booking.index');
 
 Route::middleware('auth')->group(function () {
@@ -82,6 +84,10 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     // Wisata Management - redirect to tiket management
     Route::get('wisata/kelola-tiket', [WisataKuotaController::class, 'index'])
         ->name('wisata.tiket');
+    Route::get('wisata/kelola-tiket/create', [WisataKuotaController::class, 'create'])
+        ->name('tiket.create');
+    Route::post('wisata/kelola-tiket', [WisataKuotaController::class, 'store'])
+        ->name('tiket.store');
 
     // Wisata Management - resource route with model binding (ID-based)
     Route::resource('wisata', WisataController::class)->parameters([
@@ -89,7 +95,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     ]);
 
     // Kota Management
-    Route::resource('kota', KotaController::class);
+    Route::resource('kota', KotaController::class)->parameters([
+        'kota' => 'kota',
+    ]);
 
     // Ulasan Management
     Route::get('ulasan', [UlasanController::class, 'index'])->name('ulasan.index');

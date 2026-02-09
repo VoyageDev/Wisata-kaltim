@@ -62,7 +62,7 @@
                         @if ($artikel->thumbnail)
                             <div class="mb-4">
                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Gambar Saat Ini:</p>
-                                <img src="{{ asset('storage/' . $artikel->thumbnail) }}" alt="Thumbnail"
+                                <img src="{{ asset($artikel->thumbnail) }}" alt="Thumbnail"
                                     class="max-h-40 rounded-lg">
                             </div>
                         @endif

@@ -16,7 +16,7 @@
                     </div>
                     <a href="{{ route('admin.artikel.create') }}"
                         class="bg-gradient-to-r from-[#074e0e] to-[#167509] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center">
-                        <i class="fas fa-plus mr-2"></i>Tambah Artikel
+                        <i class="fas fa-plus mr-2"></i>Tambah Berita
                     </a>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                             @forelse($artikels as $artikel)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                     <td class="px-6 py-4">
-                                        <div class="font-medium text-gray-900 dark:text-gray-100 line-clamp-1">
+                                        <div class="font-medium text-gray-900 dark:text-gray-100 line-clamp-2">
                                             {{ $artikel->judul }}</div>
                                     </td>
                                     <td class="px-6 py-4">

@@ -5,24 +5,23 @@
     <!-- Hero Section with CTA to Login -->
     <section class="relative h-[600px] flex items-center justify-center text-center text-white">
         <div class="absolute inset-0 bg-cover bg-center z-0"
-            style="background-image: url('https://i.pinimg.com/1200x/0a/19/97/0a1997811bb137f776487367d8352da4.jpg');">
+            style="background-image: url('{{ asset('images/seed/water-park.jpg') }}');">
         </div>
         <div class="absolute inset-0 bg-black/50 z-10"></div>
         <div class="relative z-20 px-4 max-w-4xl animate-[fadeInDown_1s_ease]">
             <div class="mb-6">
                 <i class="fas fa-book-open text-6xl text-[#ffffff] mb-4"></i>
             </div>
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-md">Platform Booking Tiket dan Berita Wisata
-                Kalimantan</h1>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-md">Platform Booking Tiket dan Berita Wisata</h1>
             <p class="text-xl md:text-2xl mb-4 drop-shadow-sm">Pesan tiket wisata impianmu dan baca kisah inspiratif dari
                 destinasi favorit</p>
-            <p class="text-lg md:text-xl mb-10 text-gray-200">Login sekarang untuk mulai booking dan membaca berita
-                wisata terbaru!</p>
+            <p class="text-lg md:text-xl mb-10 text-gray-200">Login sekarang untuk mulai booking
+                wisata!</p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 @auth
-                    <a href="#artikel-unggulan"
-                        class="bg-[#d4af37] text-gray-900 px-10 py-4 rounded-lg font-bold hover:bg-[#E8C547] hover:-translate-y-1 transition-all duration-300 shadow-lg inline-block">
+                    <a href="#berita"
+                        class="bg-transparent text-gray-900 px-10 py-4 rounded-lg font-bold hover:bg-[#E8C547] hover:-translate-y-1 transition-all duration-300 shadow-lg inline-block">
                         <i class="fas fa-book-reader mr-2"></i> Mulai
                     </a>
                 @else
@@ -255,14 +254,13 @@
 
                         <li><a href="https://github.com/VoyageDev" class="hover:text-[#D4AF37] transition"><i
                                     class="fab fa-github mr-2"></i> VoyageDev</a></li>
-                        <li><a href="https://github.com/" class="hover:text-[#D4AF37] transition"><i
+                        <li><a href="https://github.com/valeriannn-create" class="hover:text-[#D4AF37] transition"><i
                                     class="fab fa-github mr-2"></i> Nabhan</a></li>
                         <li><a href="https://github.com/" class="hover:text-[#D4AF37] transition"><i
                                     class="fab fa-github mr-2"></i> Aqso</a></li>
                     </ul>
                 </div>
             </div>
-
             <div class="border-t border-gray-600 pt-8 text-center text-sm text-gray-400">
                 <p>&copy; 2026 Booking Wisata Kaltim. All rights reserved.</p>
             </div>
