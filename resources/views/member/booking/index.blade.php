@@ -1,15 +1,37 @@
 @extends('layouts.user')
 @section('content')
-
     <div class="min-h-screen bg-gray-100 font-sans max-w-7xl mx-auto">
+        {{-- Toast Notification Pop-up --}}
+        @if (session('success'))
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)"
+                x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-full"
+                x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-full"
+                class="fixed top-5 right-5 z-[100] max-w-sm w-full bg-white border-l-4 border-green-500 rounded-lg shadow-2xl p-4 flex items-start gap-3">
+
+                <div class="text-green-500 mt-0.5">
+                    <i class="fas fa-check-circle text-xl"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-bold text-gray-900 text-sm">Sukses!</h3>
+                    <p class="text-gray-600 text-sm mt-1">{{ session('success') }}</p>
+                    <a href="{{ route('history.bookings') }}"
+                        class="text-blue-600 text-xs font-semibold mt-2 inline-block hover:underline">
+                        Lihat History Pemesanan &rarr;
+                    </a>
+                </div>
+                <button @click="show = false" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
         <main class="mx-auto mt-5 p-4">
             <div class="inline-block bg-[#60a5fa] text-white px-6 py-2 rounded-2xl shadow-md mb-2">
                 <h1 class="text-xl font-bold italic">Form Pemesanan</h1>
             </div>
 
             {{-- Booking Form --}}
-            <div class="flex flex-col md:flex-row rounded-3xl shadow-xl" x-data="bookingData()"
-                x-init="init()">
+            <div class="flex flex-col md:flex-row rounded-3xl shadow-xl" x-data="bookingData()" x-init="init()">
 
                 <div class="w-full md:w-1/3 bg-[#69db86] p-8">
                     <h2 class="text-2xl font-bold mb-6">Pilih Wisata</h2>
@@ -91,7 +113,7 @@
                                     <div x-show="openWisata && selectedKota" x-transition style="display: none;"
                                         class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
                                         <div class="p-2 border-b border-gray-100">
-                                            <input type="text" x-model="searchWisata" placeholder="Ketik nama wisata..."
+                                            <input type="text" x-model="searchWisata" placeholder="Cari nama wisata..."
                                                 class="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-green-400 text-sm">
                                         </div>
                                         <div class="max-h-48 overflow-y-auto py-1">
@@ -125,11 +147,13 @@
                         Silakan pilih kota dan wisata terlebih dahulu
                     </div>
 
-                    <form method="POST" action="{{ route('booking.store') }}" class="space-y-6" x-show="selectedWisata"
-                        style="display: none;">
+                    <form method="POST" action="{{ route('booking.store') }}" class="space-y-6"
+                        x-show="selectedWisata">
                         @csrf
                         <input type="hidden" name="wisata_id" :value="selectedWisata">
                         <input type="hidden" name="paket_wisata_id" :value="selectedPaketId">
+                        <input type="hidden" name="jumlah_orang" :value="bookingType === 'paket' ? 1 : jumlahOrang">
+
                         <div class="bg-white rounded-2xl p-6 shadow-sm">
                             <div class="flex items-center gap-2 text-blue-600 font-bold mb-4">
                                 Pilih Tanggal Kunjungan <span class="text-red-500">*</span>
@@ -160,9 +184,9 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="text-xs font-bold text-gray-500">Jumlah Orang</label>
-                                    <input type="number" name="jumlah_orang" x-model="jumlahOrang"
-                                        @input="inputRegular()" @change="checkTicketAvailability()"
-                                        :disabled="bookingType === 'paket'" min="1" placeholder="-"
+                                    <input type="number" x-model="jumlahOrang" @input="inputRegular()"
+                                        @change="checkTicketAvailability()" :disabled="bookingType === 'paket'"
+                                        min="1" placeholder="-"
                                         class="w-full bg-gray-200 rounded p-2 border-none mt-1 text-center focus:ring-2 focus:ring-blue-400 disabled:cursor-not-allowed">
                                 </div>
                                 <div>
@@ -189,8 +213,8 @@
                         </div>
 
                         <div class="flex justify-end">
-                            <button type="submit" :disabled="!bookingType || !tanggalKunjungan || !ticketAvailable"
-                                :class="(!bookingType || !tanggalKunjungan || !ticketAvailable) ?
+                            <button type="submit" :disabled="!bookingType || !tanggalKunjungan"
+                                :class="(!bookingType || !tanggalKunjungan) ?
                                 'bg-gray-400 cursor-not-allowed' : 'bg-[#10b981] hover:bg-emerald-600 shadow-lg'"
                                 class="text-white px-8 py-2 rounded-full font-bold text-sm transition">
                                 Booking Sekarang
@@ -227,7 +251,7 @@
                                     </h3>
                                     <h4
                                         class="text-lg font-bold text-gray-800 mb-2 line-clamp-2 hover:text-[#8B6F47] transition-colors">
-                                        {{ $paket->nama_paket }}
+                                        {{ $paket->name }}
                                     </h4>
                                     <p class="text-sm text-gray-600 mb-3 line-clamp-2 flex-grow">
                                         {{ $paket->wisata->name }}
@@ -252,10 +276,11 @@
                                     </div>
 
                                     {{-- Action Button --}}
-                                    <a href="{{ route('booking.index', ['wisata_id' => $paket->wisata_id, 'kota_id' => $paket->wisata->kota_id]) }}"
+                                    <button type="button"
+                                        onclick="window.state_ref.autoFillFromPopuler({{ $paket->wisata->kota_id }}, {{ $paket->wisata_id }}, {{ $paket->id }})"
                                         class="w-full bg-gradient-to-r from-[#8B6F47] to-[#D4AF37] text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 text-center text-sm">
                                         <i class="fas fa-shopping-cart mr-2"></i>Pesan Paket
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         @endforeach
@@ -283,6 +308,7 @@
                 // -- DATA WISATA --
                 selectedWisata: '{{ $selectedWisataId ?? '' }}',
                 wisataName: '{{ $selectedWisata->name ?? '' }}',
+                wisataList: [],
                 searchWisata: '',
                 openWisata: false,
                 loadingWisata: false,
@@ -320,6 +346,7 @@
                 selectWisata(wisata) {
                     this.selectedWisata = wisata.id;
                     this.wisataName = wisata.name;
+                    this.wisataId = wisata.id;
                     this.openWisata = false;
                     this.searchWisata = ''; // Reset form cari
                     this.fetchPaketByWisata(wisata.id);
@@ -349,7 +376,54 @@
                     }
                     this.updatePaketGridVisual();
                 },
+                async autoFillFromPopuler(kotaId, wisataId, paketId) {
+                    const formContainer = document.getElementById('bookingForm');
+                    if (formContainer) {
+                        // Offset 80px agar judul "Form Pemesanan" tidak tertutup batas atas layar
+                        const y = formContainer.getBoundingClientRect().top + window.scrollY - 80;
+                        window.scrollTo({
+                            top: y,
+                            behavior: 'smooth'
+                        });
+                    }
 
+                    // 2. Pilih Kota (Hanya fetch jika kota berbeda)
+                    if (this.selectedKota != kotaId) {
+                        const kota = this.kotasList.find(k => k.id == kotaId);
+                        if (kota) {
+                            this.selectedKota = kota.id;
+                            this.kotaName = kota.name;
+                            await this.fetchWisatasByKota(kota.id);
+                        }
+                    }
+
+                    // 3. Pilih Wisata (Hanya fetch jika wisata berbeda)
+                    if (this.selectedWisata != wisataId) {
+                        const wisata = this.wisataList.find(w => w.id == wisataId);
+                        if (wisata) {
+                            this.selectedWisata = wisata.id;
+                            this.wisataName = wisata.name;
+                            await this.fetchPaketByWisata(wisata.id);
+                        }
+                    }
+
+                    // 4. Set State Paket Bundling
+                    setTimeout(() => {
+                        this.selectedPaketId = parseInt(paketId);
+                        this.bookingType = 'paket';
+                        this.jumlahOrang = ''; // Kosongkan input reguler
+                        this.updatePaketGridVisual(); // Highlight paket warna hijau
+
+                        // TAMBAHAN BARU: Auto-focus ke input tanggal agar user sadar
+                        const dateInput = document.querySelector('input[name="tanggal_kunjungan"]');
+                        if (dateInput) {
+                            dateInput.focus();
+                            // Beri efek kedip merah sebentar agar mata user tertuju ke kolom tanggal
+                            dateInput.classList.add('ring-2', 'ring-red-500');
+                            setTimeout(() => dateInput.classList.remove('ring-2', 'ring-red-500'), 1500);
+                        }
+                    }, 200);
+                },
                 // Metode saat memilih paket bundling
                 selectPaket(id) {
                     if (this.selectedPaketId === id) {

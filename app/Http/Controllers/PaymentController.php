@@ -79,6 +79,7 @@ class PaymentController extends Controller
 
     /**
      * Confirm payment
+     * Logika sama dengan API checkAvailability() - gunakan kuota_default jika tidak ada override
      */
     public function confirm(Payments $payment)
     {
@@ -100,30 +101,43 @@ class PaymentController extends Controller
         }
 
         $booking = $payment->booking;
+        $wisata = $booking->wisata;
+        $jumlahOrang = $booking->jumlah_orang ?? 1;
 
-        // Check and update WisataKuota (decrease available tickets)
-        $kuota = WisataKuota::where('wisata_id', $booking->wisata_id)
-            ->where('tanggal', $booking->tanggal_kunjungan)
-            ->first();
+        // Get or create WisataKuota record for this date
+        // Use kuota_default if no override exists (sama seperti API logic)
+        $kuota = WisataKuota::firstOrCreate(
+            [
+                'wisata_id' => $booking->wisata_id,
+                'tanggal' => $booking->tanggal_kunjungan,
+            ],
+            [
+                'kuota_total' => null, // null = gunakan kuota_default
+                'kuota_terpakai' => 0,
+                'status' => 1, // open
+            ]
+        );
 
-        if ($kuota) {
-            // Calculate available tickets
-            $sisaTiket = $kuota->kuota_total - $kuota->kuota_terpakai;
-            $jumlahOrang = $booking->jumlah_orang ?? 1;
+        // Determine actual kuota total (override or default)
+        $kuotaTotal = $kuota->kuota_total !== null ? $kuota->kuota_total : $wisata->kuota_default;
 
-            // Check if enough tickets are still available
-            if ($sisaTiket < $jumlahOrang) {
-                return redirect()->route('history.index')
-                    ->with('error', "Maaf, hanya tersisa {$sisaTiket} tiket untuk tanggal tersebut, sementara Anda membutuhkan {$jumlahOrang} tiket. Silakan hubungi admin.");
-            }
+        // Calculate available tickets
+        $sisaTiket = $kuotaTotal - $kuota->kuota_terpakai;
 
-            // Decrease kuota/increment kuota_terpakai by number of people
-            $kuota->increment('kuota_terpakai', $jumlahOrang);
-        } else {
-            // This shouldn't happen if validation is working correctly
+        // Check if kuota is closed
+        if (!$kuota->status) {
             return redirect()->route('history.index')
-                ->with('error', 'Data kuota tiket tidak ditemukan. Hubungi admin.');
+                ->with('error', 'Wisata tutup untuk tanggal tersebut.');
         }
+
+        // Check if enough tickets are still available
+        if ($sisaTiket < $jumlahOrang) {
+            return redirect()->route('history.index')
+                ->with('error', "Maaf, hanya tersisa {$sisaTiket} tiket untuk tanggal tersebut, sementara Anda membutuhkan {$jumlahOrang} tiket. Silakan hubungi admin.");
+        }
+
+        // Update kuota_terpakai with the number of people in this booking
+        $kuota->increment('kuota_terpakai', $jumlahOrang);
 
         // Update payment status
         $payment->update([

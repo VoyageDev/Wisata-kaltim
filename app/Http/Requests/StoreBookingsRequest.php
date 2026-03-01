@@ -52,6 +52,7 @@ class StoreBookingsRequest extends FormRequest
 
     /**
      * Configure the validator instance
+     * Validate ketersediaan tiket dengan logika yang sama seperti API checkAvailability()
      */
     public function withValidator(Validator $validator): void
     {
@@ -64,30 +65,48 @@ class StoreBookingsRequest extends FormRequest
                 $jumlahOrang = (int) ($this->jumlah_orang ?? 1);
             }
 
-            // Check if tickets are available for the selected date
+            // Get wisata dan kuota (sama seperti API logic)
+            $wisata = \App\Models\Wisata::find($this->wisata_id);
+            if (! $wisata) {
+                return; // Wisata sudah divalidasi di rules()
+            }
+
             $kuota = WisataKuota::where('wisata_id', $this->wisata_id)
                 ->where('tanggal', $this->tanggal_kunjungan)
                 ->first();
 
-            if (! $kuota) {
+            // Cek status (jika ada override dan statusnya tutup)
+            if ($kuota && ! $kuota->status) {
                 $validator->errors()->add(
                     'tanggal_kunjungan',
-                    'Maaf, tiket untuk tanggal ini belum tersedia. Silakan pilih tanggal lain.'
+                    'Wisata tutup untuk tanggal ini'
                 );
-            } else {
-                $sisaTiket = $kuota->kuota_total - $kuota->kuota_terpakai;
 
-                if ($sisaTiket <= 0) {
-                    $validator->errors()->add(
-                        'tanggal_kunjungan',
-                        'Maaf, tiket untuk tanggal ini sudah terjual habis. Silakan pilih tanggal lain.'
-                    );
-                } elseif ($sisaTiket < $jumlahOrang) {
-                    $validator->errors()->add(
-                        'tanggal_kunjungan',
-                        "Maaf, hanya tersisa {$sisaTiket} tiket untuk tanggal ini, sementara Anda membutuhkan {$jumlahOrang} tiket. Silakan pilih tanggal lain atau kurangi jumlah orang."
-                    );
-                }
+                return;
+            }
+
+            // Tentukan kuota total (override atau default)
+            $kuotaTotal = $kuota && $kuota->kuota_total !== null
+                ? $kuota->kuota_total
+                : $wisata->kuota_default;
+
+            // Hitung kuota terpakai
+            $kuotaTerpakai = $kuota ? $kuota->kuota_terpakai : 0;
+
+            // Hitung sisa tiket
+            $sisaTiket = $kuotaTotal - $kuotaTerpakai;
+
+            // Cek apakah tersedia untuk jumlah orang yang diminta
+            if ($sisaTiket <= 0) {
+                $validator->errors()->add(
+                    'tanggal_kunjungan',
+                    'Tiket untuk tanggal ini sudah terjual habis. Silakan pilih tanggal lain.'
+                );
+            } elseif ($sisaTiket < $jumlahOrang) {
+                $validator->errors()->add(
+                    'tanggal_kunjungan',
+                    "Hanya tersisa {$sisaTiket} tiket untuk tanggal ini, sementara Anda membutuhkan {$jumlahOrang} tiket. Silakan pilih tanggal lain atau kurangi jumlah orang."
+                );
             }
         });
     }

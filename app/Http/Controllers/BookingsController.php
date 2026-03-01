@@ -188,7 +188,8 @@ class BookingsController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('booking.invoice', $booking->id);
+        return redirect()->route('booking.invoice', $booking->id)
+            ->with('success', 'Berhasil booking! Silakan selesaikan pembayaran dan cek history Anda.');
     }
 
     /**
