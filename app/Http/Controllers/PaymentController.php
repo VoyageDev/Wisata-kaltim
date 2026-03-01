@@ -125,7 +125,7 @@ class PaymentController extends Controller
         $sisaTiket = $kuotaTotal - $kuota->kuota_terpakai;
 
         // Check if kuota is closed
-        if (!$kuota->status) {
+        if (! $kuota->status) {
             return redirect()->route('history.index')
                 ->with('error', 'Wisata tutup untuk tanggal tersebut.');
         }

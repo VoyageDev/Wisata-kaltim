@@ -40,37 +40,41 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($kota->wisatas as $wisata)
                             <div
-                                class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 group">
-                                <div class="h-48 overflow-hidden">
+                                class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 group h-full flex flex-col">
+
+                                <div class="h-48 overflow-hidden flex-shrink-0">
                                     <img src="{{ asset('images/seed/wisata/' . ($wisata->gambar ?? 'placeholder.jpg')) }}"
                                         alt="{{ $wisata->name }}"
                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                 </div>
-                                <div class="p-5">
-                                    <div class="flex items-center justify-between mb-2">
+                                <div class="p-5 flex flex-col flex-grow">
+                                    <div class="flex items-start justify-between mb-2 gap-2">
                                         <h3
                                             class="text-lg font-bold text-gray-800 line-clamp-2 group-hover:text-[#8B6F47] transition-colors flex-1">
                                             {{ $wisata->name }}
                                         </h3>
                                         @if ($wisata->ulasans->avg('rating'))
-                                            <div class="flex items-center ml-2">
+                                            <div class="flex items-center flex-shrink-0 mt-1">
                                                 <i class="fas fa-star text-yellow-400 text-sm mr-1"></i>
                                                 <span
                                                     class="text-sm font-semibold">{{ number_format($wisata->ulasans->avg('rating'), 1) }}</span>
                                             </div>
                                         @endif
                                     </div>
-                                    <p class="text-gray-600 text-sm line-clamp-3 mb-4">
+
+                                    <p class="text-gray-600 text-sm line-clamp-3 mb-4 flex-grow">
                                         {{ Str::limit(strip_tags($wisata->description ?? ''), 100) }}
                                     </p>
+
                                     @if ($wisata->address)
                                         <div class="text-xs text-gray-500 mb-4 flex items-start">
                                             <i class="fas fa-map-pin text-[#8B6F47] mr-2 mt-0.5 flex-shrink-0"></i>
                                             <span class="line-clamp-2">{{ $wisata->alamat }}</span>
                                         </div>
                                     @endif
+                                    
                                     <a href="{{ route('wisata.detail', $wisata->slug) }}"
-                                        class="block w-full bg-gradient-to-r from-[#8B6F47] to-[#D4AF37] text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 text-sm text-center">
+                                        class="mt-auto block w-full bg-gradient-to-r from-[#8B6F47] to-[#D4AF37] text-white py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 text-sm text-center">
                                         Lihat Detail & Ulasan
                                     </a>
                                 </div>
