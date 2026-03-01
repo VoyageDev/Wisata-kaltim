@@ -8,18 +8,32 @@ use Illuminate\Support\Str;
 
 class KotaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kotas = Kota::withCount(['wisatas', 'artikels'])->latest()->paginate(10);
+        $search = $request->get('search');
+        $query = Kota::withCount(['wisatas', 'artikels'])->latest();
 
-        return view('admin.kota.index', compact('kotas'));
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $kotas = $query->paginate(10)->appends($request->query());
+
+        return view('admin.kota.index', compact('kotas', 'search'));
     }
 
-    public function memberIndex()
+    public function memberIndex(Request $request)
     {
-        $kotas = Kota::withCount(['wisatas', 'artikels'])->latest()->paginate(12);
+        $search = $request->get('search');
 
-        return view('member.kota', compact('kotas'));
+        $query = Kota::withCount(['wisatas', 'artikels'])->latest();
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $kotas = $query->paginate(12)->appends($request->query());
+
+        return view('member.kota.index', compact('kotas', 'search'));
     }
 
     public function show(Kota $kota)
@@ -43,7 +57,7 @@ class KotaController extends Controller
         // Get related articles for this kota
         $artikelTerkait = $kota->artikels()->with('user')->latest()->take(6)->get();
 
-        return view('member.kota-detail', compact('kota', 'artikelTerkait'));
+        return view('member.kota.detail', compact('kota', 'artikelTerkait'));
     }
 
     public function create()

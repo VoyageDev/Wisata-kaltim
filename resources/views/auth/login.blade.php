@@ -1,4 +1,6 @@
-<x-guest-layout>
+@extends('layouts.guest')
+
+@section('content')
     <div class="fixed inset-0 -z-10">
         <img src="https://images.unsplash.com/photo-1506501139174-099022df5260?q=80&w=2071&auto=format&fit=crop"
             alt="Background" class="w-full h-full object-cover blur-md scale-110 brightness-50">
@@ -6,8 +8,7 @@
 
     <div class="min-h-screen flex items-center justify-center p-4 sm:p-6">
 
-        <div
-            class="flex w-full xl:max-w-7xl bg-white shadow-2xl overflow-hidden rounded-lg xl:rounded-3xl lg:min-h-[650px]">
+        <div class="flex w-full xl:max-w-7xl bg-white shadow-2xl overflow-hidden rounded-lg xl:rounded-3xl lg:min-h-[650px]">
 
             <div class="hidden lg:flex lg:w-1/2 relative bg-gray-900">
                 <img src="https://images.unsplash.com/photo-1506501139174-099022df5260?q=80&w=2071&auto=format&fit=crop"
@@ -54,8 +55,7 @@
 
                         <x-text-input id="email"
                             class="block mt-1 w-full bg-gray-100 dark:bg-gray-800 dark:text-white dark:border-gray-700 border-transparent focus:border-emerald-500 focus:bg-white dark:focus:bg-gray-800 focus:ring-0 rounded-lg placeholder-gray-400"
-                            type="email" name="email" :value="old('email')" required autofocus
-                            autocomplete="email" />
+                            type="email" name="email" :value="old('email')" required autofocus autocomplete="email" />
 
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
@@ -91,18 +91,8 @@
                             {{ __('Masuk') }}
                         </x-primary-button>
                     </div>
-
-                    <div class="mt-6 text-center">
-                        <p class="text-sm text-gray-600 dark:text-gray-400">
-                            Belum punya akun?
-                            <a href="{{ route('register') }}"
-                                class="font-bold text-[#8B3A10] hover:text-[#702E0C] hover:underline">
-                                Daftar sekarang
-                            </a>
-                        </p>
-                    </div>
                 </form>
             </div>
         </div>
     </div>
-</x-guest-layout>
+@endsection

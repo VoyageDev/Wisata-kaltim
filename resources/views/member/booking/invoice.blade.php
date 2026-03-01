@@ -1,4 +1,5 @@
-<x-layouts.user>
+@extends('layouts.user')
+@section('content')
     <form action="{{ route('payment.store') }}" method="POST" id="paymentForm">
         @csrf
         <input type="hidden" name="booking_id" value="{{ $booking->id }}">
@@ -141,4 +142,4 @@
             });
         });
     </script>
-</x-layouts.user>
+@endsection

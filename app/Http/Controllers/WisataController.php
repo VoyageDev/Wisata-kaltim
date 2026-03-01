@@ -11,18 +11,29 @@ use Illuminate\Support\Str;
 
 class WisataController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $wisatas = Wisata::with('kota')->latest()->paginate(10);
+        $search = $request->get('search');
+        $query = Wisata::with('kota')->latest();
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $wisatas = $query->paginate(10)->appends($request->query());
 
         return view('admin.wisata.index', compact('wisatas'));
     }
 
-    public function memberIndex()
+    public function memberIndex(Request $request)
     {
-        $wisatas = Wisata::with('kota')->latest()->paginate(12);
+        $search = $request->get('search');
+        $query = Wisata::with('kota')->latest();
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+        $wisatas = $query->paginate(12)->appends($request->query());
 
-        return view('member.wisata', compact('wisatas'));
+        return view('member.wisata.index', compact('wisatas', 'search'));
     }
 
     public function create()
@@ -52,7 +63,7 @@ class WisataController extends Controller
             ->with('user')
             ->get();
 
-        return view('member.wisata-detail', compact('wisata', 'allReplies'));
+        return view('member.wisata.detail', compact('wisata', 'allReplies'));
     }
 
     public function store(Request $request)
@@ -151,6 +162,7 @@ class WisataController extends Controller
     public function redirectToTiket()
     {
         $wisatas = Wisata::with('kota')->latest()->paginate(10);
+
         return view('admin.wisata.tiket', compact('wisatas'));
     }
 }

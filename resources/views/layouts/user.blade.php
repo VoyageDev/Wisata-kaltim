@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title ?? config('app.name', 'Pariwisata-Kaltim') }}</title>
-
+    <title>@yield('title', config('app.name'))</title>
+    <meta name="description" content="@yield('description', 'Platform booking wisata waterpark dan berita terbaru seputar destinasi wisata Indonesia Jelajahi Sekarang.')">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -30,10 +30,15 @@
 
 <body class="bg-[#f8f5f0] antialiased text-gray-800" x-data="{ mobileMenuOpen: false, showLoginModal: false, showLogoutModal: false }">
 
+    <!-- Page Header -->
     <header class="sticky top-0 z-50">
         <x-user-nav />
     </header>
-    {{ $slot }}
+
+    <!-- Page Content -->
+    <main>
+        @yield('content')
+    </main>
 
 </body>
 

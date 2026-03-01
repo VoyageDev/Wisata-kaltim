@@ -1,4 +1,5 @@
-<x-layouts.user>
+@extends('layouts.user')
+@section('content')
     <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
         {{-- Hero Section dengan Breadcrumb --}}
         <div class="bg-gradient-to-r from-[#2C3E50] to-[#1A3C34] text-white py-8">
@@ -59,12 +60,10 @@
                             class="absolute top-0 right-8 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin">
+                                stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-                                <path
-                                    d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0" />
+                                <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0" />
                             </svg>
                         </a>
 
@@ -201,7 +200,7 @@
                 <div class="space-y-6">
                     @forelse($wisata->ulasans as $ulasan)
                         {{-- Parent Comment --}}
-                        <div class="border-b border-gray-200 pb-6 last:border-0">
+                        <div id="ulasan-{{ $ulasan->id }}" class="border-b border-gray-200 pb-6 last:border-0">
                             <div class="flex items-start space-x-4">
                                 <div class="flex-shrink-0">
                                     <div
@@ -212,7 +211,8 @@
                                 <div class="flex-1">
                                     <div class="flex items-center justify-between mb-2">
                                         <div>
-                                            <h4 class="font-semibold text-gray-800 flex items-center gap-1">{{ $ulasan->user->name }}
+                                            <h4 class="font-semibold text-gray-800 flex items-center gap-1">
+                                                {{ $ulasan->user->name }}
                                                 @if ($ulasan->user->role === 'admin')
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                         fill="currentColor" class="w-4 h-4 text-blue-500"
@@ -242,8 +242,7 @@
                                                 onsubmit="return confirm('Yakin ingin menghapus ulasan ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit"
-                                                    class="text-red-500 hover:text-red-700 text-sm">
+                                                <button type="submit" class="text-red-500 hover:text-red-700 text-sm">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -303,8 +302,7 @@
                                             {{-- Toggle Button for Replies --}}
                                             <button onclick="toggleReplies({{ $ulasan->id }})"
                                                 class="flex items-center gap-2 text-sm text-[#8B6F47] hover:text-[#D4AF37] font-medium mb-3 transition">
-                                                <i id="reply-icon-{{ $ulasan->id }}"
-                                                    class="fas fa-chevron-down"></i>
+                                                <i id="reply-icon-{{ $ulasan->id }}" class="fas fa-chevron-down"></i>
                                                 <span id="reply-text-{{ $ulasan->id }}">Tampilkan
                                                     {{ $repliesToShow->count() }} balasan</span>
                                             </button>
@@ -380,4 +378,4 @@
             }
         }
     </script>
-</x-layouts.user>
+@endsection

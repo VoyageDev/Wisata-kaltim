@@ -24,6 +24,7 @@ return new class extends Migration
             $table->time('jam_tutup');
             $table->enum('status', ['Open', 'Closed'])->default('Open');
             $table->string('alamat');
+            $table->integer('kuota_default')->default(50)->comment('Kuota tiket default per hari');
             $table->timestamps();
         });
     }

@@ -1,7 +1,10 @@
-<x-layouts.user>
+@extends('layouts.user')
+@section('title', 'Platform Booking Wisata Waterpark | ' . config('app.name', 'Pariwisata-Kaltim'))
+@section('description',
+    'Platform booking tiket wisata waterpark dan berita terbaru seputar destinasi wisata Indonesia
+    jelajahi sekarang')
 
-    <x-slot:title>Portal Berita Wisata Indonesia</x-slot:title>
-
+@section('content')
     <!-- Hero Section with CTA to Login -->
     <section class="relative h-[600px] flex items-center justify-center text-center text-white">
         <div class="absolute inset-0 bg-cover bg-center z-0"
@@ -85,8 +88,7 @@
                                 <a href="{{ route('artikel.detail', $artikel->slug) }}"
                                     class="text-[#D4AF37] font-semibold text-sm hover:text-[#8B6F47] transition-colors inline-flex items-center">
                                     Baca Selengkapnya
-                                    <i
-                                        class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                                    <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                                 </a>
                             </div>
                         </div>
@@ -229,19 +231,17 @@
                                     class="fab fa-facebook mr-2"></i> Facebook</a></li>
                         <li><a href="#" class="hover:text-[#D4AF37] transition"><i
                                     class="fab fa-instagram mr-2"></i> Instagram</a></li>
-                        <li><a href="#" class="hover:text-[#D4AF37] transition"><i
-                                    class="fab fa-github mr-2"></i> Github</a></li>
-                        <li><a href="#" class="hover:text-[#D4AF37] transition"><i
-                                    class="fab fa-youtube mr-2"></i> YouTube</a></li>
+                        <li><a href="#" class="hover:text-[#D4AF37] transition"><i class="fab fa-github mr-2"></i>
+                                Github</a></li>
+                        <li><a href="#" class="hover:text-[#D4AF37] transition"><i class="fab fa-youtube mr-2"></i>
+                                YouTube</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4
-                        class="flex items-center gap-2 text-lg font-bold mb-4 border-b border-gray-600 pb-2 inline-flex">
+                    <h4 class="flex items-center gap-2 text-lg font-bold mb-4 border-b border-gray-600 pb-2 inline-flex">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline icon-tabler-user-share">
+                            stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user-share">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
                             <path d="M6 21v-2a4 4 0 0 1 4 -4h3" />
@@ -267,4 +267,4 @@
         </div>
     </footer>
 
-</x-layouts.user>
+@endsection

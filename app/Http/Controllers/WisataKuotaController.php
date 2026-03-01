@@ -17,25 +17,23 @@ class WisataKuotaController extends Controller
     public function index(Request $request)
     {
         $query = WisataKuota::with('wisata.kota');
+
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->whereHas('wisata', function ($q) use ($search) {
-                $q->where('name', 'LIKE', '%'.$search.'%');
+            $query->whereHas('wisata', function ($q) use ($request) {
+                $q->where('name', 'LIKE', '%'.$request->search.'%');
             });
         }
 
-        //  Filter Tanggal (Besok & Minggu Depan)
         if ($request->filled('filter_date')) {
             switch ($request->filter_date) {
                 case 'besok':
-                    // Filter khusus tanggal besok
                     $query->whereDate('tanggal', Carbon::tomorrow());
                     break;
                 case 'minggu_depan':
-                    // filter minggu depan dimulai dari senin
-                    $startNextWeek = Carbon::now()->addWeek()->startOfWeek();
-                    $endNextWeek = Carbon::now()->addWeek()->endOfWeek();
-                    $query->whereBetween('tanggal', [$startNextWeek, $endNextWeek]);
+                    $query->whereBetween('tanggal', [
+                        Carbon::now()->addWeek()->startOfWeek(),
+                        Carbon::now()->addWeek()->endOfWeek(),
+                    ]);
                     break;
                 case 'bulan_ini':
                     $query->whereMonth('tanggal', Carbon::now()->month)
@@ -44,10 +42,7 @@ class WisataKuotaController extends Controller
             }
         }
 
-        $wisatas = $query->orderBy('tanggal', 'asc')->paginate(10);
-
-        // mempertahankan query search pada saat pindah halaman
-        $wisatas->appends($request->all());
+        $wisatas = $query->orderBy('tanggal', 'asc')->paginate(10)->appends($request->all());
 
         return view('admin.wisata.tiket', compact('wisatas'));
     }
@@ -64,34 +59,31 @@ class WisataKuotaController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * Untuk override kuota default atau tutup tanggal tertentu
      */
     public function store(StoreWisataKuotaRequest $request)
     {
-        try {
-            WisataKuota::create([
-                'wisata_id' => $request->wisata_id,
-                'tanggal' => $request->tanggal,
-                'kuota_total' => $request->kuota_total,
-                'kuota_terpakai' => 0,
-            ]);
+        // Cek duplikasi secara manual agar kodenya lebih bersih dibanding try-catch
+        $isDuplicate = WisataKuota::where('wisata_id', $request->wisata_id)
+            ->where('tanggal', $request->tanggal)
+            ->exists();
 
-            return redirect()
-                ->route('admin.wisata.tiket')
-                ->with('success', 'Kuota wisata berhasil ditambahkan');
-        } catch (\Exception $e) {
-            // Handle unique constraint violation
-            if (str_contains($e->getMessage(), 'Duplicate entry') || str_contains($e->getMessage(), 'UNIQUE constraint')) {
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->withErrors(['tanggal' => 'Kuota untuk wisata ini pada tanggal tersebut sudah ada']);
-            }
-
+        if ($isDuplicate) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data']);
+                ->withErrors(['tanggal' => 'Kuota untuk wisata ini pada tanggal tersebut sudah ada.']);
         }
+
+        WisataKuota::create([
+            'wisata_id' => $request->wisata_id,
+            'tanggal' => $request->tanggal,
+            'kuota_total' => $request->kuota_total,
+            'kuota_terpakai' => 0,
+            'status' => $request->status ?? 1,
+        ]);
+
+        return redirect()->route('admin.wisata.tiket')->with('success', 'Kuota wisata berhasil ditambahkan.');
     }
 
     /**
@@ -107,65 +99,110 @@ class WisataKuotaController extends Controller
      */
     public function edit(WisataKuota $wisataKuota)
     {
-        //
+        $wisatas = Wisata::orderBy('name')->get();
+
+        return view('admin.wisata.tiket-edit', compact('wisataKuota', 'wisatas'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateWisataKuotaRequest $request, WisataKuota $wisataKuota)
     {
-        //
+        $wisataKuota->update([
+            'kuota_total' => $request->kuota_total,
+            'status' => $request->status ?? 1,
+        ]);
+
+        return redirect()->route('admin.wisata.tiket')->with('success', 'Kuota wisata berhasil diupdate.');
     }
 
     /**
      * Remove the specified resource from storage.
+     * Menghapus override kuota (kembali ke default)
      */
     public function destroy(WisataKuota $wisataKuota)
     {
-        //
+        $wisataKuota->delete();
+
+        return redirect()->route('admin.wisata.tiket')->with('success', 'Kuota override berhasil dihapus, kembali menggunakan kuota default.');
     }
 
     /**
      * Check ticket availability via API
-     * GET /api/check-ticket-availability?wisata_id=1&tanggal=2026-02-15
+     * GET /api/check-ticket-availability?wisata_id=1&tanggal=2026-02-15&jumlah_orang=2
+     *
+     * Logic:
+     * 1. Cek apakah ada override kuota untuk tanggal ini
+     * 2. Jika status = 0 (tutup), return tidak tersedia
+     * 3. Jika kuota_total = null, gunakan kuota_default dari wisata
+     * 4. Jika kuota_total ada, gunakan itu (override)
+     * 5. Cek apakah sisa tiket >= jumlah_orang yang diminta
      */
     public function checkAvailability(Request $request)
     {
         $request->validate([
             'wisata_id' => 'required|exists:wisatas,id',
             'tanggal' => 'required|date',
+            'jumlah_orang' => 'nullable|integer|min:1',
         ]);
 
+        $wisata = Wisata::findOrFail($request->wisata_id);
+        $jumlahOrang = $request->input('jumlah_orang', 1);
+
+        // Cek apakah ada override kuota untuk tanggal ini
         $kuota = WisataKuota::where('wisata_id', $request->wisata_id)
             ->where('tanggal', $request->tanggal)
             ->first();
 
-        if (! $kuota) {
+        // Cek status (jika ada override dan statusnya tutup)
+        if ($kuota && ! $kuota->status) {
             return response()->json([
                 'available' => false,
-                'message' => 'Tiket tidak tersedia untuk tanggal ini',
+                'message' => 'Wisata tutup untuk tanggal ini',
                 'sisaTiket' => 0,
             ], 200);
         }
 
-        $sisaTiket = $kuota->kuota_total - $kuota->kuota_terpakai;
+        // Tentukan kuota total (override atau default)
+        $kuotaTotal = $kuota && $kuota->kuota_total !== null
+            ? $kuota->kuota_total
+            : $wisata->kuota_default;
 
+        // Hitung kuota terpakai
+        $kuotaTerpakai = $kuota ? $kuota->kuota_terpakai : 0;
+
+        // Hitung sisa tiket
+        $sisaTiket = $kuotaTotal - $kuotaTerpakai;
+
+        // Cek apakah tersedia untuk jumlah orang yang diminta
         if ($sisaTiket <= 0) {
             return response()->json([
                 'available' => false,
                 'message' => 'Tiket untuk tanggal ini sudah terjual habis',
                 'sisaTiket' => 0,
-                'kuota_total' => $kuota->kuota_total,
+                'kuota_total' => $kuotaTotal,
+                'kuota_terpakai' => $kuotaTerpakai,
+                'jumlah_orang' => $jumlahOrang,
+            ], 200);
+        }
+
+        if ($sisaTiket < $jumlahOrang) {
+            return response()->json([
+                'available' => false,
+                'message' => "Tiket tidak cukup untuk {$jumlahOrang} orang. Hanya tersedia {$sisaTiket} tiket.",
+                'sisaTiket' => $sisaTiket,
+                'kuota_total' => $kuotaTotal,
+                'kuota_terpakai' => $kuotaTerpakai,
+                'jumlah_orang' => $jumlahOrang,
             ], 200);
         }
 
         return response()->json([
             'available' => true,
-            'message' => "Tersedia {$sisaTiket} tiket untuk tanggal ini",
+            'message' => "Tersedia {$sisaTiket} tiket untuk {$jumlahOrang} orang pada tanggal ini",
             'sisaTiket' => $sisaTiket,
-            'kuota_total' => $kuota->kuota_total,
-            'kuota_terpakai' => $kuota->kuota_terpakai,
+            'kuota_total' => $kuotaTotal,
+            'kuota_terpakai' => $kuotaTerpakai,
+            'jumlah_orang' => $jumlahOrang,
+            'is_override' => $kuota && $kuota->kuota_total !== null,
         ], 200);
     }
 }

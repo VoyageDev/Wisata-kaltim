@@ -11,7 +11,7 @@ class UpdateWisataKuotaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,21 @@ class UpdateWisataKuotaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'kuota_total' => 'nullable|integer|min:0|max:10000',
+            'status' => 'nullable|boolean',
+        ];
+    }
+
+    /**
+     * Get custom messages for validation errors.
+     */
+    public function messages(): array
+    {
+        return [
+            'kuota_total.integer' => 'Kuota harus berupa angka',
+            'kuota_total.min' => 'Kuota minimal 0',
+            'kuota_total.max' => 'Kuota maksimal 10.000',
+            'status.boolean' => 'Status harus berupa boolean (0 atau 1)',
         ];
     }
 }

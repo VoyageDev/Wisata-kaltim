@@ -1,10 +1,13 @@
-<x-layouts.admin>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Detail Ulasan') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
 
+@section('header')
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Detail Ulasan') }}
+    </h2>
+@endsection
+
+
+@section('content')
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             {{-- Back Button --}}
@@ -71,8 +74,7 @@
             {{-- Review Content --}}
             <div class="pb-8 border-b border-gray-200 dark:border-gray-700">
                 <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mb-3">Isi Ulasan</p>
-                <div
-                    class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 text-gray-800 dark:text-gray-200 leading-relaxed">
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 text-gray-800 dark:text-gray-200 leading-relaxed">
                     {!! nl2br(e($ulasan->komentar)) !!}
                 </div>
             </div>
@@ -92,4 +94,4 @@
         </div>
     </div>
     </div>
-</x-layouts.admin>
+@endsection

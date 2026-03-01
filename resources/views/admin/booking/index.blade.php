@@ -1,10 +1,11 @@
-<x-layouts.admin>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Kelola Booking') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
+@section('header')
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Kelola Booking') }}
+    </h2>
+@endsection
 
+@section('content')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{-- Header --}}
@@ -14,10 +15,20 @@
                         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">Manajemen Booking</h1>
                         <p class="text-gray-600 dark:text-gray-400 mt-1">Kelola booking di platform Anda</p>
                     </div>
-                    <a href="{{ route('admin.booking.create') }}"
-                        class="bg-gradient-to-r from-[#074e0e] to-[#167509] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center">
-                        <i class="fas fa-plus mr-2"></i>Tambah Booking
-                    </a>
+                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                        {{-- Form Pencarian --}}
+                        <form action="{{ route('admin.booking.index') }}" method="GET" class="relative w-full sm:w-auto">
+                            <input type="text" name="search" value="{{ request('search') }}"
+                                placeholder="Cari booking..."
+                                class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#167509] focus:border-[#167509] outline-none dark:bg-gray-700 dark:text-white transition-all">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </form>
+
+                        <a href="{{ route('admin.booking.create') }}"
+                            class="w-full sm:w-auto bg-gradient-to-r from-[#074e0e] to-[#167509] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center whitespace-nowrap">
+                            <i class="fas fa-plus mr-2"></i>Tambah Booking
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -96,8 +107,7 @@
 
                                             {{-- TOMBOL CANCEL --}}
                                             @if ($booking->status == 'pending')
-                                                <form action="{{ route('admin.booking.cancel', $booking) }}"
-                                                    method="POST"
+                                                <form action="{{ route('admin.booking.cancel', $booking) }}" method="POST"
                                                     onsubmit="return confirm('Yakin ingin membatalkan pesanan ini?')">
                                                     @csrf
                                                     @method('PATCH')
@@ -121,8 +131,7 @@
                             @empty
                                 <tr>
                                     <td colspan="6" class="px-6 py-12 text-center">
-                                        <i
-                                            class="fas fa-inbox text-gray-300 dark:text-gray-600 text-5xl mb-4 block"></i>
+                                        <i class="fas fa-inbox text-gray-300 dark:text-gray-600 text-5xl mb-4 block"></i>
                                         <p class="text-gray-500 dark:text-gray-400 font-medium">Belum ada booking</p>
                                     </td>
                                 </tr>
@@ -138,4 +147,4 @@
                     </div>
                 @endif
             </div>
-</x-layouts.admin>
+        @endsection

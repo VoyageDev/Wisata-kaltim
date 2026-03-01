@@ -54,6 +54,7 @@ class WisataFactory extends Factory
                 'jam_tutup' => $current['jam_tutup'] ?? fake()->randomElement(['17:00:00', '18:00:00', '19:00:00', '20:00:00']),
                 'status' => $current['status'] ?? fake()->randomElement(['Open', 'Closed']),
                 'alamat' => $current['alamat'] ?? fake()->address(),
+                'kuota_default' => $current['kuota_default'] ?? fake()->numberBetween(30, 100),
             ];
         }
 
@@ -77,6 +78,7 @@ class WisataFactory extends Factory
             'jam_tutup' => fake()->randomElement(['17:00:00', '18:00:00', '19:00:00', '20:00:00']),
             'status' => fake()->randomElement(['Open', 'Closed']),
             'alamat' => fake()->address(),
+            'kuota_default' => fake()->numberBetween(30, 100),
         ];
     }
 
@@ -132,6 +134,7 @@ class WisataFactory extends Factory
                     'jam_tutup' => $jamTutup,
                     'status' => $item['status'] ?? 'Open',
                     'alamat' => $item['alamat'] ?? '',
+                    'kuota_default' => $item['kuota_default'] ?? 50,
                 ]);
             }
         }

@@ -1,10 +1,11 @@
-<x-layouts.admin>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Detail Wisata') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
+@section('header')
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Detail Wisata') }}
+    </h2>
+@endsection
 
+@section('content')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{-- Header --}}
@@ -81,8 +82,7 @@
                             {{-- Google Maps --}}
                             @if ($wisata->links_maps)
                                 <div>
-                                    <label
-                                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Lokasi
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Lokasi
                                         di Maps</label>
                                     <a href="{{ $wisata->links_maps }}" target="_blank"
                                         class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 font-medium flex items-center">
@@ -94,8 +94,7 @@
                             {{-- Booking Links --}}
                             @if ($wisata->links_bookings)
                                 <div>
-                                    <label
-                                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Booking
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Booking
                                         Online</label>
                                     @php
                                         $bookings = is_string($wisata->links_bookings)
@@ -109,8 +108,7 @@
                                             @foreach ($bookings as $booking)
                                                 <a href="{{ $booking }}" target="_blank"
                                                     class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 font-medium flex items-center">
-                                                    <i
-                                                        class="fas fa-link mr-2"></i>{{ parse_url($booking, PHP_URL_HOST) }}
+                                                    <i class="fas fa-link mr-2"></i>{{ parse_url($booking, PHP_URL_HOST) }}
                                                 </a>
                                             @endforeach
                                         @else
@@ -124,8 +122,7 @@
 
                     {{-- Description --}}
                     <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
-                        <label
-                            class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Deskripsi</label>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Deskripsi</label>
                         <div class="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-400">
                             {!! nl2br(e($wisata->description)) !!}
                         </div>
@@ -151,4 +148,4 @@
             </div>
         </div>
     </div>
-</x-layouts.admin>
+@endsection

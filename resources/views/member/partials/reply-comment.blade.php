@@ -1,5 +1,5 @@
 {{-- Flat Reply Component - No Nested Structure --}}
-<div class="border-l-2 border-gray-200 pl-3 py-3">
+<div id="ulasan-{{ $reply->id }}" class="border-l-2 border-gray-200 pl-3 py-3">
     <div class="flex items-start space-x-3">
         <div class="flex-shrink-0">
             <div

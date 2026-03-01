@@ -24,7 +24,8 @@ class StoreWisataKuotaRequest extends FormRequest
         return [
             'wisata_id' => 'required|exists:wisatas,id',
             'tanggal' => 'required|date|after_or_equal:today',
-            'kuota_total' => 'required|integer|min:1|max:10000',
+            'kuota_total' => 'nullable|integer|min:0|max:10000',
+            'status' => 'nullable|boolean',
         ];
     }
 
@@ -39,10 +40,10 @@ class StoreWisataKuotaRequest extends FormRequest
             'tanggal.required' => 'Tanggal harus diisi',
             'tanggal.date' => 'Format tanggal tidak valid',
             'tanggal.after_or_equal' => 'Tanggal tidak boleh kurang dari hari ini',
-            'kuota_total.required' => 'Kuota total harus diisi',
             'kuota_total.integer' => 'Kuota harus berupa angka',
-            'kuota_total.min' => 'Kuota minimal 1',
+            'kuota_total.min' => 'Kuota minimal 0',
             'kuota_total.max' => 'Kuota maksimal 10.000',
+            'status.boolean' => 'Status harus berupa boolean (0 atau 1)',
         ];
     }
 }

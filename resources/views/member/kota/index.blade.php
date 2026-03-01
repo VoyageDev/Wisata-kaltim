@@ -1,14 +1,31 @@
-<x-layouts.user>
+@extends('layouts.user')
+@section('content')
     <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Header --}}
-            <div class="mb-12">
+            <div class="mb-6">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">
                     <i class="fas fa-map text-[#8B6F47] mr-3"></i>
                     Daftar Kota
                 </h1>
                 <p class="text-gray-600 text-lg">Jelajahi berbagai kota dan wisata menarik di Indonesia</p>
+            </div>
+
+            {{-- Search Kota --}}
+            <div class="mb-5">
+                <form action="{{ route('kota.index') }}" method="GET" class="w-full md:w-2/3 lg:w-1/2">
+                    <div class="flex items-center gap-3 bg-white border border-gray-200 rounded-lg shadow-sm px-4 py-3">
+                        <i class="fas fa-search text-gray-400"></i>
+                        <input type="text" name="search" value="{{ $search ?? '' }}"
+                            placeholder="Cari berdasarkan nama kota..."
+                            class="w-full text-sm text-gray-700 placeholder-gray-400 focus:outline-none">
+                        <button type="submit"
+                            class="text-sm bg-[#3b3b3b] text-white px-4 py-2 rounded-md hover:bg-[#525252] transition">
+                            Cari
+                        </button>
+                    </div>
+                </form>
             </div>
 
             {{-- Cities Grid (5 Columns) --}}
@@ -19,7 +36,7 @@
                             class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 h-full flex flex-col">
                             {{-- City Image --}}
                             <div class="relative h-40 overflow-hidden bg-gray-300">
-                                <img src="{{ asset('images/seed/kota/' .$kota->image) }}" alt="{{ $kota->name }}"
+                                <img src="{{ asset('images/seed/kota/' . $kota->image) }}" alt="{{ $kota->name }}"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                 {{-- Wisata Count Badge --}}
                                 <div
@@ -64,4 +81,4 @@
 
         </div>
     </div>
-</x-layouts.user>
+@endsection

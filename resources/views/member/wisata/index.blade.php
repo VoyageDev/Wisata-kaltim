@@ -1,4 +1,5 @@
-<x-layouts.user>
+@extends('layouts.user')
+@section('content')
     <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -9,6 +10,22 @@
                     Daftar Wisata
                 </h1>
                 <p class="text-gray-600 text-lg">Temukan destinasi wisata terbaik yang ada di kalimantan timur</p>
+            </div>
+
+            {{-- Search Wisata --}}
+            <div class="mb-8">
+                <form action="{{ route('wisata.index') }}" method="GET" class="w-full md:w-2/3 lg:w-1/2">
+                    <div class="flex items-center gap-3 bg-white border border-gray-200 rounded-lg shadow-sm px-4 py-3">
+                        <i class="fas fa-search text-gray-400"></i>
+                        <input type="text" name="search" value="{{ $search ?? '' }}"
+                            placeholder="Cari berdasarkan nama wisata..."
+                            class="w-full text-sm text-gray-700 placeholder-gray-400 focus:outline-none">
+                        <button type="submit"
+                            class="text-sm bg-[#3b3b3b] text-white px-4 py-2 rounded-md hover:bg-[#525252] transition">
+                            Cari
+                        </button>
+                    </div>
+                </form>
             </div>
 
             {{-- Wisata Grid (4 Columns) --}}
@@ -90,4 +107,4 @@
 
         </div>
     </div>
-</x-layouts.user>
+@endsection

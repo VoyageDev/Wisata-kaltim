@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('wisata_id')->constrained('wisatas')->onDelete('cascade');
             $table->date('tanggal');
-            $table->integer('kuota_total')->default(0);
+            $table->integer('kuota_total')->nullable()->comment('Override kuota untuk tanggal ini, null = pakai default');
             $table->integer('kuota_terpakai')->default(0);
-            $table->timestamps();
+            $table->boolean('status')->default(1)->comment('1 = buka, 0 = tutup');
             $table->unique(['wisata_id', 'tanggal']);
         });
     }

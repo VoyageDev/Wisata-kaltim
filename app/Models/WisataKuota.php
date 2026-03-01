@@ -11,17 +11,22 @@ class WisataKuota extends Model
     /** @use HasFactory<\Database\Factories\WisataKuotaFactory> */
     use HasFactory;
 
+    // Disable timestamps karena tabel tidak memiliki created_at dan updated_at
+    public $timestamps = false;
+
     protected $fillable = [
         'wisata_id',
         'tanggal',
         'kuota_total',
         'kuota_terpakai',
+        'status',
     ];
 
     protected $casts = [
         'tanggal' => 'date',
         'kuota_total' => 'integer',
         'kuota_terpakai' => 'integer',
+        'status' => 'boolean',
     ];
 
     public function wisata(): BelongsTo

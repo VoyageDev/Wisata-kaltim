@@ -1,4 +1,6 @@
-<x-layouts.user>
+@extends('layouts.user')
+@section('content')
+
     <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -22,7 +24,7 @@
                                     {{-- Reviewable Info --}}
                                     <div class="flex items-center gap-3 mb-2">
                                         @if ($ulasan->reviewable_type === 'App\Models\Artikel')
-                                            <a href="{{ route('artikel.detail', $ulasan->reviewable->slug) }}"
+                                            <a href="{{ route('artikel.detail', $ulasan->reviewable->slug) . '#ulasan-' . $ulasan->id }}"
                                                 class="flex items-center gap-3 group">
                                                 <img src="{{ asset($ulasan->reviewable->thumbnail) }}"
                                                     alt="{{ $ulasan->reviewable->judul }}"
@@ -39,7 +41,8 @@
                                                 </div>
                                             </a>
                                         @elseif ($ulasan->reviewable_type === 'App\Models\Wisata')
-                                            <div class="flex items-center gap-3">
+                                            <a href="{{ route('wisata.detail', $ulasan->reviewable->slug) . '#ulasan-' . $ulasan->id }}"
+                                                class="flex items-center gap-3 group">
                                                 <img src="{{ asset($ulasan->reviewable->image ?? 'images/placeholder.jpg') }}"
                                                     alt="{{ $ulasan->reviewable->name }}"
                                                     class="w-16 h-16 object-cover rounded-lg">
@@ -48,14 +51,15 @@
                                                         class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded mb-1">
                                                         <i class="fas fa-map-marker-alt mr-1"></i>Wisata
                                                     </span>
-                                                    <h3 class="font-bold text-gray-800 line-clamp-1">
+                                                    <h3
+                                                        class="font-bold text-gray-800 group-hover:text-[#8B6F47] transition-colors line-clamp-1">
                                                         {{ $ulasan->reviewable->name }}
                                                     </h3>
                                                     <p class="text-xs text-gray-500">
                                                         {{ $ulasan->reviewable->kota->name ?? '' }}
                                                     </p>
                                                 </div>
-                                            </div>
+                                            </a>
                                         @endif
                                     </div>
                                 </div>
@@ -116,4 +120,4 @@
 
         </div>
     </div>
-</x-layouts.user>
+@endsection

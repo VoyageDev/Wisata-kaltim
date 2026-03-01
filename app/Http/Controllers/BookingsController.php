@@ -12,6 +12,7 @@ use App\Models\Wisata;
 use App\Models\WisataKuota;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -22,12 +23,22 @@ class BookingsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $bookings = Bookings::with(['user', 'wisata', 'paketWisata'])
-            ->orderByRaw("FIELD(status, 'pending', 'done', 'paid', 'cancelled')")
-            ->latest()
-            ->paginate(10);
+        $search = $request->get('search');
+        $query = Bookings::with(['user', 'wisata', 'paketWisata'])
+            ->orderByRaw("FIELD(status, 'pending', 'done', 'paid', 'cancelled')")->latest();
+
+        if ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })->orWhereHas('wisata', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })->orWhereHas('paketWisata', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })->orWhere('kode_tiket', 'like', "%{$search}%");
+        }
+        $bookings = $query->paginate(10)->appends($request->query());
 
         return view('admin.booking.index', compact('bookings'));
     }
@@ -61,6 +72,12 @@ class BookingsController extends Controller
             }
         }
 
+        // Get paket wisata populer (latest paket with wisata info)
+        $paketWisataPopuler = PaketWisata::with('wisata.kota')
+            ->latest()
+            ->take(8)
+            ->get();
+
         return view('member.booking.index', compact(
             'kotas',
             'selectedKotaId',
@@ -68,8 +85,49 @@ class BookingsController extends Controller
             'selectedKota',
             'selectedWisata',
             'availableWisatas',
-            'availablePakets'
+            'availablePakets',
+            'paketWisataPopuler'
         ));
+    }
+
+    /**
+     * Get wisatas by kota (AJAX endpoint)
+     */
+    public function getWisatasByKota($kotaId)
+    {
+        $kota = Kota::with('wisatas')->findOrFail($kotaId);
+
+        return response()->json([
+            'wisatas' => $kota->wisatas->map(fn ($w) => [
+                'id' => $w->id,
+                'name' => $w->name,
+            ]),
+        ]);
+    }
+
+    /**
+     * Get paket by wisata (AJAX endpoint)
+     */
+    public function getPaketByWisata($wisataId)
+    {
+        $wisata = Wisata::with('paketWisatas')->findOrFail($wisataId);
+
+        return response()->json([
+            'wisata' => [
+                'id' => $wisata->id,
+                'name' => $wisata->name,
+                'description' => $wisata->description,
+                'image' => asset('storage/'.$wisata->image),
+                'harga_tiket' => $wisata->harga_tiket,
+            ],
+            'pakets' => $wisata->paketWisatas->map(fn ($p) => [
+                'id' => $p->id,
+                'name' => $p->name,
+                'harga_paket' => $p->harga_paket,
+                'jumlah_orang' => $p->jumlah_orang,
+                'gambar' => $p->gambar ? asset('storage/'.$p->gambar) : 'https://via.placeholder.com/400x200',
+            ]),
+        ]);
     }
 
     /**

@@ -1,18 +1,20 @@
-<x-layouts.admin>
-    <x-slot name="header">
-        <div class="flex items-start gap-4">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight underline">
-                {{ __('Kelola Wisata') }}
-            </h2>
-            <span class="text-gray-300 text-xl">|</span>
-            {{-- buat kelola tiket wisata disini diarahkan ke admin.wisata.tiket --}}
-            <a href="{{ route('admin.wisata.tiket') }}"
-                class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Kelola Tiket') }}
-            </a>
-        </div>
-    </x-slot>
+@extends('layouts.admin')
 
+@section('header')
+    <div class="flex items-start gap-4">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight underline">
+            {{ __('Kelola Wisata') }}
+        </h2>
+        <span class="text-gray-300 text-xl">|</span>
+        {{-- buat kelola tiket wisata disini diarahkan ke admin.wisata.tiket --}}
+        <a href="{{ route('admin.tiket.index') }}"
+            class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Kelola Tiket') }}
+        </a>
+    </div>
+@endsection
+
+@section('content')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{-- Header --}}
@@ -22,10 +24,20 @@
                         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">Manajemen Wisata</h1>
                         <p class="text-gray-600 dark:text-gray-400 mt-1">Kelola destinasi wisata di platform Anda</p>
                     </div>
-                    <a href="{{ route('admin.wisata.create') }}"
-                        class="bg-gradient-to-r from-[#074e0e] to-[#167509] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center">
-                        <i class="fas fa-plus mr-2"></i>Tambah Wisata
-                    </a>
+                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                        {{-- Form Pencarian --}}
+                        <form action="{{ route('admin.wisata.index') }}" method="GET" class="relative w-full sm:w-auto">
+                            <input type="text" name="search" value="{{ request('search') }}"
+                                placeholder="Cari wisata..."
+                                class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#167509] focus:border-[#167509] outline-none dark:bg-gray-700 dark:text-white transition-all">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </form>
+
+                        <a href="{{ route('admin.wisata.create') }}"
+                            class="w-full sm:w-auto bg-gradient-to-r from-[#074e0e] to-[#167509] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center whitespace-nowrap">
+                            <i class="fas fa-plus mr-2"></i>Tambah Wisata
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -49,6 +61,7 @@
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Kota</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Harga Tiket</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Status</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Kuota Default</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Aksi</th>
                             </tr>
                         </thead>
@@ -73,6 +86,9 @@
                                             class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $wisata->status === 'Open' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' }}">
                                             {{ $wisata->status }}
                                         </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
+                                        {{ $wisata->kuota_default }} orang/hari
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex gap-2">
@@ -114,4 +130,4 @@
             </div>
         </div>
     </div>
-</x-layouts.admin>
+@endsection

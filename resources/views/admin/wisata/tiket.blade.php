@@ -1,17 +1,18 @@
-<x-layouts.admin>
-    <x-slot name="header">
-        <div class="flex items-center gap-4">
-            <a href="{{ route('admin.wisata.index') }}"
-                class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Kelola Wisata') }}
-            </a>
-            <span class="text-gray-300 text-xl">|</span>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight underline">
-                {{ __('Kelola Tiket') }}
-            </h2>
-        </div>
-    </x-slot>
-
+@extends('layouts.admin')
+@section('header')
+    <div class="flex items-start gap-4">
+        <a
+            href="{{ route('admin.wisata.index') }}"class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Kelola Wisata') }}
+        </a>
+        <span class="text-gray-300 text-xl">|</span>
+        {{-- buat kelola tiket wisata disini diarahkan ke admin.wisata.tiket --}}
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight underline">
+            {{ __('Kelola Tiket') }}
+        </h2>
+    </div>
+@endsection
+@section('content')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{-- Header --}}
@@ -98,13 +99,25 @@
                             <tr>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Nama Wisata</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Tanggal</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold">Kuota Total</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold">Kuota Terpakai</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Kuota Default</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Kuota Aktual</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold">Status</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             @forelse($wisatas as $wisata)
+                                {{-- Hitung kuota yang sebenarnya berlaku --}}
+                                @php
+                                    $kuotaBerlaku =
+                                        $wisata->kuota_total !== null
+                                            ? $wisata->kuota_total
+                                            : $wisata->wisata->kuota_default;
+                                    $isOverride = $wisata->kuota_total !== null;
+                                    $sisaTiket = $kuotaBerlaku - $wisata->kuota_terpakai;
+                                    $persentase =
+                                        $kuotaBerlaku > 0 ? ($wisata->kuota_terpakai / $kuotaBerlaku) * 100 : 0;
+                                @endphp
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                     <td class="px-6 py-4">
                                         <div class="font-medium text-gray-900 dark:text-gray-100">
@@ -112,8 +125,7 @@
                                         </div>
                                         @if ($wisata->wisata->kota)
                                             <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                                <i
-                                                    class="fas fa-map-marker-alt mr-1"></i>{{ $wisata->wisata->kota->name }}
+                                                <i class="fas fa-map-marker-alt mr-1"></i>{{ $wisata->wisata->kota->name }}
                                             </div>
                                         @endif
                                     </td>
@@ -124,31 +136,55 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
-                                        <span class="font-semibold">{{ number_format($wisata->kuota_total) }}</span>
+                                        <span class="font-semibold text-gray-900 dark:text-gray-100">
+                                            {{ number_format($wisata->wisata->kuota_default) }}
+                                        </span>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                                {{ number_format($wisata->kuota_terpakai) }}
-                                            </span>
-                                            <span class="text-xs text-gray-500">
-                                                ({{ $wisata->kuota_total > 0 ? number_format(($wisata->kuota_terpakai / $wisata->kuota_total) * 100, 1) : 0 }}%)
-                                            </span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
-                                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-1.5 rounded-full"
-                                                style="width: {{ $wisata->kuota_total > 0 ? min(($wisata->kuota_terpakai / $wisata->kuota_total) * 100, 100) : 0 }}%">
+                                        <div class="flex flex-col gap-2">
+                                            <div>
+                                                <span
+                                                    class="inline-block px-3 py-1 rounded-full text-sm font-medium {{ $isOverride ? 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300' }}">
+                                                    {{ number_format($kuotaBerlaku) }}
+                                                    {{ $isOverride ? '(Override)' : '(Default)' }}
+                                                </span>
+                                            </div>
+                                            <div class="text-sm">
+                                                <span
+                                                    class="text-gray-700 dark:text-gray-300">{{ number_format($wisata->kuota_terpakai) }}
+                                                    / {{ number_format($kuotaBerlaku) }}</span>
+                                                <span class="text-gray-500 dark:text-gray-400 text-xs ml-2">
+                                                    ({{ number_format($persentase, 1) }}%)
+                                                </span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-1.5 rounded-full"
+                                                    style="width: {{ min($persentase, 100) }}%">
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
+                                        @if ($wisata->status)
+                                            <span
+                                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                                                <i class="fas fa-check-circle mr-2"></i>Buka
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+                                                <i class="fas fa-times-circle mr-2"></i>Tutup
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4">
                                         <div class="flex gap-2">
-                                            <a href="{{ route('admin.wisata.edit', $wisata->wisata) }}"
+                                            <a href="{{ route('admin.tiket.edit', $wisata) }}"
                                                 class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 font-medium text-sm">
                                                 <i class="fas fa-edit"></i>Edit
                                             </a>
-                                            <form action="{{ route('admin.wisata.destroy', $wisata->wisata) }}"
-                                                method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                            <form action="{{ route('admin.tiket.destroy', $wisata) }}" method="POST"
+                                                onsubmit="return confirm('Hapus override ini? (Kembali ke default)')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
@@ -161,14 +197,14 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-12 text-center">
-                                        <i
-                                            class="fas fa-ticket text-gray-300 dark:text-gray-600 text-5xl mb-4 block"></i>
-                                        <p class="text-gray-500 dark:text-gray-400 font-medium">Belum ada kuota tiket
-                                        </p>
+                                    <td colspan="6" class="px-6 py-12 text-center">
+                                        <i class="fas fa-ticket text-gray-300 dark:text-gray-600 text-5xl mb-4 block"></i>
+                                        <p class="text-gray-500 dark:text-gray-400 font-medium">Belum ada override kuota</p>
+                                        <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">Semua wisata menggunakan
+                                            kuota default. Tambahkan override untuk tanggal tertentu.</p>
                                         <a href="{{ route('admin.tiket.create') }}"
                                             class="inline-block mt-4 text-blue-600 hover:text-blue-800 font-medium">
-                                            <i class="fas fa-plus mr-1"></i>Tambah kuota tiket pertama
+                                            <i class="fas fa-plus mr-1"></i>Buat override kuota baru
                                         </a>
                                     </td>
                                 </tr>
@@ -184,6 +220,42 @@
                     </div>
                 @endif
             </div>
+
+            {{-- Info Card --}}
+            <div class="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+                <h4 class="text-lg font-semibold text-blue-900 dark:text-blue-300 mb-3 flex items-center">
+                    <i class="fas fa-info-circle mr-2"></i>Sistem Kuota Tiket Baru
+                </h4>
+                <div class="grid md:grid-cols-2 gap-6 text-sm text-blue-800 dark:text-blue-400">
+                    <div>
+                        <p class="font-semibold mb-2 flex items-center">
+                            <i class="fas fa-check-circle text-blue-600 mr-2"></i>Kuota Default
+                        </p>
+                        <p>Setiap wisata memiliki kuota default yang berlaku untuk semua tanggal secara otomatis. Atur di
+                            halaman kelola wisata.</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2 flex items-center">
+                            <i class="fas fa-edit text-orange-600 mr-2"></i>Override Kuota
+                        </p>
+                        <p>Ubah kuota untuk tanggal tertentu (misal: weekend, peak season). Tabel di atas hanya menampilkan
+                            tanggal dengan override.</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2 flex items-center">
+                            <i class="fas fa-lock text-red-600 mr-2"></i>Tutup Tanggal
+                        </p>
+                        <p>Pilih status "Tutup" jika ada masalah serius dan wisata tidak bisa dibuka hari itu (maintenance,
+                            emergency, dll).</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2 flex items-center">
+                            <i class="fas fa-trash text-red-600 mr-2"></i>Hapus Override
+                        </p>
+                        <p>Hapus data untuk menghapus override dan mengembalikan ke kuota default automatic.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</x-layouts.admin>
+@endsection

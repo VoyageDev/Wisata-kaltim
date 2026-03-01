@@ -1,4 +1,5 @@
-<x-layouts.user>
+@extends('layouts.user')
+@section('content')
     <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -78,12 +79,10 @@
                             {{-- Wisata Detail Modal --}}
                             <div x-show="selectedWisata === {{ $wisata->id }}" x-cloak
                                 class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-                                @click.self="selectedWisata = null"
-                                x-transition:enter="transition ease-out duration-300"
+                                @click.self="selectedWisata = null" x-transition:enter="transition ease-out duration-300"
                                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                                 @keydown.escape.window="selectedWisata = null">
-                                <div
-                                    class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                                <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                                     {{-- Modal Header --}}
                                     <div
                                         class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center z-10">
@@ -142,10 +141,8 @@
                                                 class="bg-gray-50 rounded-lg p-4 mb-4">
                                                 <form action="{{ route('ulasan.store') }}" method="POST">
                                                     @csrf
-                                                    <input type="hidden" name="reviewable_type"
-                                                        value="App\Models\Wisata">
-                                                    <input type="hidden" name="reviewable_id"
-                                                        value="{{ $wisata->id }}">
+                                                    <input type="hidden" name="reviewable_type" value="App\Models\Wisata">
+                                                    <input type="hidden" name="reviewable_id" value="{{ $wisata->id }}">
 
                                                     <div class="mb-3">
                                                         <label
@@ -209,8 +206,7 @@
                                                     </div>
                                                 @empty
                                                     <div class="bg-gray-50 rounded-lg p-6 text-center">
-                                                        <i
-                                                            class="fas fa-comment-slash text-gray-400 text-3xl mb-2"></i>
+                                                        <i class="fas fa-comment-slash text-gray-400 text-3xl mb-2"></i>
                                                         <p class="text-gray-600 text-sm">Belum ada ulasan</p>
                                                     </div>
                                                 @endforelse
@@ -271,4 +267,4 @@
 
         </div>
     </div>
-</x-layouts.user>
+@endsection

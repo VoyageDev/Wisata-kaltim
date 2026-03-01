@@ -1,15 +1,45 @@
-<x-layouts.user>
-    <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+@extends('layouts.user')
+@section('content')
+    <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+        {{-- Hero Section dengan Breadcrumb --}}
+        <div class="bg-gradient-to-r from-[#2C3E50] to-[#1A3C34] text-white py-6 md:py-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            {{-- Back Button --}}
-            <div class="mb-6">
-                <a href="{{ route('artikel.index') }}"
-                    class="inline-flex items-center text-[#8B6F47] hover:text-[#D4AF37] transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Kembali ke Berita
-                </a>
+                {{-- Breadcrumb --}}
+                <nav class="text-xs sm:text-sm mb-3 md:mb-4">
+                    <ol class="flex flex-wrap items-center gap-y-1 text-gray-200">
+
+                        <li class="flex items-center">
+                            <a href="{{ route('home') }}" class="hover:text-white transition">
+                                <i class="fas fa-home mr-1"></i>
+                                <span class="hidden sm:inline">Home</span>
+                            </a>
+                            <i class="fas fa-chevron-right mx-2 text-[10px]"></i>
+                        </li>
+
+                        <li class="flex items-center">
+                            <a href="{{ route('artikel.index') }}" class="hover:text-white transition">
+                                Berita
+                            </a>
+                            <i class="fas fa-chevron-right mx-2 text-[10px]"></i>
+                        </li>
+
+                        <li class="truncate max-w-[160px] sm:max-w-xs">
+                            {{ $artikel->judul }}
+                        </li>
+
+                    </ol>
+                </nav>
+
+                {{-- Title --}}
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold leading-snug">
+                    {{ $artikel->judul }}
+                </h1>
+
             </div>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
             {{-- Main Article --}}
             <article class="bg-white rounded-xl shadow-lg overflow-hidden mb-12">
@@ -22,8 +52,7 @@
                 {{-- Article Content --}}
                 <div class="p-8 md:p-12">
                     {{-- Metadata --}}
-                    <div
-                        class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6 pb-6 border-b border-gray-200">
+                    <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6 pb-6 border-b border-gray-200">
                         @if ($artikel->wisata && $artikel->wisata->kota)
                             <span class="flex items-center">
                                 <i class="fas fa-map-marker-alt text-[#8B6F47] mr-2"></i>
@@ -39,11 +68,6 @@
                             {{ number_format($artikel->views) }} views
                         </span>
                     </div>
-
-                    {{-- Title --}}
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
-                        {{ $artikel->judul }}
-                    </h1>
 
                     {{-- Author Info --}}
                     <div class="flex items-center mb-8 pb-8 border-b border-gray-200">
@@ -142,7 +166,7 @@
                 <div id="ulasan-container" class="space-y-6">
                     @forelse($artikel->ulasans as $ulasan)
                         {{-- Parent Comment --}}
-                        <div class="border-b border-gray-200 pb-6 last:border-0">
+                        <div id="ulasan-{{ $ulasan->id }}" class="border-b border-gray-200 pb-6 last:border-0">
                             <div class="flex items-start space-x-4">
                                 <div class="flex-shrink-0">
                                     <div
@@ -153,7 +177,8 @@
                                 <div class="flex-1">
                                     <div class="flex items-center justify-between mb-2">
                                         <div>
-                                            <h4 class="font-semibold text-gray-800 flex items-center gap-1">{{ $ulasan->user->name }}
+                                            <h4 class="font-semibold text-gray-800 flex items-center gap-1">
+                                                {{ $ulasan->user->name }}
                                                 @if ($ulasan->user->role === 'admin')
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                                         fill="currentColor" class="w-4 h-4 text-blue-500"
@@ -243,8 +268,7 @@
                                             {{-- Toggle Button for Replies --}}
                                             <button onclick="toggleReplies({{ $ulasan->id }})"
                                                 class="flex items-center gap-2 text-sm text-[#8B6F47] hover:text-[#D4AF37] font-medium mb-3 transition">
-                                                <i id="reply-icon-{{ $ulasan->id }}"
-                                                    class="fas fa-chevron-down"></i>
+                                                <i id="reply-icon-{{ $ulasan->id }}" class="fas fa-chevron-down"></i>
                                                 <span id="reply-text-{{ $ulasan->id }}">Tampilkan
                                                     {{ $repliesToShow->count() }} balasan</span>
                                             </button>
@@ -502,4 +526,5 @@
                 };
             }
     </script>
-</x-layouts.user>
+
+@endsection

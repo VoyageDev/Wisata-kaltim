@@ -1,4 +1,6 @@
-<x-layouts.user>
+@extends('layouts.user')
+@section('content')
+
     <div class="container mx-auto px-4 py-8">
         <!-- Back Button -->
         <div class="mb-6">
@@ -16,8 +18,7 @@
                             {{ $booking->wisata->name ?? 'Wisata Tidak Tersedia' }}
                         </a>
                     </h1>
-                    <p class="text-gray-600">Kode Tiket: <span
-                            class="font-mono font-bold">{{ $booking->kode_tiket }}</span>
+                    <p class="text-gray-600">Kode Tiket: <span class="font-mono font-bold">{{ $booking->kode_tiket }}</span>
                     </p>
                 </div>
                 <span
@@ -165,4 +166,4 @@
     </div>
     </div>
     @endif
-</x-layouts.user>
+@endsection

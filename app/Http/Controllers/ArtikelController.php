@@ -12,53 +12,95 @@ use Illuminate\Support\Str;
 
 class ArtikelController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $artikels = Artikel::with(['wisata.kota', 'user'])->latest()->paginate(10);
+        $search = $request->get('search');
 
-        return view('admin.artikel.index', compact('artikels'));
+        $query = Artikel::with(['wisata.kota', 'user'])->latest();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                // Cari berdasarkan judul artikel
+                $q->where('judul', 'like', "%{$search}%")
+                  // ATAU cari berdasarkan nama wisata terkait
+                    ->orWhereHas('wisata', function ($w) use ($search) {
+                        $w->where('name', 'like', "%{$search}%");
+                    })
+                  // ATAU cari berdasarkan nama penulis
+                    ->orWhereHas('user', function ($u) use ($search) {
+                        $u->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $artikels = $query->paginate(10)->appends($request->query());
+
+        // Tambahkan 'search' ke compact agar bisa ditangkap oleh view
+        return view('admin.artikel.index', compact('artikels', 'search'));
     }
 
-    public function memberIndex()
+    public function memberIndex(Request $request)
     {
+        $search = $request->get('search');
+
+        if ($search) {
+            $searchResults = Artikel::with(['wisata.kota', 'user'])
+                ->where('judul', 'like', "%{$search}%")
+                ->latest()
+                ->paginate(10)
+                ->appends($request->query());
+
+            return view('member.berita.index', [
+                'search' => $search,
+                'searchResults' => $searchResults,
+                'beritaTerbaru' => collect(),
+                'totalBeritaTerbaru' => 0,
+                'populerBulanIni' => collect(),
+                'totalPopulerBulanIni' => 0,
+                'topWisata' => collect(),
+                'totalTopWisata' => 0,
+            ]);
+        }
+
         // Berita Terbaru - latest articles
-        $beritaTerbaru = Artikel::with(['wisata.kota', 'user'])
-            ->latest()
-            ->take(6)
-            ->get();
-        $totalBeritaTerbaru = Artikel::count();
+        $beritaQuery = Artikel::with(['wisata.kota', 'user'])->latest();
+        if ($search) {
+            $beritaQuery->where('judul', 'like', "%{$search}%");
+        }
+        $totalBeritaTerbaru = (clone $beritaQuery)->count();
+        $beritaTerbaru = $beritaQuery->take(6)->get();
 
         // Populer Bulan Ini - most viewed this month
-        $populerBulanIni = Artikel::with(['wisata.kota', 'user'])
+        $populerQuery = Artikel::with(['wisata.kota', 'user'])
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
-            ->orderBy('views', 'desc')
-            ->take(5)
-            ->get();
-        $totalPopulerBulanIni = Artikel::whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-            ->count();
+            ->orderBy('views', 'desc');
+        if ($search) {
+            $populerQuery->where('judul', 'like', "%{$search}%");
+        }
+        $totalPopulerBulanIni = (clone $populerQuery)->count();
+        $populerBulanIni = $populerQuery->take(5)->get();
 
         // Top Wisata - highest viewed articles about wisata
-        $topWisata = Artikel::with(['wisata.kota', 'user'])
-            ->orderBy('views', 'desc')
-            ->take(6)
-            ->get();
-        $totalTopWisata = Artikel::count();
+        $topWisataQuery = Artikel::with(['wisata.kota', 'user'])->orderBy('views', 'desc');
+        if ($search) {
+            $topWisataQuery->where('judul', 'like', "%{$search}%");
+        }
+        $totalTopWisata = (clone $topWisataQuery)->count();
+        $topWisata = $topWisataQuery->take(6)->get();
 
-        return view('member.artikel', compact(
+        $searchResults = null;
+
+        return view('member.berita.index', compact(
             'beritaTerbaru',
             'totalBeritaTerbaru',
             'populerBulanIni',
             'totalPopulerBulanIni',
             'topWisata',
-            'totalTopWisata'
+            'totalTopWisata',
+            'search',
+            'searchResults'
         ));
-    }
-
-    public function show(Artikel $artikel)
-    {
-        return view('admin.artikel.show', compact('artikel'));
     }
 
     // memuat detail artikel beserta ulasan berdasarkan slug
@@ -88,7 +130,7 @@ class ArtikelController extends Controller
             ->take(6)
             ->get();
 
-        return view('member.artikel-detail', compact('artikel', 'artikelTerkait', 'allReplies'));
+        return view('member.berita.detail', compact('artikel', 'artikelTerkait', 'allReplies'));
     }
 
     public function create()
@@ -157,43 +199,50 @@ class ArtikelController extends Controller
         return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil dihapus');
     }
 
-    public function loadMoreTerbaru($offset)
+    public function loadMoreTerbaru(Request $request, $offset)
     {
         $offset = max(0, (int) $offset);
 
-        $artikels = Artikel::with(['wisata.kota', 'user'])
-            ->latest()
-            ->skip($offset)
-            ->take(6)
-            ->get();
+        $search = $request->get('search');
+
+        $query = Artikel::with(['wisata.kota', 'user'])->latest();
+        if ($search) {
+            $query->where('judul', 'like', "%{$search}%");
+        }
+        $artikels = $query->skip($offset)->take(6)->get();
 
         return response()->json($this->buildArtikelPayload($artikels));
     }
 
-    public function loadMorePopuler($offset)
+    public function loadMorePopuler(Request $request, $offset)
     {
         $offset = max(0, (int) $offset);
 
-        $artikels = Artikel::with(['wisata.kota', 'user'])
+        $search = $request->get('search');
+
+        $query = Artikel::with(['wisata.kota', 'user'])
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
-            ->orderBy('views', 'desc')
-            ->skip($offset)
-            ->take(5)
-            ->get();
+            ->orderBy('views', 'desc');
+        if ($search) {
+            $query->where('judul', 'like', "%{$search}%");
+        }
+        $artikels = $query->skip($offset)->take(5)->get();
 
         return response()->json($this->buildArtikelPayload($artikels));
     }
 
-    public function loadMoreTopWisata($offset)
+    public function loadMoreTopWisata(Request $request, $offset)
     {
         $offset = max(0, (int) $offset);
 
-        $artikels = Artikel::with(['wisata.kota', 'user'])
-            ->orderBy('views', 'desc')
-            ->skip($offset)
-            ->take(6)
-            ->get();
+        $search = $request->get('search');
+
+        $query = Artikel::with(['wisata.kota', 'user'])->orderBy('views', 'desc');
+        if ($search) {
+            $query->where('judul', 'like', "%{$search}%");
+        }
+        $artikels = $query->skip($offset)->take(6)->get();
 
         return response()->json($this->buildArtikelPayload($artikels));
     }

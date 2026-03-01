@@ -12,7 +12,7 @@
             <div class="hidden md:flex flex-1 justify-center items-center">
                 <ul class="flex space-x-8">
                     @auth
-                        <li><a href="{{ url('/artikel') }}"
+                        <li><a href="{{ route('artikel.index') }}"
                                 class="text-white font-medium hover:scale-110 transition-transform block">Berita</a>
                         </li>
                         {{-- Kota Dropdown --}}
@@ -25,7 +25,7 @@
                                 <div class="py-2 max-h-96 overflow-y-auto">
                                     @foreach ($kotas as $kota)
                                         <a href="{{ route('kota.detail', $kota->slug) }}"
-                                            class="block px-4 py-2 text-gray-700 hover:bg-[#D4AF37] hover:text-white transition-colors">
+                                            class="block px-4 py-2 text-gray-700 hover:bg-[#434343]/20 hover:text-white transition-colors">
                                             {{ $kota->name }}
                                         </a>
                                     @endforeach
@@ -143,7 +143,7 @@
                 {{-- Mobile Kota Dropdown --}}
                 <div x-data="{ kotaOpen: false }" class="relative">
                     <button @click="kotaOpen = !kotaOpen"
-                        class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#D4AF37] transition flex items-center justify-between">
+                        class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#b6b6b6] transition flex items-center justify-between">
                         Kota
                         <i class="fas fa-chevron-down" :class="kotaOpen && 'rotate-180'"
                             style="transition: transform 0.2s;"></i>
@@ -151,7 +151,7 @@
                     <div x-show="kotaOpen" class="ml-4 space-y-1 mt-1">
                         @foreach ($kotas as $kota)
                             <a href="{{ route('kota.detail', $kota->slug) }}"
-                                class="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-[#6B5436] transition"
+                                class="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-[#c7c7c7] transition"
                                 @click="kotaOpen = false; mobileMenuOpen = false">
                                 {{ $kota->name }}
                             </a>

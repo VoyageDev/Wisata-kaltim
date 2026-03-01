@@ -1,12 +1,13 @@
-<x-layouts.user>
+@extends('layouts.user')
+@section('content')
     <div class="min-h-screen bg-gray-100 font-sans max-w-4xl mx-auto">
         <main class="mx-auto mt-5 p-4">
             <div class="bg-white rounded-lg shadow-lg p-8">
                 <!-- Header -->
                 <div class="text-center mb-8">
                     <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                         </svg>
@@ -99,8 +100,8 @@
                             <div class="text-center py-6">
                                 <p class="text-sm text-gray-600 mb-4">Scan QR Code di bawah ini untuk membayar</p>
                                 <div class="inline-block bg-white p-4 rounded-lg shadow-md">
-                                    <img id="qrisImage" src="{{ asset('images/qris-placeholder.png') }}"
-                                        alt="QRIS Code" class="w-64 h-64 object-contain mx-auto"
+                                    <img id="qrisImage" src="{{ asset('images/qris-placeholder.png') }}" alt="QRIS Code"
+                                        class="w-64 h-64 object-contain mx-auto"
                                         onerror="this.onerror=null; this.src='https://api.qrserver.com/v1/create-qr-code/?size=256x256&data={{ urlencode($payment->booking->kode_tiket) }}'">
                                 </div>
                                 <div class="mt-4">
@@ -265,4 +266,4 @@
             }
         }
     </script>
-</x-layouts.user>
+@endsection

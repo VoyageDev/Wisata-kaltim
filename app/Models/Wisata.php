@@ -26,12 +26,14 @@ class Wisata extends Model
         'alamat',
         'links_maps',
         'links_bookings',
+        'kuota_default',
     ];
 
     protected $casts = [
         'jam_buka' => 'datetime:H:i',
         'jam_tutup' => 'datetime:H:i',
         'links_bookings' => 'array',
+        'kuota_default' => 'integer',
     ];
 
     public function kota(): BelongsTo

@@ -1,10 +1,11 @@
-<x-layouts.admin>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Manajemen Ulasan') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
+@section('header')
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Manajemen Ulasan') }}
+    </h2>
+@endsection
 
+@section('content')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             {{-- Filter & Search --}}
@@ -31,8 +32,7 @@
                             </select>
                         </div>
                         <div>
-                            <label
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rating</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rating</label>
                             <select name="rating"
                                 class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                 <option value="">Semua Rating</option>
@@ -80,8 +80,7 @@
                                     Rating</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">
                                     Tanggal</th>
-                                <th
-                                    class="px-6 py-4 text-center text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900 dark:text-gray-100">
                                     Aksi</th>
                             </tr>
                         </thead>
@@ -133,7 +132,7 @@
                                             @endfor
                                         </div>
                                     </td>
-                                    <td class="px-7 py-4 text-sm text-gray-600 dark:text-gray-400">
+                                    <td class="px-7 py-4 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
                                         {{ $ulasan->created_at->format('d M Y H:i') }}
                                     </td>
                                     <td class="px-6 py-4">
@@ -143,8 +142,8 @@
                                                 title="Lihat Detail">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <form action="{{ route('admin.ulasan.destroy', $ulasan->id) }}"
-                                                method="POST" class="inline"
+                                            <form action="{{ route('admin.ulasan.destroy', $ulasan->id) }}" method="POST"
+                                                class="inline"
                                                 onsubmit="return confirm('Apakah Anda yakin ingin menghapus ulasan ini?');">
                                                 @csrf
                                                 @method('DELETE')
@@ -160,8 +159,7 @@
                             @empty
                                 <tr>
                                     <td colspan="7" class="px-6 py-12 text-center">
-                                        <i
-                                            class="fas fa-inbox text-gray-300 dark:text-gray-600 text-5xl mb-4 block"></i>
+                                        <i class="fas fa-inbox text-gray-300 dark:text-gray-600 text-5xl mb-4 block"></i>
                                         <p class="text-gray-500 dark:text-gray-400 font-medium">Belum ada ulasan</p>
                                     </td>
                                 </tr>
@@ -179,4 +177,4 @@
             </div>
         </div>
     </div>
-</x-layouts.admin>
+@endsection

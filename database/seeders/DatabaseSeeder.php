@@ -13,7 +13,6 @@ use Database\Factories\PaymentsChannelsFactory;
 use Database\Factories\PaymentsFactory;
 use Database\Factories\UlasanFactory;
 use Database\Factories\WisataFactory;
-use Database\Factories\WisataKuotaFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -48,8 +47,9 @@ class DatabaseSeeder extends Seeder
         // Create paket wisatas from JSON
         PaketWisataFactory::createFromJson();
 
-        // Create wisata kuotas from JSON
-        WisataKuotaFactory::createFromJson();
+        // Note: Wisata kuota tidak lagi di-seed dari JSON
+        // Admin dapat membuat kuota override sesuai kebutuhan
+        // Kuota default sudah tersimpan di field kuota_default pada tabel wisatas
 
         // Create ulasans from JSON
         UlasanFactory::createFromJson();

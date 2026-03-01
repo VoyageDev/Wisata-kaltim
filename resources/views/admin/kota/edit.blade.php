@@ -1,10 +1,11 @@
-<x-layouts.admin>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Edit Kota') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
+@section('header')
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Edit Kota') }}
+    </h2>
+@endsection
 
+@section('content')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{-- Header --}}
@@ -18,14 +19,15 @@
 
             {{-- Form --}}
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 md:p-8">
-                <form action="{{ route('admin.kota.update', $kota) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <form action="{{ route('admin.kota.update', $kota) }}" method="POST" enctype="multipart/form-data"
+                    class="space-y-6">
                     @csrf
                     @method('PUT')
 
                     {{-- Nama Kota --}}
                     <div>
-                        <label for="name"
-                            class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nama Kota</label>
+                        <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nama
+                            Kota</label>
                         <input type="text" id="name" name="name" placeholder="Masukkan nama kota"
                             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
                             required value="{{ old('name', $kota->name) }}">
@@ -46,8 +48,7 @@
                                 onchange="previewGambar(event)">
 
                             <label for="gambar" class="cursor-pointer">
-                                <i
-                                    class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500 mb-2 block"></i>
+                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500 mb-2 block"></i>
                                 <p class="text-gray-600 dark:text-gray-400 font-medium">Klik untuk upload atau drag &
                                     drop</p>
                                 <p class="text-gray-500 dark:text-gray-500 text-sm">PNG, JPG, GIF (Max 2MB)</p>
@@ -113,6 +114,5 @@
                 });
             }
         });
-
     </script>
-</x-layouts.admin>
+@endsection

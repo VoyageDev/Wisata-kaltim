@@ -1,10 +1,11 @@
-<x-layouts.admin>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Edit Wisata') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
+@section('header')
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Edit Wisata') }}
+    </h2>
+@endsection
 
+@section('content')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{-- Header --}}
@@ -65,8 +66,8 @@
                                 required>
                                 <option value="Open" {{ old('status', $wisata->status) == 'Open' ? 'selected' : '' }}>
                                     Open</option>
-                                <option value="Close"
-                                    {{ old('status', $wisata->status) == 'Close' ? 'selected' : '' }}>Close</option>
+                                <option value="Close" {{ old('status', $wisata->status) == 'Close' ? 'selected' : '' }}>
+                                    Close</option>
                             </select>
                             @error('status')
                                 <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
@@ -124,6 +125,20 @@
                                 <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
+
+                        {{-- Kuota Default  --}}
+                        <div>
+                            <label for="kuota_default"
+                                class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Kuota Default Per
+                                Hari</label>
+                            <input type="number" id="kuota_default" name="kuota_default" placeholder="Contoh: 50"
+                                min="1"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
+                                required value="{{ old('kuota_default', $wisata->kuota_default) }}">
+                            @error('kuota_default')
+                                <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
 
                     {{-- Gambar --}}
@@ -145,8 +160,7 @@
                                 onchange="previewGambar(event)">
 
                             <label for="gambar" class="cursor-pointer">
-                                <i
-                                    class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500 mb-2 block"></i>
+                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 dark:text-gray-500 mb-2 block"></i>
                                 <p class="text-gray-600 dark:text-gray-400 font-medium">Klik untuk upload atau drag &
                                     drop</p>
                                 <p class="text-gray-500 dark:text-gray-500 text-sm">PNG, JPG, GIF (Max 2MB)</p>
@@ -166,7 +180,7 @@
                     <div>
                         <label for="alamat"
                             class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Alamat</label>
-                            <input type="text" id="alamat" name="alamat" placeholder="Masukkan alamat wisata"
+                        <input type="text" id="alamat" name="alamat" placeholder="Masukkan alamat wisata"
                             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
                             required value="{{ old('alamat', $wisata->alamat) }}">
                         @error('alamat')
@@ -178,9 +192,9 @@
                     <div>
                         <label for="deskripsi"
                             class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Deskripsi</label>
-                            <textarea id="description" name="description" rows="6" placeholder="Masukkan deskripsi wisata"
-                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
-                                required>{{ old('description', $wisata->description) }}</textarea>
+                        <textarea id="description" name="description" rows="6" placeholder="Masukkan deskripsi wisata"
+                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-[#8B6F47] focus:border-transparent"
+                            required>{{ old('description', $wisata->description) }}</textarea>
                         @error('description')
                         <p class="text-red-600 dark:text-red-400 text-sm mt-1">{{ $message }}</p @enderror </div>
 
@@ -265,5 +279,4 @@
             input.value = rupiah;
         }
     </script>
-
-</x-layouts.admin>
+@endsection
